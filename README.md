@@ -36,8 +36,8 @@ writes to the database.
 builds each lab's web app with `VITE_BASE=/<lab>/` into `dist/<lab>/`, and the index page from `site/`.
 Each lab's API is an Edge Function at `/<lab>/api/*` ([netlify/edge-functions](netlify/edge-functions)),
 which strips the path prefix, reads that lab's TypeDB Cloud settings from `<LAB>_TYPEDB_*` env vars and
-caches successful answers on the CDN. The npm packages the functions use (the HTTP driver, the YAML parser)
-are dependencies of the root `package.json`, which is where Netlify's edge bundler looks for them (the data only changes on reseed; purge the lab's cache tag then).
+caches successful answers on the CDN. The one npm package the functions use at request time (the TypeDB HTTP
+driver) is a dependency of the root `package.json`, which is where Netlify's edge bundler looks for it (the data only changes on reseed; purge the lab's cache tag then).
 
 Seeding a cluster is done once from a laptop, from the lab's `api/` folder, with the cluster's address
 and credentials in the environment: see each lab's README ("Rebuild the database").

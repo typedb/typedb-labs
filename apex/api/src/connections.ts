@@ -5,9 +5,8 @@
 // offered as a connection. The paths are ranked here by a stated cost (config/connection-policy.yaml), the
 // best kept, and each step explained in words from the relation's type, the roles used and its attributes.
 
-import { parse } from "yaml";
 import { Dec } from "./decimal.ts";
-import { CONNECTION_POLICY_YAML } from "./generated/assets.ts";
+import { CONNECTION_POLICY } from "./generated/assets.ts";
 import * as queries from "./queries.ts";
 import { dayMonthYear, formatG, PyFloat, pyRoundTo, sorted } from "./py.ts";
 import { decimalText, iid, label, value, type Tx } from "./typedb.ts";
@@ -53,7 +52,7 @@ export interface Policy {
 let loaded: Policy | undefined;
 
 export function policy(): Policy {
-  return (loaded ??= parse(CONNECTION_POLICY_YAML) as Policy);
+  return (loaded ??= CONNECTION_POLICY as Policy);
 }
 
 function role(roleLabel: string): string {

@@ -12,7 +12,6 @@
     "typecheck": "cd apex/api && npm run typecheck && cd ../../noodlelab/api && npm run typecheck"
   },
   "dependencies": {
-    "@typedb/driver-http": "3.14.0",
-    "yaml": "2.9.1"
+    "@typedb/driver-http": "3.14.0"
   }
 }

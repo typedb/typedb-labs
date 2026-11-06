@@ -1,10 +1,11 @@
-// The generated module (schema and policy texts) must match the files it was generated from, and
+// The generated module (schema texts and parsed policies) must match the files it was generated from, and
 // the API must keep reading its configuration from that module rather than from disk.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "vitest";
-import { CONNECTION_POLICY_YAML, ENGAGEMENT_POLICY_YAML, SCHEMA_FILES } from "../src/generated/assets.ts";
+import { parse } from "yaml";
+import { CONNECTION_POLICY, ENGAGEMENT_POLICY, SCHEMA_FILES } from "../src/generated/assets.ts";
 import { OUT, render, ROOT } from "../scripts/gen.ts";
 
 test("src/generated/assets.ts is up to date", () => {
@@ -12,9 +13,9 @@ test("src/generated/assets.ts is up to date", () => {
 });
 
 test("the policies the API serves are the files in config/", () => {
-  // The policy files are read at build time (npm run gen), so the API image needs no config/ directory.
-  expect(ENGAGEMENT_POLICY_YAML).toBe(readFileSync(join(ROOT, "config", "engagement-policy.yaml"), "utf8"));
-  expect(CONNECTION_POLICY_YAML).toBe(readFileSync(join(ROOT, "config", "connection-policy.yaml"), "utf8"));
+  // The policy files are parsed at build time (npm run gen), so the API needs neither config/ nor a YAML parser.
+  expect(ENGAGEMENT_POLICY).toEqual(parse(readFileSync(join(ROOT, "config", "engagement-policy.yaml"), "utf8")));
+  expect(CONNECTION_POLICY).toEqual(parse(readFileSync(join(ROOT, "config", "connection-policy.yaml"), "utf8")));
   expect(SCHEMA_FILES.map((f) => f.path)).toEqual(["schema/schema.tql", "schema/functions.tql", "schema/migrations/001-phase6-foundation.tql", "schema/migrations/002-meeting-agenda.tql"]);
 });
 
@@ -26,5 +27,6 @@ test("the runtime core touches no runtime-specific API", () => {
     expect(source, file).not.toMatch(/from "node:/);
     expect(source, file).not.toMatch(/\bDeno\./);
     expect(source, file).not.toMatch(/readFileSync|process\.env[.[]/);
+    expect(source, file).not.toMatch(/from "yaml"/);
   }
 });

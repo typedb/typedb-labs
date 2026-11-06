@@ -1,4 +1,5 @@
-// Writes src/generated/assets.ts: the schema files and the YAML policies as string constants.
+// Writes src/generated/assets.ts: the schema files as string constants and the YAML policies as parsed
+// objects (parsed here, so the API needs no YAML parser at runtime).
 //
 //     npm run gen
 //
@@ -9,6 +10,7 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse } from "yaml";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const OUT = join(ROOT, "api", "src", "generated", "assets.ts");
@@ -42,9 +44,11 @@ export function render(): string {
     ...schema.map((f) => `  { path: ${JSON.stringify(f.path)}, text: ${JSON.stringify(f.text)} },`),
     "];",
     "",
-    `export const ENGAGEMENT_POLICY_YAML = ${JSON.stringify(read("config/engagement-policy.yaml"))};`,
+    "/** config/engagement-policy.yaml, parsed. */",
+    `export const ENGAGEMENT_POLICY = ${JSON.stringify(parse(read("config/engagement-policy.yaml")))};`,
     "",
-    `export const CONNECTION_POLICY_YAML = ${JSON.stringify(read("config/connection-policy.yaml"))};`,
+    "/** config/connection-policy.yaml, parsed. */",
+    `export const CONNECTION_POLICY = ${JSON.stringify(parse(read("config/connection-policy.yaml")))};`,
     "",
   ];
   return lines.join("\n");

@@ -13,8 +13,7 @@
 // Authorities (regulators, courts) are assessed against their statutory timetable and the requests sent to
 // them, never against silence. Delivery risk (an item at risk, delayed or overdue) is reported separately.
 
-import { parse } from "yaml";
-import { ENGAGEMENT_POLICY_YAML } from "./generated/assets.ts";
+import { ENGAGEMENT_POLICY } from "./generated/assets.ts";
 import * as impact from "./impact.ts";
 import type { Items, RaciRow, WorkstreamEvent } from "./queries.ts";
 import { addDays, dayMonth, dayMonthYear, daysBetween, maxBy, plural, sorted } from "./py.ts";
@@ -39,7 +38,7 @@ export interface Policy {
 let loaded: Policy | undefined;
 
 export function policy(): Policy {
-  return (loaded ??= parse(ENGAGEMENT_POLICY_YAML) as Policy);
+  return (loaded ??= ENGAGEMENT_POLICY as Policy);
 }
 
 /** The date part of a date or datetime text. */
