@@ -1,6 +1,0 @@
-{
-  "imports": {
-    "@typedb/driver-http": "npm:@typedb/driver-http@3.14.0",
-    "yaml": "npm:yaml@2.9.1"
-  }
-}

@@ -9,7 +9,7 @@
 
 import { handle } from "../../apex/api/src/app.ts";
 import { settingsFromEnv } from "../../apex/api/src/settings.ts";
-import { cached, prefixedEnv, stripPrefix } from "./shared.ts";
+import { cached, prefixedEnv, stripPrefix } from "../lib/shared.ts";
 
 export const config = {
   path: "/apex/api/*",

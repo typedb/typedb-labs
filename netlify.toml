@@ -6,6 +6,9 @@
 #   /noodlelab/api/*  its API (netlify/edge-functions/noodlelab-api.ts)
 #   /                 the index page (site/index.html)
 #
+# The edge functions import the HTTP driver and the YAML parser as npm packages, which Netlify's bundler takes
+# from the root node_modules: they are dependencies of the root package.json, installed before the build.
+#
 # Site env vars: for each lab, <PREFIX>TYPEDB_ADDRESS, <PREFIX>TYPEDB_USERNAME, <PREFIX>TYPEDB_PASSWORD and the
 # database name (APEX_DATABASE, NOODLELAB_TYPEDB_DATABASE), with PREFIX = APEX_ or NOODLELAB_. A plain
 # TYPEDB_ADDRESS / TYPEDB_USERNAME / TYPEDB_PASSWORD is used by any lab without its own.
@@ -16,11 +19,6 @@
 
 [build.environment]
   NODE_VERSION = "24"
-
-[functions]
-  # The edge functions import the HTTP driver and the YAML parser as npm packages; the build installs only
-  # each lab's web/, so the import map names them for Netlify's bundler.
-  deno_import_map = "netlify/import_map.json"
 
 [[edge_functions]]
   function = "apex-api"

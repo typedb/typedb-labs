@@ -5,7 +5,7 @@
 
 import { handle } from "../../noodlelab/api/src/app.ts";
 import { settingsFromEnv } from "../../noodlelab/api/src/settings.ts";
-import { cached, prefixedEnv, stripPrefix } from "./shared.ts";
+import { cached, prefixedEnv, stripPrefix } from "../lib/shared.ts";
 
 export const config = {
   path: "/noodlelab/api/*",
