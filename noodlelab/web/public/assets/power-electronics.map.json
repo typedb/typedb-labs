@@ -1,0 +1,11 @@
+{
+  "asset": "power-electronics",
+  "nodes": {
+    "pdu": "pdu",
+    "dc-dc": "dc-dc",
+    "obc": "obc",
+    "lv-battery": "lv-battery",
+    "lv-fuse-box": "lv-fuse-box",
+    "charge-port": "charge-port"
+  }
+}

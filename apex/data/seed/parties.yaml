@@ -1,0 +1,99 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Organisation types must be concrete types from the schema. People's contact details are fictional:
+# reserved .example domains (RFC 2606) and Ofcom's drama range (07700 900000-900999). The API only ever
+# returns them masked.
+
+organisations:
+  - {code: ORG-NOV, type: company, name: Novacore plc, jurisdiction: GB, sector: Life sciences and medical technology, description: UK-listed life-sciences and medical-technology group; the acquirer.}
+  - {code: ORG-ATL, type: company, name: Atlas Biopharma plc, jurisdiction: GB, sector: Biopharmaceuticals, description: UK-listed developer of rare-disease biologic medicines; the target.}
+  - {code: ORG-ATL-UK, type: company, name: Atlas Biopharma (UK) Ltd, jurisdiction: GB, sector: Biopharmaceuticals, description: Main operating company.}
+  - {code: ORG-ATL-US, type: company, name: Atlas Therapeutics Inc, jurisdiction: US, sector: Biopharmaceuticals, description: US commercial arm (Delaware).}
+  - {code: ORG-ATL-IE, type: company, name: Atlas Biologics Ireland Ltd, jurisdiction: IE, sector: Biopharmaceutical manufacturing, description: Manufacturing company.}
+  - {code: ORG-ATL-DE, type: company, name: Atlas Biopharma GmbH, jurisdiction: DE, sector: Biopharmaceuticals, description: EU distribution.}
+  - {code: ORG-ATL-IP, type: company, name: Atlas IP Holdings Ltd, jurisdiction: GB, sector: Intellectual property, description: Holds Atlas's patents and licences.}
+  - {code: ORG-ATL-JV, type: company, name: Helix Atlas Manufacturing Ltd, jurisdiction: IE, sector: Biopharmaceutical manufacturing, description: Joint venture that manufactures Atlas's lead product.}
+  - {code: ORG-HELIX, type: company, name: Helix Contract Services Ltd, jurisdiction: GB, sector: Contract manufacturing, description: Joint-venture partner in Helix Atlas Manufacturing.}
+  - {code: ORG-CALDER, type: company, name: Calder University Enterprises Ltd, jurisdiction: GB, sector: Technology transfer, description: University technology-transfer company; licensor of Atlas's core patents.}
+  - {code: ORG-HAR, type: investment-bank, name: Harrowgate & Co, jurisdiction: GB, sector: Investment banking}
+  - {code: ORG-BWM, type: law-firm, name: Blackwood Marsh LLP, jurisdiction: GB, sector: Legal services}
+  - {code: ORG-KF, type: accounting-firm, name: Kestrel & Finch LLP, jurisdiction: GB, sector: Accounting and advisory}
+  - {code: ORG-COR, type: consultancy, name: Corvane Consulting, jurisdiction: GB, sector: Management consulting}
+  - {code: ORG-HAL, type: communications-firm, name: Halyard Communications, jurisdiction: GB, sector: Financial communications}
+  - {code: ORG-LKH, type: investment-bank, name: Larkhill Capital, jurisdiction: GB, sector: Investment banking}
+  - {code: ORG-PH, type: law-firm, name: Pemberton Hale LLP, jurisdiction: GB, sector: Legal services}
+  - {code: ORG-CRB, type: communications-firm, name: Corbel Communications, jurisdiction: GB, sector: Financial communications}
+  - {code: ORG-ALB, type: commercial-bank, name: Albion Commercial Bank, jurisdiction: GB, sector: Banking}
+  - {code: ORG-NMB, type: commercial-bank, name: Northmere Bank, jurisdiction: GB, sector: Banking}
+  - {code: ORG-CMA, type: regulator, name: Competition and Markets Authority, jurisdiction: GB, sector: Competition regulation, description: UK merger control (Enterprise Act 2002).}
+  - {code: ORG-EC, type: regulator, name: European Commission (DG Competition), jurisdiction: EU, sector: Competition regulation, description: EU merger control (EU Merger Regulation).}
+  - {code: ORG-FTC, type: regulator, name: US Federal Trade Commission, jurisdiction: US, sector: Competition regulation, description: Receives HSR premerger notifications (with the DOJ).}
+  - {code: ORG-DOJ, type: regulator, name: US Department of Justice (Antitrust Division), jurisdiction: US, sector: Competition regulation, description: Receives HSR premerger notifications (with the FTC).}
+  - {code: ORG-ISU, type: regulator, name: Investment Security Unit (Cabinet Office), jurisdiction: GB, sector: National security screening, description: Runs UK National Security and Investment Act reviews for the Secretary of State.}
+  - {code: ORG-PANEL, type: regulator, name: The Panel on Takeovers and Mergers, jurisdiction: GB, sector: Takeover regulation, description: Administers the Takeover Code.}
+  - {code: ORG-HCJ, type: court, name: High Court of Justice (England and Wales), jurisdiction: GB, sector: Courts, description: 'Sanctions schemes of arrangement (Companies Act 2006, Part 26).'}
+  - {code: ORG-MLS, type: investment-bank, name: Mercia Lane Securities, jurisdiction: GB, sector: Corporate broking}
+  - {code: ORG-TCM, type: investment-bank, name: Thornbury Capital Markets, jurisdiction: GB, sector: Corporate broking}
+  - {code: ORG-ASH, type: registrar, name: Ashgrove Registrars Ltd, jurisdiction: GB, sector: Share registration, description: Atlas's share registrar; receiving agent for the scheme and paying agent for the consideration.}
+
+# Job titles belong to the employment, not the person.
+people:
+  - {code: PER-HARTLEY, name: Eleanor Hartley, employer: ORG-NOV, job_title: Chief Executive Officer, email: e.hartley@novacore.example, phone: 07700 900001}
+  - {code: PER-ADEBAYO, name: Marcus Adebayo, employer: ORG-NOV, job_title: Chief Financial Officer, email: m.adebayo@novacore.example, phone: 07700 900002}
+  - {code: PER-LINDQVIST, name: Sophie Lindqvist, employer: ORG-NOV, job_title: General Counsel, email: s.lindqvist@novacore.example, phone: 07700 900003}
+  - {code: PER-OKAFOR, name: Daniel Okafor, employer: ORG-NOV, job_title: 'Director, Corporate Development', email: d.okafor@novacore.example, phone: 07700 900004}
+  - {code: PER-REYES, name: Hannah Reyes, employer: ORG-NOV, job_title: Integration Director, email: h.reyes@novacore.example, phone: 07700 900005}
+  - {code: PER-FERREIRA, name: Tomás Ferreira, employer: ORG-NOV, job_title: Chief People Officer, email: t.ferreira@novacore.example, phone: 07700 900006}
+  - {code: PER-WHITFIELD, name: Grace Whitfield, employer: ORG-NOV, job_title: Head of Investor Relations, email: g.whitfield@novacore.example, phone: 07700 900007}
+  - {code: PER-MENON, name: Dr Rajiv Menon, employer: ORG-ATL, job_title: Chief Executive Officer, email: r.menon@atlasbiopharma.example, phone: 07700 900008}
+  - {code: PER-DONNELLY, name: Claire Donnelly, employer: ORG-ATL, job_title: Chief Financial Officer, email: c.donnelly@atlasbiopharma.example, phone: 07700 900009}
+  - {code: PER-PRITCHARD, name: Owen Pritchard, employer: ORG-ATL, job_title: Company Secretary, email: o.pritchard@atlasbiopharma.example, phone: 07700 900010}
+  - {code: PER-GALLAGHER, name: Fiona Gallagher, employer: ORG-ATL, job_title: Chair, email: f.gallagher@atlasbiopharma.example, phone: 07700 900011}
+  - {code: PER-THORNTON, name: James Thornton, employer: ORG-HAR, job_title: Managing Director, email: j.thornton@harrowgate.example, phone: 07700 900012}
+  - {code: PER-KARIM, name: Aisha Karim, employer: ORG-HAR, job_title: Director, email: a.karim@harrowgate.example, phone: 07700 900013}
+  - {code: PER-AINSWORTH, name: Charlotte Ainsworth, employer: ORG-BWM, job_title: Corporate Partner, email: c.ainsworth@blackwoodmarsh.example, phone: 07700 900014}
+  - {code: PER-SHAW, name: Benedict Shaw, employer: ORG-BWM, job_title: Competition Partner, email: b.shaw@blackwoodmarsh.example, phone: 07700 900015}
+  - {code: PER-NAIR, name: Priya Nair, employer: ORG-KF, job_title: Transaction Services Partner, email: p.nair@kestrelfinch.example, phone: 07700 900016}
+  - {code: PER-BRENNAN, name: Lucas Brennan, employer: ORG-COR, job_title: Integration Management Office Lead, email: l.brennan@corvane.example, phone: 07700 900017}
+  - {code: PER-TANAKA, name: Mei Tanaka, employer: ORG-COR, job_title: Integration Manager, email: m.tanaka@corvane.example, phone: 07700 900018}
+  - {code: PER-GRANT, name: Oliver Grant, employer: ORG-HAL, job_title: Account Director, email: o.grant@halyard.example, phone: 07700 900019}
+  - {code: PER-COLE, name: Henrietta Cole, employer: ORG-LKH, job_title: Managing Director, email: h.cole@larkhillcapital.example, phone: 07700 900020}
+  - {code: PER-ACHEBE, name: Samuel Achebe, employer: ORG-PH, job_title: Corporate Partner, email: s.achebe@pembertonhale.example, phone: 07700 900021}
+  - {code: PER-PETROVA, name: Nadia Petrova, employer: ORG-CRB, job_title: Partner, email: n.petrova@corbel.example, phone: 07700 900022}
+  - {code: PER-HOLT, name: Rebecca Holt, employer: ORG-ALB, job_title: Head of Leveraged Finance, email: r.holt@albionbank.example, phone: 07700 900023}
+  - {code: PER-MCKENZIE, name: Ian McKenzie, employer: ORG-NMB, job_title: 'Director, Acquisition Finance', email: i.mckenzie@northmere.example, phone: 07700 900024}
+  - {code: PER-CHANDRAN, name: Ravi Chandran, employer: ORG-NOV, job_title: Head of Regulatory Affairs, email: r.chandran@novacore.example, phone: 07700 900025}
+  - {code: PER-FOSTER, name: Neil Foster, employer: ORG-NOV, job_title: Treasury Director, email: n.foster@novacore.example, phone: 07700 900026}
+  - {code: PER-WHITCOMBE, name: Laura Whitcombe, employer: ORG-NOV, job_title: Group Financial Controller, email: l.whitcombe@novacore.example, phone: 07700 900027}
+  - {code: PER-HADDAD, name: Amira Haddad, employer: ORG-NOV, job_title: Integration Programme Manager, email: a.haddad@novacore.example, phone: 07700 900028}
+  - {code: PER-BARLOW, name: Simon Barlow, employer: ORG-NOV, job_title: Head of Internal Communications, email: s.barlow@novacore.example, phone: 07700 900029}
+  - {code: PER-REID, name: Joanna Reid, employer: ORG-ATL, job_title: General Counsel, email: j.reid@atlasbiopharma.example, phone: 07700 900030}
+  - {code: PER-LINDSAY, name: Sarah Lindsay, employer: ORG-ATL, job_title: HR Director, email: s.lindsay@atlasbiopharma.example, phone: 07700 900031}
+  - {code: PER-ELLISON, name: Mark Ellison, employer: ORG-ATL, job_title: Head of Investor Relations, email: m.ellison@atlasbiopharma.example, phone: 07700 900032}
+  - {code: PER-OSULLIVAN, name: Liam O'Sullivan, employer: ORG-ATL-IE, job_title: Site Director, email: l.osullivan@atlasbiologics.example, phone: 07700 900033}
+  - {code: PER-NAVARRO, name: Ella Navarro, employer: ORG-BWM, job_title: 'Senior Associate, Competition', email: e.navarro@blackwoodmarsh.example, phone: 07700 900034}
+  - {code: PER-KINGSLEY, name: Rory Kingsley, employer: ORG-BWM, job_title: 'Associate, Corporate', email: r.kingsley@blackwoodmarsh.example, phone: 07700 900035}
+  - {code: PER-LIU, name: Grace Liu, employer: ORG-KF, job_title: Tax Director, email: g.liu@kestrelfinch.example, phone: 07700 900036}
+  - {code: PER-BRANDT, name: Felix Brandt, employer: ORG-COR, job_title: Day-1 Workstream Lead, email: f.brandt@corvane.example, phone: 07700 900037}
+  - {code: PER-PATEL, name: Zoe Patel, employer: ORG-HAL, job_title: Account Manager, email: z.patel@halyard.example, phone: 07700 900038}
+  - {code: PER-FRASER, name: Isla Fraser, employer: ORG-PH, job_title: Senior Associate, email: i.fraser@pembertonhale.example, phone: 07700 900039}
+  - {code: PER-MENSAH, name: Kofi Mensah, employer: ORG-ALB, job_title: 'Associate, Leveraged Finance', email: k.mensah@albionbank.example, phone: 07700 900040}
+  - {code: PER-HOLLIS, name: Ben Hollis, employer: ORG-MLS, job_title: Corporate Broking Director, email: b.hollis@mercialane.example, phone: 07700 900041}
+  - {code: PER-HUANG, name: Claire Huang, employer: ORG-TCM, job_title: 'Director, Corporate Broking', email: c.huang@thornburycm.example, phone: 07700 900042}
+  - {code: PER-DALE, name: Martin Dale, employer: ORG-ASH, job_title: Client Relationship Manager, email: m.dale@ashgroveregistrars.example, phone: 07700 900043}
+  - {code: PER-BYRNE, name: Declan Byrne, employer: ORG-HELIX, job_title: Managing Director, email: d.byrne@helixcs.example, phone: 07700 900044}
+  - {code: PER-WHITLOCK, name: Prof. Anne Whitlock, employer: ORG-CALDER, job_title: Director of Licensing, email: a.whitlock@calder-enterprises.example, phone: 07700 900045}
+
+# Direct legal shareholdings. Stakes are strings so they stay exact ("0.7" = 70%). No cross-shareholdings,
+# by design: the loader refuses ownership cycles (a deliberate simplification; docs/schema-design.md §4).
+ownership:
+  - {owner: ORG-ATL, owned: ORG-ATL-UK, stake: '1.0', description: 'Atlas Biopharma plc''s main operating subsidiary, wholly owned.'}
+  - {owner: ORG-ATL-UK, owned: ORG-ATL-US, stake: '1.0', description: 'The US commercial arm, wholly owned by the UK operating company.'}
+  - {owner: ORG-ATL-UK, owned: ORG-ATL-IE, stake: '1.0', description: 'The Irish manufacturing company, wholly owned by the UK operating company.'}
+  - {owner: ORG-ATL-IE, owned: ORG-ATL-DE, stake: '1.0', description: 'EU distribution, held from Ireland so that it sits inside the EU.'}
+  - {owner: ORG-ATL-IE, owned: ORG-ATL-JV, stake: '0.6', description: 'Majority stake in the manufacturing joint venture. Helix holds the other 40%, with two of five board seats, a veto over reserved matters (budget, new products, a change of manufacturer) and a call option over this stake if Atlas changes control.'}
+  - {owner: ORG-HELIX, owned: ORG-ATL-JV, stake: '0.4', description: 'The joint-venture partner''s minority stake, with two board seats, reserved-matter vetoes and the change-of-control call option.'}
+  - {owner: ORG-ATL-UK, owned: ORG-ATL-IP, stake: '0.7', description: The UK operating company's founding stake in the IP holding company.}
+  - {owner: ORG-ATL-US, owned: ORG-ATL-IP, stake: '0.2', description: 'Issued to Atlas Therapeutics Inc in 2021, when it contributed its US-origin patents to the IP holding company.'}
+  - {owner: ORG-CALDER, owned: ORG-ATL-IP, stake: '0.1', description: 'University spin-out equity received for licensing the founding patents. Calder''s consent is needed to assign or sub-license the core patents (a reserved matter), separate from its change-of-control consent under the licence.'}

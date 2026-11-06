@@ -1,0 +1,19 @@
+{
+  "asset": "thermal",
+  "nodes": {
+    "radiator": "radiator",
+    "condenser": "condenser",
+    "cooling-fan-l": "cooling-fan-l",
+    "cooling-fan-r": "cooling-fan-r",
+    "coolant-pump": "coolant-pump",
+    "coolant-reservoir": "coolant-reservoir",
+    "coolant-valve": "coolant-valve",
+    "coolant-heater": "coolant-heater",
+    "battery-chiller": "battery-chiller",
+    "heat-pump-compressor": "heat-pump-compressor",
+    "refrigerant-lines": "refrigerant-lines",
+    "front-coolant-lines": "front-coolant-lines",
+    "rear-coolant-lines": "rear-coolant-lines",
+    "coolant-lines": "coolant-lines"
+  }
+}

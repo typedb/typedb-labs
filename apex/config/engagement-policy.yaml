@@ -1,0 +1,34 @@
+# Engagement policy (decision D9, docs/phase6-plan.md §5.3 and §12). Configuration, not business data:
+# changing it never touches a TypeDB record. Every "days" figure is counted from the scenario date
+# stored in TypeDB (26 Oct 2026), never from today's real date. Served read-only at /api/engagement-policy.
+
+# Days without engagement on an assigned, active item before the assignment turns amber or red,
+# by RACI letter. Only the letters listed are assessed for inactivity: Accountable and Responsible people
+# are expected to act; Consulted and Informed people act when asked, so they are assessed on the requests
+# sent to them (below), never on silence. (Phase 6D deviation from the plan's C and I thresholds, which
+# were C 8/15 and I 31/46 days: add these lines back to restore them.)
+inactivity:
+  A: {amber_from: 4, red_from: 8}
+  R: {amber_from: 4, red_from: 8}
+
+# A request addressed to someone with a reply-by date: red once that date has passed with no response
+# recorded; amber when it falls due within this many days.
+response_warning_days: 2
+
+# When an item becomes active, so that its inactivity clock starts: its actual start, else its planned
+# start; a point milestone or condition (no start date) becomes active this many days before it is due.
+milestone_active_window_days: 21
+
+# Escalation (one step, amber to red; never green to amber, so an engaged person is not flagged for
+# the item's own difficulty, which is shown separately as delivery risk). Applies when the item is
+# schedule-critical or recorded as critical, AND it is due within the urgent window or is at risk or delayed.
+urgent_window_days: 14
+
+# Schedule float: the largest delay an item can absorb before any contractual deadline is breached
+# (the Impact Explorer's projection). At or below these, an item is schedule-critical / near-critical.
+critical_float_days: 30
+near_critical_float_days: 60
+
+# Authorities (regulators, courts) are assessed against their statutory timetable and the requests sent
+# to them, never against silence. A decision due within this many days with none recorded is amber.
+statutory_warning_days: 10

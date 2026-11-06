@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TypeDB Labs</title>
+  <meta name="description" content="Demonstration projects built on TypeDB." />
+  <style>
+    :root { color-scheme: light dark; --bg: #ffffff; --ink: #1b1b1f; --muted: #5f6370; --line: #e6e6ea; --brand: #6a3fc7; --card: #fafafc; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #111114; --ink: #f2f2f5; --muted: #a3a6b1; --line: #2a2a31; --brand: #b79cf0; --card: #18181d; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    main { max-width: 880px; margin: 0 auto; padding: 56px 16px 72px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    p.lead { color: var(--muted); margin: 0 0 40px; }
+    .labs { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .labs { grid-template-columns: 1fr 1fr; } }
+    a.card { display: block; padding: 20px 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: inherit; text-decoration: none; }
+    a.card:hover { border-color: var(--brand); }
+    a.card h2 { margin: 0 0 6px; font-size: 1.15rem; color: var(--brand); }
+    a.card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>TypeDB Labs</h1>
+    <p class="lead">Demonstration projects built on <a href="https://typedb.com">TypeDB</a>. Every figure on every screen is read live from a TypeDB database, and each panel shows the TypeQL that produced it.</p>
+    <div class="labs">
+      <a class="card" href="/apex/">
+        <h2>Project Apex</h2>
+        <p>Deal intelligence for a fictional £2.4 billion acquisition: who is involved and how, what is being acquired through which chain of companies, and which contractual deadline breaks if a regulator takes 61 more days.</p>
+      </a>
+      <a class="card" href="/noodlelab/">
+        <h2>NoodleLab Visual Explorer</h2>
+        <p>An original electric vehicle that separates into an exploded assembly. Select a part to ask TypeDB what it is, what it connects to, which systems it serves and what stops working if it fails.</p>
+      </a>
+    </div>
+    <footer>Open source under Apache-2.0 on <a href="https://github.com/typedb/typedb-labs">GitHub</a>. Everything in these demonstrations is fictional.</footer>
+  </main>
+</body>
+</html>

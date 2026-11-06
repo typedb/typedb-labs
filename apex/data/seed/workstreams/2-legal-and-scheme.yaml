@@ -1,0 +1,119 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Legal and Scheme workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-LEG, name: Legal and Scheme, status: in-progress, planned_start: 2026-06-22, due: 2026-12-03, criticality: critical, description: 'The Takeover Code and court process that delivers Atlas to Novacore: the co-operation agreement and Rule 2.7 announcement, the scheme document and court hearings, shareholder approval, change-of-control consents, and Atlas''s conduct of business until completion.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-LEG-COOP, type: activity, name: Co-operation agreement and Rule 2.7 announcement, workstream: WS-LEG, status: complete, planned_start: 2026-06-22, due: 2026-07-13, criticality: critical, progress: 100}
+  - {code: AC-LEG-IRREV, type: activity, name: Irrevocable undertakings from Atlas's directors, workstream: WS-LEG, status: complete, planned_start: 2026-07-01, due: 2026-07-13, criticality: high, progress: 100}
+  - {code: MS-ANNOUNCE, type: milestone, name: Firm offer announced (Rule 2.7), workstream: WS-LEG, status: complete, progress: 100, due: 2026-07-14, criticality: critical}
+  - {code: AC-LEG-CONSENTS, type: activity, name: Change-of-control consents programme, workstream: WS-LEG, status: complete, planned_start: 2026-07-14, due: 2026-10-14, criticality: critical, progress: 100, description: 'Approach the counterparties with change-of-control rights (Calder under the patent licence, Helix under the joint-venture agreement) and obtain their consents.'}
+  - {code: CV-CONDUCT, type: covenant, name: Atlas ordinary-course operating restrictions end, workstream: WS-LEG, status: in-progress, progress: 55, planned_start: 2026-07-14, due: 2026-12-02, criticality: medium, legal_basis: Co-operation agreement, description: Atlas must run its business in the ordinary course until completion.}
+  - {code: AC-LEG-CLAIM, type: activity, name: Scheme claim form and evidence filed with the court, workstream: WS-LEG, status: complete, planned_start: 2026-07-15, due: 2026-07-21, criticality: high, progress: 100, description: 'Filed in good time before the convening hearing, at which the court decides whether the shareholder meetings can be called.'}
+  - {code: AC-LEG-SCHEMEDOC, type: activity, name: Draft and verify the scheme document, workstream: WS-LEG, status: complete, planned_start: 2026-07-15, due: 2026-08-10, criticality: high, progress: 100}
+  - {code: MS-CONVENE, type: milestone, name: Court convening hearing, workstream: WS-LEG, status: complete, due: 2026-08-04, criticality: high, progress: 100, description: The court orders the Court Meeting and approves the explanatory statement in the scheme document.}
+  - {code: MS-SCHEME-DOC, type: milestone, name: Scheme document published, workstream: WS-LEG, status: complete, progress: 100, due: 2026-08-11, criticality: high, description: 'Published within 28 days of the firm offer announcement, as the Code requires.'}
+  - {code: AC-LEG-MEETINGS, type: activity, name: Proxy solicitation and shareholder meetings, workstream: WS-LEG, status: complete, planned_start: 2026-08-11, due: 2026-09-07, criticality: critical, progress: 100, description: The registrar counts proxies for the Court Meeting (a majority in number holding 75% by value) and the General Meeting.}
+  - {code: CP-SHAREHOLDERS, type: shareholder-approval, name: Scheme approved by Atlas shareholders, workstream: WS-LEG, status: complete, progress: 100, due: 2026-09-07, criticality: critical, legal_basis: 'Companies Act 2006, Part 26', description: Approved at the Court Meeting and General Meeting.}
+  - {code: CV-COC-CALDER, type: covenant, name: 'Calder licence: change-of-control consent', workstream: WS-LEG, status: complete, progress: 100, due: 2026-10-09, criticality: high, legal_basis: Calder patent licence, description: "Calder's consent to Atlas IP Holdings' change of control, received unconditionally."}
+  - {code: CV-COC-HELIX, type: covenant, name: Helix waiver of its change-of-control call option, workstream: WS-LEG, status: complete, progress: 100, due: 2026-10-14, criticality: critical, legal_basis: Helix Atlas Manufacturing shareholders' agreement, description: 'Helix has signed a waiver of its call option, but only on condition that completion happens by 31 January 2027 (see DL-HELIX-WAIVER).'}
+  - {code: AC-LEG-SANCTION, type: activity, name: Prepare the sanction hearing, workstream: WS-LEG, status: not-started, planned_start: 2026-11-02, due: 2026-11-25, criticality: critical, progress: 0}
+  - {code: AC-LEG-DELIST, type: activity, name: Cancellation of listing and re-registration applications, workstream: WS-LEG, status: not-started, planned_start: 2026-11-18, due: 2026-12-02, criticality: medium, progress: 0}
+  - {code: CP-COURT, type: court-sanction, name: Court sanction hearing, workstream: WS-LEG, status: not-started, progress: 0, due: 2026-11-30, criticality: critical, legal_basis: 'Companies Act 2006, Part 26', description: Held once every other condition is satisfied or waived.}
+  - {code: MS-COMPLETION, type: milestone, name: 'Scheme effective: completion', workstream: WS-LEG, status: not-started, progress: 0, due: 2026-12-02, criticality: critical, description: The court order is delivered to the Registrar of Companies and the scheme takes effect.}
+  - {code: MS-DELIST, type: milestone, name: Atlas shares delisted, workstream: WS-LEG, status: not-started, progress: 0, due: 2026-12-03, criticality: medium}
+  - {code: DL-HELIX-WAIVER, type: deadline, name: 'Helix waiver: completion deadline', workstream: WS-LEG, status: in-progress, due: 2027-01-31, criticality: critical, legal_basis: Helix waiver letter (14 October 2026), consequence: 'The waiver lapses and Helix''s change-of-control call option revives: Helix may buy Atlas Biologics Ireland''s 60% of Helix Atlas Manufacturing, which makes Atlas''s lead product, at the shareholders'' agreement''s fair-value price. If Helix exercised the option, Novacore could lose control of manufacturing.'}
+  - {code: DL-LONGSTOP, type: deadline, name: Long-stop date, workstream: WS-LEG, status: in-progress, due: 2027-03-31, criticality: critical, legal_basis: 'Takeover Code, Appendix 7; scheme conditions', consequence: 'If the scheme is not effective by this date it lapses, unless Novacore extends the date with Atlas''s agreement (Panel consent is needed only in a competitive situation; the extension must be announced).'}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-DD, to: MS-ANNOUNCE, lag: 0}
+  - {kind: sequencing, from: MS-FACILITY, to: MS-ANNOUNCE, lag: 0}
+  - {kind: sequencing, from: MS-ANNOUNCE, to: MS-SCHEME-DOC, lag: 28}
+  - {kind: sequencing, from: MS-SCHEME-DOC, to: CP-SHAREHOLDERS, lag: 21}
+  - {kind: gating, from: CP-SHAREHOLDERS, to: CP-COURT, lag: 14}
+  - {kind: gating, from: CP-HSR, to: CP-COURT, lag: 14}
+  - {kind: gating, from: CP-NSIA, to: CP-COURT, lag: 14}
+  - {kind: gating, from: CP-EC, to: CP-COURT, lag: 14}
+  - {kind: gating, from: CP-CMA, to: CP-COURT, lag: 14}
+  - {kind: sequencing, from: CP-COURT, to: MS-COMPLETION, lag: 2}
+  - {kind: sequencing, from: MS-COMPLETION, to: MS-DELIST, lag: 1}
+  - {kind: sequencing, from: MS-COMPLETION, to: CV-CONDUCT, lag: 0}
+  - {kind: informing, from: CV-COC-HELIX, to: MS-COMPLETION, lag: 0}
+  - {kind: sequencing, from: AC-LEG-COOP, to: MS-ANNOUNCE, lag: 0}
+  - {kind: sequencing, from: AC-LEG-IRREV, to: MS-ANNOUNCE, lag: 0}
+  - {kind: sequencing, from: MS-ANNOUNCE, to: AC-LEG-CLAIM, lag: 1}
+  - {kind: sequencing, from: AC-LEG-CLAIM, to: MS-CONVENE, lag: 14}
+  - {kind: sequencing, from: MS-CONVENE, to: MS-SCHEME-DOC, lag: 0}
+  - {kind: sequencing, from: MS-ANNOUNCE, to: AC-LEG-SCHEMEDOC, lag: 1}
+  - {kind: sequencing, from: AC-LEG-SCHEMEDOC, to: MS-SCHEME-DOC, lag: 0}
+  - {kind: sequencing, from: MS-SCHEME-DOC, to: AC-LEG-MEETINGS, lag: 0}
+  - {kind: sequencing, from: AC-LEG-MEETINGS, to: CP-SHAREHOLDERS, lag: 0}
+  - {kind: informing, from: CV-COC-CALDER, to: AC-LEG-CONSENTS, lag: 0}
+  - {kind: informing, from: CV-COC-HELIX, to: AC-LEG-CONSENTS, lag: 0}
+  - {kind: informing, from: AC-DD-IP, to: AC-LEG-CONSENTS, lag: 0}
+  - {kind: sequencing, from: AC-LEG-SANCTION, to: CP-COURT, lag: 0}
+  - {kind: sequencing, from: AC-LEG-DELIST, to: MS-DELIST, lag: 0}
+  - {kind: sequencing, from: AC-FIN-CASHCONF, to: MS-ANNOUNCE, lag: 0}
+  - {kind: sequencing, from: AC-COM-ANNOUNCE, to: MS-ANNOUNCE, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-LEG: {A: PER-LINDQVIST, R: [PER-AINSWORTH], C: [PER-ACHEBE], I: [PER-HARTLEY]}
+  AC-LEG-COOP: {A: PER-LINDQVIST, R: [PER-AINSWORTH], C: [PER-ACHEBE, PER-THORNTON], I: [PER-HARTLEY]}
+  AC-LEG-IRREV: {A: PER-OKAFOR, R: [PER-THORNTON], C: [PER-COLE], I: [PER-GALLAGHER]}
+  MS-ANNOUNCE: {A: PER-HARTLEY, R: [PER-THORNTON, PER-AINSWORTH], C: [PER-MENON, PER-COLE], I: [PER-WHITFIELD, ORG-PANEL]}
+  AC-LEG-CONSENTS: {A: PER-LINDQVIST, R: [PER-AINSWORTH], C: [PER-REID, PER-OSULLIVAN, PER-WHITLOCK], I: [PER-OKAFOR]}
+  CV-CONDUCT: {A: PER-MENON, R: [PER-DONNELLY], C: [PER-ACHEBE], I: [PER-OKAFOR]}
+  AC-LEG-CLAIM: {A: PER-PRITCHARD, R: [PER-ACHEBE, PER-FRASER], I: [PER-LINDQVIST]}
+  AC-LEG-SCHEMEDOC: {A: PER-PRITCHARD, R: [PER-FRASER], C: [PER-AINSWORTH, PER-COLE], I: [PER-GALLAGHER]}
+  MS-CONVENE: {A: PER-PRITCHARD, R: [PER-ACHEBE], C: [PER-AINSWORTH], I: [PER-OKAFOR]}
+  MS-SCHEME-DOC: {A: PER-PRITCHARD, R: [PER-ACHEBE], C: [PER-AINSWORTH, PER-COLE], I: [PER-OKAFOR]}
+  AC-LEG-MEETINGS: {A: PER-PRITCHARD, R: [PER-DALE], C: [PER-HUANG], I: [PER-GALLAGHER]}
+  CP-SHAREHOLDERS: {A: PER-GALLAGHER, R: [PER-PRITCHARD], C: [PER-COLE], I: [PER-OKAFOR]}
+  CV-COC-CALDER: {A: PER-LINDQVIST, R: [PER-AINSWORTH], C: [PER-MENON, PER-WHITLOCK], I: [PER-OKAFOR]}
+  CV-COC-HELIX: {A: PER-OKAFOR, R: [PER-AINSWORTH], C: [PER-MENON, PER-REYES, PER-BYRNE], I: [ORG-HELIX]}
+  AC-LEG-SANCTION: {A: PER-LINDQVIST, R: [PER-FRASER], C: [PER-AINSWORTH], I: [PER-PRITCHARD]}
+  AC-LEG-DELIST: {A: PER-PRITCHARD, R: [PER-HUANG], C: [PER-DALE], I: [PER-WHITFIELD]}
+  CP-COURT: {A: PER-LINDQVIST, R: [PER-AINSWORTH, PER-ACHEBE], C: [PER-PRITCHARD], I: [PER-OKAFOR]}
+  MS-COMPLETION: {A: PER-HARTLEY, R: [PER-OKAFOR], C: [PER-MENON, PER-THORNTON], I: [ORG-ALB, ORG-NMB, PER-WHITFIELD]}
+  MS-DELIST: {A: PER-PRITCHARD, R: [PER-ACHEBE], I: [PER-WHITFIELD]}
+  DL-HELIX-WAIVER: {A: PER-OKAFOR, R: [PER-AINSWORTH], C: [PER-REYES, PER-BYRNE], I: [PER-HARTLEY, ORG-HELIX]}
+  DL-LONGSTOP: {A: PER-HARTLEY, R: [PER-LINDQVIST], C: [PER-MENON, PER-THORNTON], I: [ORG-PANEL]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-LEG-01, type: request, at: !!timestamp '2026-06-23 10:00:00', kind: request, actor: PER-LINDQVIST, subject: AC-LEG-COOP, summary: First draft of the co-operation agreement requested for 30 June, recipients: [PER-AINSWORTH], response_due: 2026-06-30}
+  - {code: EV-LEG-02, type: response, at: !!timestamp '2026-06-29 18:00:00', kind: response, actor: PER-AINSWORTH, subject: AC-LEG-COOP, summary: First draft of the co-operation agreement sent, reply_to: [EV-LEG-01]}
+  - {code: EV-LEG-03, type: meeting, at: !!timestamp '2026-07-08 14:00:00', kind: meeting, actor: PER-AINSWORTH, subject: AC-LEG-COOP, summary: All-parties negotiation of the co-operation agreement, attendees: [PER-ACHEBE, PER-THORNTON, PER-COLE]}
+  - {code: EV-LEG-04, type: decision, at: !!timestamp '2026-07-13 20:30:00', kind: signed, actor: PER-GALLAGHER, subject: AC-LEG-IRREV, summary: Atlas's directors sign irrevocable undertakings to vote for the scheme}
+  - {code: EV-0004, type: decision, at: !!timestamp '2026-07-14 07:00:00', kind: announced, actor: ORG-NOV, subject: MS-ANNOUNCE, summary: Firm offer for Atlas Biopharma announced under Rule 2.7}
+  - {code: EV-LEG-05, type: request, at: !!timestamp '2026-07-20 11:00:00', kind: request, actor: PER-AINSWORTH, subject: CV-COC-CALDER, summary: Consent requested from Calder to Atlas IP Holdings' change of control, recipients: [ORG-CALDER, PER-WHITLOCK], response_due: 2026-08-31}
+  - {code: EV-LEG-07, type: delivery, at: !!timestamp '2026-07-21 16:00:00', kind: filed, actor: PER-ACHEBE, subject: AC-LEG-CLAIM, summary: Scheme claim form and witness evidence filed}
+  - {code: EV-LEG-06, type: request, at: !!timestamp '2026-07-22 10:00:00', kind: request, actor: PER-OKAFOR, subject: CV-COC-HELIX, summary: Helix asked to waive its change-of-control call option, recipients: [ORG-HELIX, PER-BYRNE], response_due: 2026-09-30}
+  - {code: EV-LEG-08, type: decision, at: !!timestamp '2026-08-04 12:30:00', kind: approved, actor: ORG-HCJ, subject: MS-CONVENE, summary: Court orders the Court Meeting and approves the explanatory statement}
+  - {code: EV-LEG-09, type: delivery, at: !!timestamp '2026-08-10 19:00:00', kind: delivered, actor: PER-FRASER, subject: AC-LEG-SCHEMEDOC, summary: Verification complete; scheme document approved for printing}
+  - {code: EV-0006, type: delivery, at: !!timestamp '2026-08-11 07:00:00', kind: published, actor: PER-PRITCHARD, subject: MS-SCHEME-DOC, summary: Scheme document published to Atlas shareholders}
+  - {code: EV-LEG-10, type: notice, at: !!timestamp '2026-08-20 07:00:00', kind: notification, actor: ORG-ASH, subject: AC-LEG-MEETINGS, summary: 'Proxy count: 31% of shares voted so far', recipients: [PER-PRITCHARD], automated: true}
+  - {code: EV-LEG-11, type: response, at: !!timestamp '2026-08-27 16:00:00', kind: response, actor: PER-WHITLOCK, subject: CV-COC-CALDER, summary: Calder asks for undertakings on the scope of the licence before consenting, reply_to: [EV-LEG-05]}
+  - {code: EV-LEG-12, type: notice, at: !!timestamp '2026-09-01 07:00:00', kind: notification, actor: ORG-ASH, subject: AC-LEG-MEETINGS, summary: 'Proxy count: 64% of shares voted, 98% in favour', recipients: [PER-PRITCHARD, PER-HUANG], automated: true}
+  - {code: EV-0009, type: decision, at: !!timestamp '2026-09-07 11:00:00', kind: approved, actor: PER-GALLAGHER, subject: CP-SHAREHOLDERS, summary: Court Meeting and General Meeting approve the scheme}
+  - {code: EV-LEG-13, type: delivery, at: !!timestamp '2026-09-07 13:00:00', kind: delivered, actor: PER-DALE, subject: AC-LEG-MEETINGS, summary: Final poll results certified by the registrar}
+  - {code: EV-LEG-14, type: request, at: !!timestamp '2026-09-15 09:00:00', kind: request, actor: PER-ACHEBE, subject: CV-CONDUCT, summary: Monthly ordinary-course compliance confirmation requested, recipients: [PER-DONNELLY], response_due: 2026-09-22}
+  - {code: EV-LEG-15, type: meeting, at: !!timestamp '2026-09-18 15:00:00', kind: meeting, actor: PER-OKAFOR, subject: CV-COC-HELIX, summary: Negotiation of the Helix waiver terms, attendees: [PER-BYRNE, PER-AINSWORTH, PER-REYES]}
+  - {code: EV-LEG-16, type: response, at: !!timestamp '2026-09-21 17:00:00', kind: response, actor: PER-DONNELLY, subject: CV-CONDUCT, summary: September ordinary-course confirmation given, reply_to: [EV-LEG-14]}
+  - {code: EV-LEG-17, type: response, at: !!timestamp '2026-10-02 12:00:00', kind: response, actor: PER-BYRNE, subject: CV-COC-HELIX, summary: 'Helix offers a waiver, conditional on completion by 31 January 2027', reply_to: [EV-LEG-06]}
+  - {code: EV-LEG-18, type: response, at: !!timestamp '2026-10-09 11:00:00', kind: response, actor: PER-WHITLOCK, subject: CV-COC-CALDER, summary: 'Calder grants its consent, unconditionally', reply_to: [EV-LEG-05]}
+  - {code: EV-0013, type: delivery, at: !!timestamp '2026-10-09 14:00:00', kind: consent, actor: PER-AINSWORTH, subject: CV-COC-CALDER, summary: Calder licence change-of-control consent received}
+  - {code: EV-0014, type: decision, at: !!timestamp '2026-10-14 17:00:00', kind: signed, actor: PER-OKAFOR, subject: CV-COC-HELIX, summary: 'Helix waiver signed, conditional on completion by 31 January 2027'}
+  - {code: EV-LEG-19, type: request, at: !!timestamp '2026-10-15 09:00:00', kind: request, actor: PER-ACHEBE, subject: CV-CONDUCT, summary: October ordinary-course compliance confirmation requested, recipients: [PER-DONNELLY], response_due: 2026-10-22}
+  - {code: EV-LEG-20, type: decision, at: !!timestamp '2026-10-16 16:00:00', kind: approved, actor: PER-MENON, subject: CV-CONDUCT, summary: 'Atlas board approves a capital-expenditure item, with Novacore''s consent'}
+  - {code: EV-LEG-21, type: response, at: !!timestamp '2026-10-23 10:00:00', kind: response, actor: PER-DONNELLY, subject: CV-CONDUCT, summary: 'October ordinary-course confirmation given, a day late', reply_to: [EV-LEG-19]}
+  - {code: EV-LEG-22, type: meeting, at: !!timestamp '2026-10-20 15:00:00', kind: meeting, actor: PER-LINDQVIST, subject: WS-LEG, summary: 'Legal and Scheme steering: sanction hearing timetable and evidence for the court', attendees: [PER-AINSWORTH, PER-ACHEBE, PER-PRITCHARD], agenda: [CP-COURT, AC-LEG-SANCTION]}

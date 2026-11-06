@@ -1,0 +1,8 @@
+# Migration 002 (Phase 6E data): a meeting can name the work items it actually discussed.
+# A workstream steering meeting is recorded against the workstream (oversight); its agenda items say
+# which activities were discussed, so attending it is engagement on those items only, never on every
+# item in the workstream (docs/phase6-plan.md §18).
+
+define
+  relation meeting, relates agenda-item @card(0..);
+  entity deal-item, plays meeting:agenda-item;

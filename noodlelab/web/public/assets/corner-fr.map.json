@@ -1,0 +1,30 @@
+{
+  "asset": "corner-fr",
+  "nodes": {
+    "tyre": "tyre-fr",
+    "wheel": "wheel-fr",
+    "wheel-nut-1": "wheel-nut-fr-1",
+    "wheel-nut-2": "wheel-nut-fr-2",
+    "wheel-nut-3": "wheel-nut-fr-3",
+    "wheel-nut-4": "wheel-nut-fr-4",
+    "wheel-nut-5": "wheel-nut-fr-5",
+    "brake-disc": "brake-disc-fr",
+    "caliper": "caliper-fr",
+    "brake-pad-inner": "brake-pad-inner-fr",
+    "brake-pad-outer": "brake-pad-outer-fr",
+    "brake-shield": "brake-shield-fr",
+    "brake-hose": "brake-hose-fr",
+    "hub-nut": "hub-nut-fr",
+    "hub": "hub-fr",
+    "wheel-bearing": "wheel-bearing-fr",
+    "knuckle": "knuckle-fr",
+    "wheel-speed-sensor": "wheel-speed-sensor-fr",
+    "lower-arm": "lower-arm-fr",
+    "upper-arm": "upper-arm-fr",
+    "coilover": "coilover-fr",
+    "spring": "spring-fr",
+    "top-mount": "top-mount-fr",
+    "drop-link": "drop-link-fr",
+    "tie-rod": "tie-rod-fr"
+  }
+}

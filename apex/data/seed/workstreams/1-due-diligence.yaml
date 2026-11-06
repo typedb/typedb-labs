@@ -1,0 +1,54 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Due Diligence workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-DD, name: Due Diligence, status: complete, planned_start: 2026-05-18, due: 2026-06-26, criticality: high, description: 'Confirmatory financial, tax, legal, commercial and IP due diligence on Atlas before the firm offer, run through a virtual data room with management Q&A.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-DD-VDR, type: activity, name: Data room review and document requests, workstream: WS-DD, status: complete, planned_start: 2026-05-18, due: 2026-06-12, criticality: medium, progress: 100, description: Atlas's virtual data room opened to Novacore's advisers under the non-disclosure agreement; every document request tracked to closure.}
+  - {code: AC-DD-FINWORK, type: activity, name: Financial and tax diligence fieldwork, workstream: WS-DD, status: complete, planned_start: 2026-05-25, due: 2026-06-17, criticality: high, progress: 100}
+  - {code: AC-DD-LEGWORK, type: activity, name: 'Legal diligence: contracts, litigation and change-of-control terms', workstream: WS-DD, status: complete, planned_start: 2026-05-25, due: 2026-06-19, criticality: high, progress: 100}
+  - {code: AC-DD-QA, type: activity, name: Management presentations and Q&A, workstream: WS-DD, status: complete, planned_start: 2026-05-26, due: 2026-06-05, criticality: medium, progress: 100}
+  - {code: AC-DD-IP, type: activity, name: IP and licensing diligence, workstream: WS-DD, status: complete, planned_start: 2026-06-01, due: 2026-06-19, criticality: high, progress: 100, description: 'Patent ownership and licences. Found the two change-of-control provisions the deal must manage: the Calder licence and Helix''s call option over the manufacturing joint venture.'}
+  - {code: MS-DD-FIN, type: milestone, name: Financial and tax due diligence report, workstream: WS-DD, status: complete, progress: 100, due: 2026-06-19}
+  - {code: MS-DD-LEGAL, type: milestone, name: Legal due diligence report, workstream: WS-DD, status: complete, progress: 100, due: 2026-06-22}
+  - {code: MS-DD, type: milestone, name: Due diligence complete, workstream: WS-DD, status: complete, progress: 100, due: 2026-06-26, criticality: high}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-DD-FIN, to: MS-DD, lag: 0}
+  - {kind: sequencing, from: MS-DD-LEGAL, to: MS-DD, lag: 0}
+  - {kind: informing, from: AC-DD-QA, to: AC-DD-FINWORK, lag: 0}
+  - {kind: sequencing, from: AC-DD-FINWORK, to: MS-DD-FIN, lag: 0}
+  - {kind: sequencing, from: AC-DD-LEGWORK, to: MS-DD-LEGAL, lag: 0}
+  - {kind: sequencing, from: AC-DD-IP, to: MS-DD, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-DD: {A: PER-OKAFOR, R: [PER-NAIR, PER-AINSWORTH], I: [PER-ADEBAYO]}
+  AC-DD-VDR: {A: PER-OKAFOR, R: [PER-AINSWORTH], C: [PER-PRITCHARD], I: [PER-NAIR]}
+  AC-DD-FINWORK: {A: PER-ADEBAYO, R: [PER-NAIR, PER-LIU], C: [PER-DONNELLY]}
+  AC-DD-LEGWORK: {A: PER-LINDQVIST, R: [PER-AINSWORTH, PER-KINGSLEY], C: [PER-REID]}
+  AC-DD-QA: {A: PER-OKAFOR, R: [PER-THORNTON], C: [PER-MENON, PER-DONNELLY], I: [PER-HARTLEY]}
+  AC-DD-IP: {A: PER-LINDQVIST, R: [PER-KINGSLEY], C: [PER-REID], I: [PER-OKAFOR]}
+  MS-DD-FIN: {A: PER-ADEBAYO, R: [PER-NAIR], I: [PER-OKAFOR]}
+  MS-DD-LEGAL: {A: PER-LINDQVIST, R: [PER-AINSWORTH], I: [PER-OKAFOR]}
+  MS-DD: {A: PER-OKAFOR, R: [PER-NAIR], C: [PER-AINSWORTH], I: [PER-HARTLEY]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-DD-01, type: notice, at: !!timestamp '2026-05-18 09:00:00', kind: notification, actor: ORG-ATL, subject: AC-DD-VDR, summary: Data room access granted to Novacore's advisers, recipients: [PER-AINSWORTH, PER-NAIR], automated: true}
+  - {code: EV-DD-02, type: meeting, at: !!timestamp '2026-05-26 10:00:00', kind: meeting, actor: PER-THORNTON, subject: AC-DD-QA, summary: Atlas management presentation to Novacore, attendees: [PER-MENON, PER-DONNELLY, PER-OKAFOR]}
+  - {code: EV-DD-03, type: request, at: !!timestamp '2026-05-27 17:00:00', kind: request, actor: PER-AINSWORTH, subject: AC-DD-VDR, summary: 'Q&A batch 1 sent to Atlas: 42 questions', recipients: [PER-PRITCHARD], response_due: 2026-06-03}
+  - {code: EV-DD-04, type: response, at: !!timestamp '2026-06-02 16:30:00', kind: response, actor: PER-PRITCHARD, subject: AC-DD-VDR, summary: Atlas answers Q&A batch 1, reply_to: [EV-DD-03]}
+  - {code: EV-DD-05, type: delivery, at: !!timestamp '2026-06-17 18:00:00', kind: delivered, actor: PER-LIU, subject: AC-DD-FINWORK, summary: Tax diligence findings delivered}
+  - {code: EV-DD-06, type: delivery, at: !!timestamp '2026-06-19 12:00:00', kind: delivered, actor: PER-KINGSLEY, subject: AC-DD-IP, summary: 'IP report delivered: Calder licence and Helix call option flagged'}
+  - {code: EV-0001, type: delivery, at: !!timestamp '2026-06-19 17:30:00', kind: delivered, actor: PER-NAIR, subject: MS-DD-FIN, summary: Financial and tax due diligence report delivered}
+  - {code: EV-0002, type: delivery, at: !!timestamp '2026-06-22 12:00:00', kind: delivered, actor: PER-AINSWORTH, subject: MS-DD-LEGAL, summary: Legal due diligence report delivered}
+  - {code: EV-DD-07, type: meeting, at: !!timestamp '2026-06-24 10:00:00', kind: meeting, actor: PER-OKAFOR, subject: WS-DD, summary: 'Due diligence close-out steering: final findings signed off and open points handed to integration planning', attendees: [PER-NAIR, PER-AINSWORTH, PER-ADEBAYO], agenda: [MS-DD]}

@@ -1,0 +1,52 @@
+# labs.typedb.com: one Netlify site serving every lab under its own path.
+#
+#   /apex/*           Project Apex (apex/web, built with VITE_BASE=/apex/)
+#   /apex/api/*       its API, as an Edge Function over TypeDB Cloud (netlify/edge-functions/apex-api.ts)
+#   /noodlelab/*      NoodleLab Visual Explorer (noodlelab/web, built with VITE_BASE=/noodlelab/)
+#   /noodlelab/api/*  its API (netlify/edge-functions/noodlelab-api.ts)
+#   /                 the index page (site/index.html)
+#
+# Site env vars: for each lab, <PREFIX>TYPEDB_ADDRESS, <PREFIX>TYPEDB_USERNAME, <PREFIX>TYPEDB_PASSWORD and the
+# database name (APEX_DATABASE, NOODLELAB_TYPEDB_DATABASE), with PREFIX = APEX_ or NOODLELAB_. A plain
+# TYPEDB_ADDRESS / TYPEDB_USERNAME / TYPEDB_PASSWORD is used by any lab without its own.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  # The edge functions import the HTTP driver and the YAML parser as npm packages; the build installs only
+  # each lab's web/, so the import map names them for Netlify's bundler.
+  deno_import_map = "netlify/import_map.json"
+
+[[edge_functions]]
+  function = "apex-api"
+  path = "/apex/api/*"
+
+[[edge_functions]]
+  function = "noodlelab-api"
+  path = "/noodlelab/api/*"
+
+# Each lab is a single-page app: its own paths serve its own index.
+[[redirects]]
+  from = "/apex"
+  to = "/apex/"
+  status = 301
+
+[[redirects]]
+  from = "/apex/*"
+  to = "/apex/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/noodlelab"
+  to = "/noodlelab/"
+  status = 301
+
+[[redirects]]
+  from = "/noodlelab/*"
+  to = "/noodlelab/index.html"
+  status = 200

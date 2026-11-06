@@ -1,0 +1,290 @@
+# Functional dependencies, function to function (docs/dependency-semantics.md, C1).
+#
+#   dependent / function   the component and the function of it that relies on...
+#   provider / needs       ...this component's function
+#   kind                   support, torque (physical); power, cooling, lubrication, hydraulic (operational); control, data (control)
+#   loss                   what happens to `function` if `needs` is LOST: lost | degraded
+#   degradation            (optional) what happens if `needs` is only DEGRADED: lost | degraded; absent = nothing
+#   fallback               (optional) {backup, description}: if `needs` is lost but the backup works, the
+#                          result is degraded instead of lost
+# Placeholders as in connections.yaml (<c> corner, <a> axle, <s> side, plus "each" lists).
+# Concept vehicle: plausible engineering, simplified; see the simplifications in docs/dependency-semantics.md.
+
+dependencies:
+  # ---- 12 V supply -------------------------------------------------------------------------------------------
+  - {dependent: lv-fuse-box, function: 12 V distribution, provider: lv-battery, needs: 12 V supply, kind: power, loss: lost}
+  - {dependent: lv-harness, function: 12 V distribution, provider: lv-fuse-box, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: lv-battery, function: 12 V supply, provider: dc-dc, needs: 12 V charging, kind: power, loss: degraded,
+     description: "Without charging the 12 V battery runs down over hours"}
+  - {dependent: bms, function: battery supervision, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: vcu, function: torque control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: vcu, function: traction control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: bcm, function: body control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: gateway, function: network routing, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: telematics, function: connectivity, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: ad-compute, function: automated driving, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: steering-ecu, function: steering control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: esc-module, function: anti-lock braking, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: esc-module, function: stability control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: brake-booster, function: brake assistance, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: coolant-pump, function: coolant flow, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: "cooling-fan-<s>", function: airflow, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: "<a>-gate-driver", function: switching control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost,
+     description: "The gate-driver board's isolated supplies are fed from 12 V"}
+  - {dependent: "<a>-control-board", function: motor control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: "<a>-current-sensor", function: current measurement, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: "<a>-oil-pump", function: oil flow, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: vcu, function: park control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+
+  # ---- High-voltage path: modules > busbars > junction box > PDU > harness > inverter -------------------------
+  # Loss of any module opens the series string; reduced module power (degradation) reduces pack power.
+  - {dependent: battery-busbar-l, function: pack current, provider: "battery-module-<n>", needs: cell power, kind: power, loss: lost,
+     degradation: degraded, each: {n: [1, 3, 5, 7, 9, 11, 13, 15]}}
+  - {dependent: battery-busbar-r, function: pack current, provider: "battery-module-<n>", needs: cell power, kind: power, loss: lost,
+     degradation: degraded, each: {n: [2, 4, 6, 8, 10, 12, 14, 16]}}
+  # C3b: the string continues through the service disconnect and the fuse to the main contactors (docs/dependency-semantics.md)
+  - {dependent: service-disconnect, function: pack current, provider: "battery-busbar-<s>", needs: pack current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: pack-fuse, function: pack current, provider: service-disconnect, needs: pack current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: main-contactor-pos, function: HV switching, provider: pack-fuse, needs: pack current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: main-contactor-neg, function: HV switching, provider: service-disconnect, needs: pack current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "main-contactor-<pole>", function: HV switching, provider: bms, needs: battery supervision, kind: control, loss: lost, degradation: degraded,
+     each: {pole: [pos, neg]}, description: "The BMS holds the contactors closed; without it they open (a deliberate fail-safe)"}
+  - {dependent: main-contactor-pos, function: HV switching, provider: precharge-circuit, needs: precharge, kind: control, loss: lost,
+     description: "The positive contactor may only close after the inverters' capacitors are pre-charged"}
+  - {dependent: precharge-circuit, function: precharge, provider: bms, needs: battery supervision, kind: control, loss: lost}
+  - {dependent: hv-junction-box, function: HV supply, provider: "main-contactor-<pole>", needs: HV switching, kind: power, loss: lost, degradation: degraded,
+     each: {pole: [pos, neg]}}
+  - {dependent: bms, function: battery supervision, provider: "battery-monitor-<n>", needs: cell monitoring, kind: data, loss: lost,
+     each: {n: [1, 2, 3, 4, 5, 6, 7, 8]}, description: "Cells may not be used unmonitored: without their data the BMS opens the contactors"}
+  - {dependent: bms, function: battery supervision, provider: battery-monitor-chain, needs: monitor link, kind: data, loss: lost}
+  - {dependent: bms, function: battery supervision, provider: pack-current-sensor, needs: current measurement, kind: data, loss: degraded,
+     description: "Without current measurement the BMS keeps the contactors closed but limits power"}
+  - {dependent: pack-current-sensor, function: current measurement, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  # each monitor is powered by the two modules it watches
+  - {dependent: battery-monitor-1, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [1, 2]}}
+  - {dependent: battery-monitor-2, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [3, 4]}}
+  - {dependent: battery-monitor-3, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [5, 6]}}
+  - {dependent: battery-monitor-4, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [7, 8]}}
+  - {dependent: battery-monitor-5, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [9, 10]}}
+  - {dependent: battery-monitor-6, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [11, 12]}}
+  - {dependent: battery-monitor-7, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [13, 14]}}
+  - {dependent: battery-monitor-8, function: cell monitoring, provider: "battery-module-<m>", needs: cell power, kind: power, loss: lost, each: {m: [15, 16]}}
+  - {dependent: battery-rear-feed, function: DC charging, provider: hv-harness-charge, needs: DC charging, kind: power, loss: lost,
+     description: "DC charging enters at the pack's rear outlet and runs forwards along the internal feed"}
+  - {dependent: hv-junction-box, function: battery charging, provider: battery-rear-feed, needs: DC charging, kind: power, loss: lost,
+     fallback: {backup: obc, description: "AC charging through the on-board charger, much slower"}}
+  - {dependent: hv-junction-box, function: battery charging, provider: bms, needs: battery supervision, kind: control, loss: lost}
+  - {dependent: hv-junction-box, function: battery charging, provider: "main-contactor-<pole>", needs: HV switching, kind: power, loss: lost,
+     each: {pole: [pos, neg]}, description: "Charging current reaches the cells through the same contactors and fuse"}
+  - {dependent: hv-harness-charge, function: DC charging, provider: charge-port, needs: DC inlet, kind: power, loss: lost}
+  - {dependent: obc, function: AC charging, provider: charge-port, needs: AC inlet, kind: power, loss: lost}
+  - {dependent: obc, function: AC charging, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: charge-port, function: DC inlet, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost,
+     description: "The inlet's lock and communication need 12 V"}
+  - {dependent: charge-port, function: AC inlet, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: hv-harness-aux, function: HV distribution, provider: hv-junction-box, needs: HV supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: battery-rear-feed, function: HV distribution, provider: hv-junction-box, needs: HV supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: pdu, function: HV distribution, provider: hv-harness-aux, needs: HV distribution, kind: power, loss: lost, degradation: degraded}
+  - {dependent: hv-harness-front, function: HV distribution, provider: hv-junction-box, needs: HV supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: hv-harness-rear, function: HV distribution, provider: battery-rear-feed, needs: HV distribution, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-hv-connector", function: DC supply, provider: "hv-harness-<a>", needs: HV distribution, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-inverter-busbars", function: DC supply, provider: "<a>-hv-connector", needs: DC supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-dc-link-capacitor", function: DC supply, provider: "<a>-inverter-busbars", needs: DC supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-power-module", function: phase current, provider: "<a>-dc-link-capacitor", needs: DC supply, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-power-module", function: phase current, provider: "<a>-gate-driver", needs: switching control, kind: control, loss: lost}
+  - {dependent: "<a>-power-module", function: phase current, provider: "<a>-coolant-lines", needs: coolant flow, kind: cooling, loss: degraded,
+     description: "Without coolant the inverter limits its current"}
+  - {dependent: "<a>-power-module", function: phase current, provider: coolant-valve, needs: coolant temperature, kind: cooling, loss: degraded,
+     degradation: degraded, description: "Warmer coolant: the inverter derates sooner"}
+  - {dependent: "<a>-gate-driver", function: switching control, provider: "<a>-control-board", needs: motor control, kind: control, loss: lost,
+     description: "Switching commands from the motor-control board"}
+  - {dependent: "<a>-control-board", function: motor control, provider: vcu, needs: torque control, kind: control, loss: lost,
+     description: "Torque requests"}
+  - {dependent: "<a>-control-board", function: motor control, provider: "<a>-resolver", needs: rotor position, kind: data, loss: lost,
+     description: "Field-oriented control needs the rotor angle; this concept has no sensorless fallback"}
+  - {dependent: "<a>-control-board", function: motor control, provider: "<a>-current-sensor", needs: current measurement, kind: data, loss: lost,
+     description: "The current loop cannot run without phase-current feedback"}
+  - {dependent: dc-dc, function: 12 V charging, provider: pdu, needs: HV distribution, kind: power, loss: lost, degradation: degraded}
+  - {dependent: obc, function: AC charging, provider: pdu, needs: HV distribution, kind: power, loss: lost}
+  - {dependent: heat-pump-compressor, function: refrigerant compression, provider: pdu, needs: HV distribution, kind: power, loss: lost}
+
+  # ---- Drive torque, each axle: power module > stator > rotor > shaft > gears > drive shafts > hubs > wheels > tyres
+  - {dependent: "<a>-phase-busbars", function: phase current, provider: "<a>-power-module", needs: phase current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-stator", function: magnetic field, provider: "<a>-phase-busbars", needs: phase current, kind: power, loss: lost, degradation: degraded}
+  - {dependent: "<a>-stator", function: magnetic field, provider: "<a>-oil-cooler", needs: oil cooling, kind: cooling, loss: degraded,
+     description: "Without oil cooling the end windings overheat: the motor limits its torque"}
+  - {dependent: "<a>-oil-cooler", function: oil cooling, provider: "<a>-oil-pump", needs: oil flow, kind: lubrication, loss: lost}
+  - {dependent: "<a>-oil-cooler", function: oil cooling, provider: "<a>-coolant-lines", needs: coolant flow, kind: cooling, loss: lost, degradation: degraded,
+     description: "The oil gives its heat to the vehicle's coolant circuit"}
+  - {dependent: "<a>-oil-cooler", function: oil cooling, provider: coolant-valve, needs: coolant temperature, kind: cooling, loss: degraded,
+     degradation: degraded}
+  - {dependent: "<a>-stator", function: magnetic field, provider: "<a>-motor", needs: housing support, kind: support, loss: lost}
+  - {dependent: "<a>-rotor", function: drive torque, provider: "<a>-stator", needs: magnetic field, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-rotor-shaft", function: drive torque, provider: "<a>-rotor", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-rotor-shaft", function: drive torque, provider: "<a>-motor-bearing-<n>", needs: shaft support, kind: support, loss: lost,
+     each: {n: [1, 2]}}
+  - {dependent: "<a>-pinion", function: drive torque, provider: "<a>-rotor-shaft", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-intermediate-gear", function: drive torque, provider: "<a>-pinion", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: rear-intermediate-shaft, function: drive torque, provider: rear-intermediate-gear, needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: front-disconnect, function: drive torque, provider: front-intermediate-gear, needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: front-intermediate-shaft, function: drive torque, provider: front-disconnect, needs: drive torque, kind: torque, loss: lost, degradation: degraded,
+     description: "The dog clutch couples the intermediate gear to its shaft"}
+  - {dependent: front-disconnect, function: drive torque, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost,
+     description: "A spring opens the clutch when its solenoid has no power"}
+  - {dependent: front-disconnect, function: drive torque, provider: vcu, needs: torque control, kind: control, loss: lost,
+     description: "Engaged only on the VCU's command"}
+  - {dependent: rear-park-lock, function: parking hold, provider: vcu, needs: park control, kind: control, loss: lost,
+     description: "Engaging or releasing the park lock needs the VCU's command"}
+  - {dependent: "<a>-intermediate-shaft", function: drive torque, provider: "<a>-oil-pump", needs: oil flow, kind: lubrication, loss: degraded,
+     description: "Without pumped oil the gears run on splash lubrication only: torque is limited"}
+  - {dependent: "<a>-reduction-gear", function: drive torque, provider: "<a>-intermediate-shaft", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-differential", function: drive torque, provider: "<a>-reduction-gear", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-spider-gears", function: drive torque, provider: "<a>-differential", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-side-gear-<s>", function: drive torque, provider: "<a>-spider-gears", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: "<a>-halfshaft-<s>", function: drive torque, provider: "<a>-side-gear-<s>", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  # ---- Suspension (docs/dependency-semantics.md, C3c step 2) --------------------------------------------------
+  - {dependent: "<a>-subframe", function: subframe location, provider: "<a>-subframe-mount-<n>", needs: body mounting, kind: support, loss: degraded,
+     each: {n: [1, 2, 3, 4]}, description: "The other three mounts still hold the subframe; alignment shifts and vibration rises"}
+  - {dependent: lower-arm-<c>, function: knuckle location, provider: "<a>-subframe", needs: subframe location, kind: support, loss: lost, degradation: degraded}
+  - {dependent: knuckle-<c>, function: wheel location, provider: lower-arm-<c>, needs: knuckle location, kind: support, loss: lost, degradation: degraded}
+  - {dependent: knuckle-<c>, function: wheel location, provider: upper-arm-<c>, needs: knuckle location, kind: support, loss: lost, degradation: degraded}
+  - {dependent: knuckle-f<s>, function: wheel alignment, provider: tie-rod-f<s>, needs: steering motion, kind: support, loss: lost,
+     description: "Without the tie rod the wheel can steer itself"}
+  - {dependent: toe-link-r<s>, function: toe control, provider: rear-subframe, needs: subframe location, kind: support, loss: lost, degradation: degraded}
+  - {dependent: knuckle-r<s>, function: wheel alignment, provider: toe-link-r<s>, needs: toe control, kind: support, loss: lost, degradation: degraded,
+     description: "Without the toe link the rear wheel can steer itself"}
+  - {dependent: spring-<c>, function: load support, provider: top-mount-<c>, needs: body attachment, kind: support, loss: lost}
+  - {dependent: coilover-<c>, function: damping, provider: top-mount-<c>, needs: body attachment, kind: support, loss: lost}
+  - {dependent: "<a>-anti-roll-bar", function: roll control, provider: "drop-link-<c>", needs: roll link, kind: support, loss: lost}
+  - {dependent: tyre-<c>, function: road holding, provider: knuckle-<c>, needs: wheel location, kind: support, loss: lost, degradation: degraded}
+  - {dependent: tyre-<c>, function: road holding, provider: knuckle-<c>, needs: wheel alignment, kind: support, loss: lost, degradation: degraded}
+  - {dependent: tyre-<c>, function: road holding, provider: spring-<c>, needs: load support, kind: support, loss: degraded,
+     description: "The corner rests on its bump stop: drivable slowly, ride and handling much worse"}
+  - {dependent: tyre-<c>, function: road holding, provider: coilover-<c>, needs: damping, kind: support, loss: degraded,
+     description: "Ride comfort and grip on rough roads reduced"}
+  - {dependent: tyre-<c>, function: road holding, provider: "<a>-anti-roll-bar", needs: roll control, kind: support, loss: degraded,
+     description: "Body roll and balance in corners worse; ride unaffected"}
+  # ---- Body structure load paths (docs/dependency-semantics.md, D1.2) ------------------------------------------
+  - {dependent: top-mount-<c>, function: body attachment, provider: "<a>-tower-<s>", needs: suspension mounting, kind: support, loss: lost,
+     degradation: degraded}
+  - {dependent: upper-arm-<c>, function: knuckle location, provider: "<a>-tower-<s>", needs: suspension mounting, kind: support, loss: lost,
+     degradation: degraded}
+  - {dependent: "<a>-tower-<s>", function: suspension mounting, provider: "<a>-rail-<s>", needs: structural support, kind: support, loss: degraded,
+     description: "The tower is also tied to the cowl (front) or to the wheelhouse and boot floor (rear): the corner stays located, with less stiffness"}
+  - {dependent: front-subframe-mount-1, function: body mounting, provider: front-rail-l, needs: structural support, kind: support, loss: lost}
+  - {dependent: front-subframe-mount-2, function: body mounting, provider: front-rail-r, needs: structural support, kind: support, loss: lost}
+  - {dependent: front-subframe-mount-3, function: body mounting, provider: front-floor-rail-l, needs: structural support, kind: support, loss: lost}
+  - {dependent: front-subframe-mount-4, function: body mounting, provider: front-floor-rail-r, needs: structural support, kind: support, loss: lost}
+  - {dependent: "rear-subframe-mount-<n>", function: body mounting, provider: floor-crossmember-3, needs: structural support, kind: support, loss: lost,
+     each: {n: [1, 2]}}
+  - {dependent: rear-subframe-mount-3, function: body mounting, provider: rear-rail-l, needs: structural support, kind: support, loss: lost}
+  - {dependent: rear-subframe-mount-4, function: body mounting, provider: rear-rail-r, needs: structural support, kind: support, loss: lost}
+  # Open differential (docs/dependency-semantics.md, C3b): it can only deliver torque while BOTH sides resist it.
+  - {dependent: "<a>-halfshaft-<s>", function: reaction path, provider: "<a>-side-gear-<s>", needs: reaction path, kind: support, loss: lost}
+  - {dependent: "<a>-differential", function: drive torque, provider: "<a>-halfshaft-<s>", needs: reaction path, kind: support, loss: lost,
+     description: "An open differential passes equal torque to both sides: if one side spins free, neither carries useful torque"}
+  - {dependent: hub-<c>, function: wheel rotation, provider: wheel-bearing-<c>, needs: bearing support, kind: support, loss: lost}
+  - {dependent: hub-<c>, function: drive torque, provider: "<a>-halfshaft-<s>", needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: wheel-<c>, function: drive torque, provider: hub-<c>, needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: tyre-<c>, function: drive torque, provider: wheel-<c>, needs: drive torque, kind: torque, loss: lost, degradation: degraded}
+  - {dependent: vcu, function: traction control, provider: wheel-speed-sensor-<c>, needs: wheel speed, kind: data, loss: lost,
+     description: "Traction control compares all four wheel speeds"}
+
+  # ---- Braking: pedal and booster > master cylinder > ESC hydraulic unit > hoses > callipers > pads --------------
+  - {dependent: master-cylinder, function: brake pressure, provider: brake-booster, needs: brake assistance, kind: hydraulic, loss: lost,
+     fallback: {backup: brake-pedal, description: "The pedal still pushes the master cylinder directly, with much higher effort"}}
+  - {dependent: master-cylinder, function: brake pressure, provider: brake-pedal, needs: driver brake demand, kind: support, loss: lost,
+     fallback: {backup: brake-booster, description: "The booster can still build pressure on electronic demand (automatic emergency braking)"}}
+  - {dependent: master-cylinder, function: brake pressure, provider: brake-fluid-reservoir, needs: fluid supply, kind: hydraulic, loss: lost,
+     description: "Without fluid the master cylinder draws air; neither the booster nor the pedal can make up for it"}
+  - {dependent: esc-module, function: brake pressure, provider: master-cylinder, needs: brake pressure, kind: hydraulic, loss: lost, degradation: degraded}
+  - {dependent: brake-line-<c>, function: brake pressure, provider: esc-module, needs: brake pressure, kind: hydraulic, loss: lost, degradation: degraded,
+     fallback: {backup: master-cylinder, description: "The hydraulic unit's valves fail open: pedal pressure passes through, unmodulated"}}
+  - {dependent: brake-hose-<c>, function: brake pressure, provider: brake-line-<c>, needs: brake pressure, kind: hydraulic, loss: lost, degradation: degraded}
+  - {dependent: caliper-<c>, function: clamping force, provider: brake-hose-<c>, needs: brake pressure, kind: hydraulic, loss: lost, degradation: degraded}
+  - {dependent: brake-pad-inner-<c>, function: friction braking, provider: caliper-<c>, needs: clamping force, kind: support, loss: lost, degradation: degraded}
+  - {dependent: brake-pad-outer-<c>, function: friction braking, provider: caliper-<c>, needs: clamping force, kind: support, loss: lost, degradation: degraded}
+  - {dependent: esc-module, function: anti-lock braking, provider: wheel-speed-sensor-<c>, needs: wheel speed, kind: data, loss: lost,
+     description: "With one wheel speed missing, anti-lock braking is switched off (warning light); base braking remains"}
+  - {dependent: esc-module, function: stability control, provider: wheel-speed-sensor-<c>, needs: wheel speed, kind: data, loss: lost}
+
+  # ---- Parking: park lock and electric parking brake back each other up for holding the vehicle, never braking ----
+  - {dependent: esc-module, function: parking-brake control, provider: lv-harness, needs: 12 V distribution, kind: power, loss: lost}
+  - {dependent: "epb-actuator-r<s>", function: parking hold, provider: esc-module, needs: parking-brake control, kind: control, loss: lost}
+  - {dependent: "caliper-r<s>", function: parking clamp, provider: "epb-actuator-r<s>", needs: parking hold, kind: support, loss: lost,
+     description: "The actuator drives the calliper's piston mechanically; no hydraulic pressure is involved"}
+  - {dependent: "tyre-r<s>", function: vehicle holding, provider: rear-park-lock, needs: parking hold, kind: support, loss: lost,
+     fallback: {backup: "epb-actuator-r<s>", description: "The electric parking brake holds the car on its own"}}
+  - {dependent: "tyre-r<s>", function: vehicle holding, provider: "caliper-r<s>", needs: parking clamp, kind: support, loss: lost,
+     fallback: {backup: rear-park-lock, description: "The park lock still holds the car through the rear drive unit"}}
+
+  # ---- Steering -----------------------------------------------------------------------------------------------
+  - {dependent: steering-column, function: driver steering input, provider: steering-wheel, needs: driver steering input, kind: torque, loss: lost}
+  - {dependent: steering-intermediate-shaft, function: driver steering input, provider: steering-column, needs: driver steering input, kind: torque, loss: lost}
+  - {dependent: steering-rack, function: steering motion, provider: steering-intermediate-shaft, needs: driver steering input, kind: torque, loss: lost}
+  - {dependent: steering-torque-sensor, function: steering torque, provider: steering-intermediate-shaft, needs: driver steering input, kind: torque, loss: lost}
+  - {dependent: steering-ecu, function: steering control, provider: steering-torque-sensor, needs: steering torque, kind: data, loss: lost,
+     description: "Without the driver's torque the module cannot work out how much to assist, so it switches assistance off"}
+  - {dependent: steering-rack, function: steering motion, provider: "steering-rack-mount-<s>", needs: rack location, kind: support, loss: degraded,
+     description: "The other mount still holds the rack; it shifts under load and the steering feels vague"}
+  - {dependent: "steering-rack-mount-<s>", function: rack location, provider: front-subframe, needs: subframe location, kind: support, loss: lost,
+     degradation: degraded}
+  - {dependent: steering-rack, function: steering assistance, provider: eps-motor, needs: power assistance, kind: torque, loss: lost,
+     description: "Without assistance the car still steers, with much more effort"}
+  - {dependent: eps-motor, function: power assistance, provider: steering-ecu, needs: steering control, kind: control, loss: lost}
+  - {dependent: "tie-rod-f<s>", function: steering motion, provider: steering-rack, needs: steering motion, kind: support, loss: lost}
+
+  # ---- Automated driving: it needs every system it commands to be fully available --------------------------------
+  - {dependent: ad-compute, function: automated driving, provider: esc-module, needs: stability control, kind: control, loss: lost,
+     description: "Automated driving disengages when stability control is unavailable"}
+  - {dependent: ad-compute, function: automated driving, provider: brake-booster, needs: brake assistance, kind: control, loss: lost,
+     description: "Automatic braking acts through the booster"}
+  - {dependent: ad-compute, function: automated driving, provider: eps-motor, needs: power assistance, kind: control, loss: lost,
+     description: "Automatic steering acts through the power-steering motor"}
+  - {dependent: ad-compute, function: automated driving, provider: steering-rack, needs: steering motion, kind: control, loss: lost}
+  - {dependent: ad-compute, function: automated driving, provider: vcu, needs: torque control, kind: control, loss: lost}
+  - {dependent: ad-compute, function: automated driving, provider: gateway, needs: network routing, kind: data, loss: lost}
+  - {dependent: ad-compute, function: perception, provider: "<sensor>", needs: object detection, kind: data, loss: degraded,
+     each: {sensor: [front-camera, rear-camera, side-camera-l, side-camera-r, front-radar, corner-radar-fl, corner-radar-fr, corner-radar-rl, corner-radar-rr, lidar]},
+     description: "One sensor fewer: a narrower or less certain view"}
+  - {dependent: ad-compute, function: perception, provider: gnss-antenna, needs: positioning, kind: data, loss: degraded}
+  - {dependent: telematics, function: connectivity, provider: gateway, needs: network routing, kind: data, loss: lost}
+
+  # ---- Thermal ------------------------------------------------------------------------------------------------
+  - {dependent: coolant-pump, function: coolant flow, provider: coolant-reservoir, needs: coolant supply, kind: cooling, loss: degraded,
+     description: "The sealed circuit keeps running but loses pressure and coolant over time"}
+  - {dependent: coolant-lines, function: coolant flow, provider: coolant-pump, needs: coolant flow, kind: cooling, loss: lost, degradation: degraded}
+  - {dependent: "<a>-coolant-lines", function: coolant flow, provider: coolant-pump, needs: coolant flow, kind: cooling, loss: lost, degradation: degraded}
+  - {dependent: coolant-valve, function: coolant temperature, provider: radiator, needs: heat rejection, kind: cooling, loss: degraded,
+     description: "The chiller can still take heat, with less margin"}
+  - {dependent: battery-coolant-manifold, function: coolant heating, provider: coolant-heater, needs: coolant heating, kind: cooling, loss: lost,
+     description: "No battery pre-conditioning in cold weather"}
+  - {dependent: hvac-module, function: cabin climate, provider: coolant-heater, needs: coolant heating, kind: cooling, loss: degraded,
+     description: "In cold weather the cabin is heated by the heat pump alone"}
+  - {dependent: coolant-valve, function: coolant temperature, provider: lv-harness, needs: 12 V distribution, kind: power, loss: degraded,
+     description: "An unpowered valve stays where it was"}
+  - {dependent: coolant-heater, function: coolant heating, provider: pdu, needs: HV distribution, kind: power, loss: lost}
+  - {dependent: battery-coolant-manifold, function: coolant flow, provider: coolant-valve, needs: coolant temperature, kind: cooling, loss: degraded,
+     degradation: degraded}
+  - {dependent: battery-coolant-manifold, function: coolant flow, provider: coolant-lines, needs: coolant flow, kind: cooling, loss: lost}
+  - {dependent: battery-cooling-plate, function: cell cooling, provider: battery-coolant-manifold, needs: coolant flow, kind: cooling, loss: lost}
+  - {dependent: battery-coolant-manifold, function: coolant chilling, provider: battery-chiller, needs: coolant chilling, kind: cooling, loss: lost}
+  - {dependent: battery-cooling-plate, function: cell cooling, provider: battery-coolant-manifold, needs: coolant chilling, kind: cooling, loss: degraded,
+     description: "Without chilling the coolant runs warmer: less cooling in hot conditions"}
+  - {dependent: "battery-module-<n>", function: cell power, provider: battery-cooling-plate, needs: cell cooling, kind: cooling, loss: degraded,
+     each: {n: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]},
+     description: "Without cooling the BMS limits module power to protect the cells"}
+  - {dependent: refrigerant-lines, function: refrigerant flow, provider: heat-pump-compressor, needs: refrigerant compression, kind: cooling, loss: lost}
+  - {dependent: refrigerant-lines, function: refrigerant flow, provider: condenser, needs: refrigerant condensing, kind: cooling, loss: lost}
+  - {dependent: condenser, function: refrigerant condensing, provider: "cooling-fan-<s>", needs: airflow, kind: cooling, loss: degraded,
+     description: "Fan airflow matters at low speed; ram air remains when moving"}
+  - {dependent: battery-chiller, function: coolant chilling, provider: refrigerant-lines, needs: refrigerant flow, kind: cooling, loss: lost}
+  - {dependent: hvac-module, function: cabin climate, provider: refrigerant-lines, needs: refrigerant flow, kind: cooling, loss: lost}
+  - {dependent: radiator, function: heat rejection, provider: "cooling-fan-<s>", needs: airflow, kind: cooling, loss: degraded,
+     description: "Fan airflow matters at low speed; ram air remains when moving"}
+
+  # ---- Body ---------------------------------------------------------------------------------------------------
+  - {dependent: "door-latch-<c>", function: locking, provider: bcm, needs: body control, kind: control, loss: lost}
+  - {dependent: "window-regulator-<c>", function: window operation, provider: bcm, needs: body control, kind: control, loss: lost}
+  - {dependent: "headlamp-<s>", function: lighting, provider: bcm, needs: body control, kind: control, loss: lost}
+  - {dependent: "tail-lamp-<s>", function: lighting, provider: bcm, needs: body control, kind: control, loss: lost}

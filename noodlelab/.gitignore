@@ -1,0 +1,32 @@
+# Local settings and secrets. Only the example file is committed.
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+web/node_modules/
+web/dist/
+api/node_modules/
+
+# Private notes
+notes/
+
+# Operating system and editor clutter
+.DS_Store
+.idea/
+.vscode/
+
+# Review screenshots saved by the dev server
+web/shots/
+
+# Blender environment
+blender/.venv/
+
+# Python caches (the Blender and browser-review scripts)
+__pycache__/
+
+# Uncompressed Blender output (scripts/build-assets.sh compresses it into web/public/assets)
+web/assets-src/
+
+# Generated TypeQL insert (npm run create-database -- --write-tql)
+data/seed.generated.tql

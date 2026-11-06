@@ -1,0 +1,37 @@
+Project Apex
+Copyright 2026 Callum Hemsley
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+FICTIONAL DEMONSTRATION DATA
+All organisations, people, events and commercial terms in this project are fictional. Real public
+authorities (for example the Competition and Markets Authority and the European Commission) appear
+only in an invented scenario and have no involvement in it. Nothing here is legal, financial or
+regulatory advice.
+
+THIRD-PARTY SOFTWARE
+Project Apex uses, without modification, the following software under its own licence. Versions are
+pinned in api/package.json / api/package-lock.json and web/package.json / web/package-lock.json.
+
+Run as a separate container (not distributed with this code):
+  TypeDB Community Edition 3.14.1 (typedb/typedb image) .... Mozilla Public License 2.0
+
+Backend (TypeScript on Node.js):
+  @typedb/driver-http (the TypeDB HTTP driver) ............. Apache-2.0
+  yaml ..................................................... ISC
+
+Built into the web app (JavaScript, CSS, fonts):
+  React, React DOM, React Router, TanStack Query ........... MIT
+  React Flow (@xyflow/react), dagre (@dagrejs/dagre) ....... MIT
+  elkjs, the Eclipse Layout Kernel ......................... EPL-2.0 (offered as EPL-2.0 OR
+                                                             GPL-3.0-or-later; used here under EPL-2.0).
+                                                             Source: https://github.com/kieler/elkjs
+  Tailwind CSS, tailwind-merge, clsx, tw-animate-css,
+  Radix UI and shadcn/ui components (copied into
+  web/src/components/ui) ................................... MIT
+  class-variance-authority ................................. Apache-2.0
+  Lucide icons (lucide-react) .............................. ISC
+  Inter typeface (@fontsource-variable/inter) .............. SIL Open Font License 1.1
+
+The web app is served by nginx (nginxinc/nginx-unprivileged image, BSD-2-Clause) and the backend runs
+on the official node image. Full licence texts are in each package's distribution.

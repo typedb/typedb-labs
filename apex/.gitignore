@@ -1,0 +1,27 @@
+# Local settings and secrets. Only the example file is committed.
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+web/node_modules/
+web/dist/
+api/node_modules/
+api/deno.lock
+.netlify/
+
+# Database files and backups never go in git (the seed data in data/seed/ does).
+backups/
+*.typedb
+*.log
+
+# Private notes (TypeDB feedback log, spike scripts)
+notes/
+
+# Operating system and editor clutter
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+web/.layout-sample.json

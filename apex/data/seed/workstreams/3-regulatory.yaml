@@ -1,0 +1,95 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Regulatory workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-REG, name: Regulatory, status: at-risk, planned_start: 2026-07-15, due: 2026-11-16, criticality: critical, description: 'The merger-control and foreign-investment approvals the scheme is conditional on: US HSR, the UK National Security and Investment Act, EU merger control and the CMA''s Phase 1 review, including pre-notification and the CMA''s issues process.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-REG-HSR, type: activity, name: Prepare and file the HSR notifications, workstream: WS-REG, status: complete, planned_start: 2026-07-15, due: 2026-08-03, criticality: high, progress: 100}
+  - {code: AC-REG-NSIA, type: activity, name: Prepare the National Security and Investment Act notification, workstream: WS-REG, status: complete, planned_start: 2026-07-20, due: 2026-08-21, criticality: high, progress: 100}
+  - {code: AC-REG-EC-PRE, type: activity, name: EC pre-notification and draft Form CO, workstream: WS-REG, status: complete, planned_start: 2026-07-20, due: 2026-09-11, criticality: high, progress: 100}
+  - {code: AC-REG-CMA-PRE, type: activity, name: 'CMA pre-notification: briefing paper and draft Merger Notice', workstream: WS-REG, status: complete, planned_start: 2026-07-20, due: 2026-09-18, criticality: critical, progress: 100, description: Weeks of exchanges with the CMA case team before the statutory 40-working-day clock starts.}
+  - {code: CP-HSR, type: regulatory-clearance, name: US HSR waiting period expired, workstream: WS-REG, status: complete, progress: 100, planned_start: 2026-08-03, due: 2026-09-02, criticality: high, legal_basis: Hart-Scott-Rodino Antitrust Improvements Act 1976, description: 30 calendar days after both parties' notifications to the FTC and DOJ.}
+  - {code: CP-NSIA, type: regulatory-clearance, name: National Security and Investment Act approval, workstream: WS-REG, status: complete, progress: 100, planned_start: 2026-08-24, due: 2026-10-06, criticality: high, legal_basis: National Security and Investment Act 2021, description: 'Mandatory notification (fictional assumption: Atlas''s engineered cell-line platform falls in the synthetic biology sector). Cleared at the end of the 30-working-day review period.'}
+  - {code: CP-EC, type: regulatory-clearance, name: EU merger clearance (Phase 1), workstream: WS-REG, status: complete, progress: 100, planned_start: 2026-09-14, due: 2026-10-19, criticality: high, legal_basis: EU Merger Regulation (Council Regulation (EC) No 139/2004), description: Cleared on day 25 (working days) of Phase 1.}
+  - {code: AC-REG-CMA-RFI, type: activity, name: Answer CMA information requests in Phase 1, workstream: WS-REG, status: complete, planned_start: 2026-09-21, due: 2026-10-09, criticality: high, progress: 100}
+  - {code: CP-CMA, type: regulatory-clearance, name: UK merger clearance (CMA Phase 1), workstream: WS-REG, status: at-risk, progress: 60, planned_start: 2026-09-21, due: 2026-11-16, criticality: critical, legal_basis: Enterprise Act 2002, description: Statutory Phase 1 deadline is working day 40 (16 November). The CMA has raised concerns about an overlap in enzyme-replacement therapies.}
+  - {code: MS-CMA-ISSUES, type: milestone, name: CMA issues letter received, workstream: WS-REG, status: complete, due: 2026-10-22, criticality: critical, progress: 100, description: 'The CMA sets out the concern it says could justify a Phase 2 reference: the overlap in enzyme-replacement therapies. (Timing illustrative.)'}
+  - {code: AC-REG-CMA-RESP, type: activity, name: Response to the CMA issues letter, workstream: WS-REG, status: in-progress, planned_start: 2026-10-22, due: 2026-10-30, criticality: critical, progress: 40, actual_start: 2026-10-22, description: 'Novacore''s written answer to the issues letter, ahead of the issues meeting.'}
+  - {code: AC-REG-REMEDIES, type: activity, name: Remedy options analysis (possible undertakings in lieu), workstream: WS-REG, status: in-progress, planned_start: 2026-10-23, due: 2026-11-13, criticality: high, progress: 20, actual_start: 2026-10-23, description: 'Contingency planning only: undertakings in lieu of a Phase 2 reference would be offered only if the CMA finds a realistic prospect of a substantial lessening of competition.'}
+  - {code: MS-CMA-MEETING, type: milestone, name: CMA issues meeting, workstream: WS-REG, status: not-started, due: 2026-11-04, criticality: critical, progress: 0, description: Novacore's chance to address the concerns in person before the CMA's Phase 1 decision. (Timing illustrative.)}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: AC-REG-HSR, to: CP-HSR, lag: 0}
+  - {kind: sequencing, from: AC-REG-NSIA, to: CP-NSIA, lag: 0}
+  - {kind: sequencing, from: AC-REG-EC-PRE, to: CP-EC, lag: 0}
+  - {kind: sequencing, from: AC-REG-CMA-PRE, to: CP-CMA, lag: 0}
+  - {kind: sequencing, from: AC-REG-CMA-RFI, to: CP-CMA, lag: 0}
+  - {kind: sequencing, from: MS-CMA-ISSUES, to: AC-REG-CMA-RESP, lag: 0}
+  - {kind: sequencing, from: AC-REG-CMA-RESP, to: MS-CMA-MEETING, lag: 0}
+  - {kind: sequencing, from: MS-CMA-MEETING, to: CP-CMA, lag: 0}
+  - {kind: informing, from: MS-CMA-ISSUES, to: AC-REG-REMEDIES, lag: 0}
+  - {kind: informing, from: AC-REG-REMEDIES, to: CP-CMA, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-REG: {A: PER-OKAFOR, R: [PER-SHAW], C: [PER-THORNTON, PER-LINDQVIST], I: [PER-HARTLEY]}
+  AC-REG-HSR: {A: PER-OKAFOR, R: [PER-SHAW, PER-NAVARRO], I: [PER-LINDQVIST]}
+  AC-REG-NSIA: {A: PER-LINDQVIST, R: [PER-NAVARRO], C: [PER-CHANDRAN], I: [PER-OKAFOR]}
+  AC-REG-EC-PRE: {A: PER-OKAFOR, R: [PER-SHAW], C: [PER-CHANDRAN], I: [PER-LINDQVIST]}
+  AC-REG-CMA-PRE: {A: PER-OKAFOR, R: [PER-SHAW, PER-NAVARRO], C: [PER-THORNTON], I: [PER-HARTLEY]}
+  CP-HSR: {A: PER-OKAFOR, R: [PER-SHAW], I: [PER-LINDQVIST]}
+  CP-NSIA: {A: PER-LINDQVIST, R: [PER-SHAW], C: [PER-OKAFOR], I: [PER-HARTLEY]}
+  CP-EC: {A: PER-OKAFOR, R: [PER-SHAW], I: [PER-LINDQVIST]}
+  AC-REG-CMA-RFI: {A: PER-OKAFOR, R: [PER-NAVARRO], C: [PER-CHANDRAN, PER-REID], I: [PER-LINDQVIST]}
+  CP-CMA: {A: PER-OKAFOR, R: [PER-SHAW], C: [PER-THORNTON, PER-LINDQVIST, PER-ACHEBE], I: [PER-HARTLEY, PER-MENON]}
+  MS-CMA-ISSUES: {A: PER-OKAFOR, R: [PER-SHAW], I: [PER-HARTLEY, PER-MENON]}
+  AC-REG-CMA-RESP: {A: PER-OKAFOR, R: [PER-SHAW, PER-NAVARRO], C: [PER-THORNTON, PER-CHANDRAN, PER-ACHEBE], I: [PER-HARTLEY]}
+  AC-REG-REMEDIES: {A: PER-LINDQVIST, R: [PER-SHAW], C: [PER-THORNTON, PER-ADEBAYO], I: [PER-HARTLEY]}
+  MS-CMA-MEETING: {A: PER-OKAFOR, R: [PER-SHAW], C: [PER-CHANDRAN, PER-MENON], I: [PER-HARTLEY]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-REG-01, type: request, at: !!timestamp '2026-07-20 10:00:00', kind: request, actor: PER-OKAFOR, subject: AC-REG-CMA-PRE, summary: 'CMA pre-notification to start: briefing paper by 31 July', recipients: [PER-SHAW, PER-NAVARRO], response_due: 2026-07-24}
+  - {code: EV-REG-02, type: response, at: !!timestamp '2026-07-23 17:00:00', kind: response, actor: PER-SHAW, subject: AC-REG-CMA-PRE, summary: Pre-notification plan and briefing-paper outline agreed, reply_to: [EV-REG-01]}
+  - {code: EV-REG-03, type: delivery, at: !!timestamp '2026-07-31 16:00:00', kind: filed, actor: PER-NAVARRO, subject: AC-REG-CMA-PRE, summary: Briefing paper submitted to the CMA}
+  - {code: EV-REG-04, type: delivery, at: !!timestamp '2026-08-03 09:30:00', kind: delivered, actor: PER-NAVARRO, subject: AC-REG-HSR, summary: HSR filing package finalised for both parties}
+  - {code: EV-0005, type: delivery, at: !!timestamp '2026-08-03 10:00:00', kind: filed, actor: PER-SHAW, subject: CP-HSR, summary: HSR notifications filed with the FTC and DOJ}
+  - {code: EV-REG-05, type: meeting, at: !!timestamp '2026-08-14 11:00:00', kind: meeting, actor: PER-SHAW, subject: AC-REG-CMA-PRE, summary: Pre-notification call with the CMA case team, attendees: [ORG-CMA, PER-NAVARRO, PER-CHANDRAN]}
+  - {code: EV-REG-06, type: delivery, at: !!timestamp '2026-08-21 15:00:00', kind: filed, actor: PER-NAVARRO, subject: AC-REG-NSIA, summary: NSI Act notification submitted through the government portal}
+  - {code: EV-0007, type: delivery, at: !!timestamp '2026-08-24 15:00:00', kind: filed, actor: PER-SHAW, subject: CP-NSIA, summary: National Security and Investment Act notification accepted; 30-working-day review begins}
+  - {code: EV-0008, type: decision, at: !!timestamp '2026-09-02 23:59:00', kind: cleared, actor: ORG-FTC, subject: CP-HSR, summary: HSR waiting period expired}
+  - {code: EV-REG-07, type: delivery, at: !!timestamp '2026-09-04 12:00:00', kind: delivered, actor: PER-SHAW, subject: AC-REG-EC-PRE, summary: Final draft Form CO sent to DG Competition}
+  - {code: EV-0010, type: delivery, at: !!timestamp '2026-09-14 09:00:00', kind: filed, actor: PER-SHAW, subject: CP-EC, summary: Merger notified to the European Commission}
+  - {code: EV-REG-08, type: delivery, at: !!timestamp '2026-09-18 16:00:00', kind: filed, actor: PER-NAVARRO, subject: AC-REG-CMA-PRE, summary: Formal Merger Notice submitted}
+  - {code: EV-0011, type: delivery, at: !!timestamp '2026-09-21 09:00:00', kind: filed, actor: PER-SHAW, subject: CP-CMA, summary: CMA Phase 1 formally begins (statutory deadline 16 November)}
+  - {code: EV-REG-09, type: request, at: !!timestamp '2026-09-24 09:30:00', kind: request, actor: ORG-CMA, subject: AC-REG-CMA-RFI, summary: 'CMA information request 1: customer and pipeline data', recipients: [PER-SHAW, PER-NAVARRO], response_due: 2026-10-01}
+  - {code: EV-REG-10, type: response, at: !!timestamp '2026-09-30 18:00:00', kind: response, actor: PER-NAVARRO, subject: AC-REG-CMA-RFI, summary: Response to information request 1, reply_to: [EV-REG-09]}
+  - {code: EV-REG-11, type: request, at: !!timestamp '2026-10-02 10:00:00', kind: request, actor: ORG-CMA, subject: AC-REG-CMA-RFI, summary: CMA follow-up questions on the pipeline overlap, recipients: [PER-NAVARRO], response_due: 2026-10-09}
+  - {code: EV-0012, type: decision, at: !!timestamp '2026-10-06 16:00:00', kind: cleared, actor: ORG-ISU, subject: CP-NSIA, summary: 'National Security and Investment Act: notification of no further action'}
+  - {code: EV-REG-12, type: response, at: !!timestamp '2026-10-08 17:30:00', kind: response, actor: PER-NAVARRO, subject: AC-REG-CMA-RFI, summary: Answers to the follow-up questions, reply_to: [EV-REG-11]}
+  - {code: EV-0015, type: decision, at: !!timestamp '2026-10-19 16:30:00', kind: cleared, actor: ORG-EC, subject: CP-EC, summary: European Commission Phase 1 clearance}
+  - {code: EV-REG-13, type: request, at: !!timestamp '2026-10-20 10:00:00', kind: request, actor: PER-OKAFOR, subject: MS-CMA-MEETING, summary: CMA asked to confirm the issues meeting date, recipients: [ORG-CMA], response_due: 2026-10-27}
+  - {code: EV-REG-14, type: notice, at: !!timestamp '2026-10-21 09:00:00', kind: notification, actor: ORG-CMA, subject: AC-REG-CMA-RFI, summary: 'Case portal: upload of the follow-up answers confirmed', recipients: [PER-NAVARRO], automated: true}
+  - {code: EV-0016, type: meeting, at: !!timestamp '2026-10-21 11:00:00', kind: meeting, actor: PER-SHAW, subject: CP-CMA, summary: 'CMA state-of-play call: concerns raised about an overlap in enzyme-replacement therapies', attendees: [ORG-CMA, PER-NAVARRO, PER-OKAFOR]}
+  - {code: EV-REG-15, type: notice, at: !!timestamp '2026-10-22 14:00:00', kind: issues-letter, actor: ORG-CMA, subject: MS-CMA-ISSUES, summary: 'CMA issues letter received: concerns about the enzyme-replacement overlap', recipients: [PER-OKAFOR, PER-SHAW], automated: false}
+  - {code: EV-REG-16, type: status-change, at: !!timestamp '2026-10-22 16:00:00', kind: status-change, actor: PER-SHAW, subject: AC-REG-CMA-RESP, summary: Work on the issues-letter response begins, previous_status: not-started, new_status: in-progress}
+  - {code: EV-REG-17, type: request, at: !!timestamp '2026-10-22 18:00:00', kind: request, actor: PER-OKAFOR, subject: AC-REG-CMA-RESP, summary: Comments on the draft response wanted by 27 October, recipients: [PER-THORNTON, PER-CHANDRAN, PER-ACHEBE], response_due: 2026-10-27}
+  - {code: EV-REG-18, type: request, at: !!timestamp '2026-10-22 19:00:00', kind: request, actor: PER-OKAFOR, subject: MS-CMA-MEETING, summary: Atlas asked to name its attendees for the issues meeting, recipients: [PER-MENON], response_due: 2026-10-24}
+  - {code: EV-REG-21, type: response, at: !!timestamp '2026-10-23 08:00:00', kind: response, actor: PER-MENON, subject: MS-CMA-MEETING, summary: Atlas names its CEO and head of R&D for the issues meeting, reply_to: [EV-REG-18]}
+  - {code: EV-0018, type: status-change, at: !!timestamp '2026-10-23 09:30:00', kind: status-change, actor: PER-OKAFOR, subject: CP-CMA, summary: CMA clearance marked at risk, previous_status: in-progress, new_status: at-risk}
+  - {code: EV-REG-20, type: meeting, at: !!timestamp '2026-10-23 10:00:00', kind: meeting, actor: PER-OKAFOR, subject: CP-CMA, summary: Briefing for Novacore's CEO on the CMA's concerns, attendees: [PER-HARTLEY]}
+  - {code: EV-REG-19, type: request, at: !!timestamp '2026-10-23 11:00:00', kind: request, actor: PER-LINDQVIST, subject: AC-REG-REMEDIES, summary: First view of possible remedies wanted by 28 October, recipients: [PER-SHAW], response_due: 2026-10-28}
+  - {code: EV-REG-22, type: meeting, at: !!timestamp '2026-10-23 15:30:00', kind: meeting, actor: PER-SHAW, subject: AC-REG-CMA-RESP, summary: Drafting session on the issues-letter response, attendees: [PER-NAVARRO, PER-CHANDRAN, PER-THORNTON]}
+  - {code: EV-REG-23, type: response, at: !!timestamp '2026-10-24 12:00:00', kind: response, actor: PER-THORNTON, subject: AC-REG-CMA-RESP, summary: Harrowgate's comments on market definition, reply_to: [EV-REG-17]}
+  - {code: EV-REG-26, type: delivery, at: !!timestamp '2026-10-24 16:00:00', kind: delivered, actor: PER-SHAW, subject: AC-REG-REMEDIES, summary: Remedy options long-list shared with Novacore}
+  - {code: EV-REG-24, type: delivery, at: !!timestamp '2026-10-25 17:00:00', kind: delivered, actor: PER-NAVARRO, subject: AC-REG-CMA-RESP, summary: Second draft of the response circulated}
+  - {code: EV-REG-25, type: meeting, at: !!timestamp '2026-10-26 08:30:00', kind: meeting, actor: PER-OKAFOR, subject: CP-CMA, summary: Weekly regulatory steering call, attendees: [PER-SHAW, PER-LINDQVIST]}
+  - {code: EV-REG-27, type: meeting, at: !!timestamp '2026-10-19 08:30:00', kind: meeting, actor: PER-OKAFOR, subject: WS-REG, summary: 'Weekly regulatory steering call: EC Phase 1 decision expected today; CMA Phase 1 timetable to day 40', attendees: [PER-SHAW, PER-LINDQVIST, PER-THORNTON], agenda: [CP-CMA, CP-EC]}

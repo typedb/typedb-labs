@@ -1,0 +1,67 @@
+# Continuous integration: for each lab, build and start its whole stack from scratch exactly as its README
+# says, then typecheck and test its API against that stack. The site build is checked too.
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lab: apex
+            health: http://127.0.0.1:8091/api/health
+            typedb: 127.0.0.1:8003
+          - lab: noodlelab
+            health: http://127.0.0.1:5180/api/health
+            typedb: 127.0.0.1:8004
+    defaults:
+      run:
+        working-directory: ${{ matrix.lab }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Build and start the stack (seeds the database)
+        run: |
+          docker compose up -d --build
+          for i in $(seq 90); do curl -sf ${{ matrix.health }} && exit 0; sleep 2; done; exit 1
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Build the web app
+        run: cd web && npm ci --no-audit --no-fund && npm run build
+
+      - name: Typecheck and test the API (throwaway test databases on the stack's TypeDB)
+        run: cd api && npm ci --no-audit --no-fund && npm run typecheck && npm test
+        env:
+          TYPEDB_ADDRESS: ${{ matrix.typedb }}
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose ps -a && docker compose logs
+
+  site:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Build the site as Netlify does
+        run: npm run build

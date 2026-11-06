@@ -1,0 +1,58 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# People workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-PPL, name: People, status: in-progress, planned_start: 2026-07-20, due: 2027-06-02, criticality: high, description: 'Employee information and consultation in the UK and Ireland, the Day-1 leadership structure, and keeping the scientists and managers the deal depends on.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-PPL-RETAIN, type: activity, name: Design the key-staff retention plan, workstream: WS-PPL, status: complete, planned_start: 2026-07-20, due: 2026-08-28, criticality: high, progress: 100}
+  - {code: AC-PPL-MATERIALS, type: activity, name: Employee information and consultation materials, workstream: WS-PPL, status: complete, planned_start: 2026-09-01, due: 2026-09-11, criticality: medium, progress: 100}
+  - {code: AC-PPL-LEADERS, type: activity, name: Day-1 leadership structure design, workstream: WS-PPL, status: in-progress, planned_start: 2026-09-01, due: 2026-11-20, criticality: medium, progress: 60}
+  - {code: AC-PPL-IRELAND, type: activity, name: Information and consultation in Ireland (Atlas Biologics), workstream: WS-PPL, status: in-progress, planned_start: 2026-09-14, due: 2026-11-20, criticality: high, progress: 50}
+  - {code: HR-CONSULT, type: covenant, name: Employee information and consultation, workstream: WS-PPL, status: in-progress, progress: 60, planned_start: 2026-09-14, due: 2026-11-20, criticality: high, legal_basis: Employee information and consultation law (UK and Ireland)}
+  - {code: HR-ORG, type: milestone, name: Day-1 leadership structure announced, workstream: WS-PPL, status: not-started, progress: 0, due: 2026-12-02, criticality: medium}
+  - {code: AC-PPL-AWARDS, type: activity, name: Retention award administration, workstream: WS-PPL, status: not-started, planned_start: 2027-05-03, due: 2027-06-02, criticality: medium, progress: 0}
+  - {code: CV-RETENTION, type: covenant, name: Atlas key-staff retention awards paid, workstream: WS-PPL, status: not-started, progress: 0, due: 2027-06-02, criticality: medium, legal_basis: Retention plan (6 months after completion)}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-COMPLETION, to: HR-ORG, lag: 0}
+  - {kind: sequencing, from: MS-COMPLETION, to: CV-RETENTION, lag: 182}
+  - {kind: informing, from: AC-PPL-RETAIN, to: CV-RETENTION, lag: 0}
+  - {kind: sequencing, from: AC-PPL-MATERIALS, to: HR-CONSULT, lag: 0}
+  - {kind: sequencing, from: AC-PPL-IRELAND, to: HR-CONSULT, lag: 0}
+  - {kind: sequencing, from: AC-PPL-LEADERS, to: HR-ORG, lag: 0}
+  - {kind: sequencing, from: MS-COMPLETION, to: AC-PPL-AWARDS, lag: 152}
+  - {kind: sequencing, from: AC-PPL-AWARDS, to: CV-RETENTION, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-PPL: {A: PER-FERREIRA, R: [PER-TANAKA], C: [PER-MENON], I: [PER-REYES]}
+  AC-PPL-RETAIN: {A: PER-FERREIRA, R: [PER-LINDSAY], C: [PER-MENON], I: [PER-ADEBAYO]}
+  AC-PPL-MATERIALS: {A: PER-FERREIRA, R: [PER-TANAKA], C: [PER-LINDSAY, PER-BARLOW], I: [PER-REYES]}
+  AC-PPL-LEADERS: {A: PER-FERREIRA, R: [PER-TANAKA], C: [PER-MENON, PER-LINDSAY], I: [PER-HARTLEY]}
+  AC-PPL-IRELAND: {A: PER-FERREIRA, R: [PER-LINDSAY, PER-OSULLIVAN], C: [PER-TANAKA], I: [PER-MENON]}
+  HR-CONSULT: {A: PER-FERREIRA, R: [PER-TANAKA], C: [PER-LINDQVIST], I: [PER-MENON]}
+  HR-ORG: {A: PER-FERREIRA, R: [PER-REYES], C: [PER-MENON], I: [PER-WHITFIELD]}
+  AC-PPL-AWARDS: {A: PER-FERREIRA, R: [PER-LINDSAY], C: [PER-WHITCOMBE], I: [PER-MENON]}
+  CV-RETENTION: {A: PER-FERREIRA, R: [PER-TANAKA], C: [PER-ADEBAYO], I: [PER-MENON]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-PPL-01, type: decision, at: !!timestamp '2026-08-28 12:00:00', kind: approved, actor: PER-FERREIRA, subject: AC-PPL-RETAIN, summary: Retention plan approved by Novacore's remuneration committee}
+  - {code: EV-PPL-02, type: delivery, at: !!timestamp '2026-09-11 16:00:00', kind: delivered, actor: PER-TANAKA, subject: AC-PPL-MATERIALS, summary: Consultation pack issued to employee representatives}
+  - {code: EV-PPL-03, type: status-change, at: !!timestamp '2026-09-14 09:00:00', kind: status-change, actor: PER-TANAKA, subject: HR-CONSULT, summary: Employee information and consultation begins, previous_status: not-started, new_status: in-progress}
+  - {code: EV-PPL-04, type: request, at: !!timestamp '2026-10-14 10:00:00', kind: request, actor: PER-FERREIRA, subject: AC-PPL-IRELAND, summary: Confirm the Irish consultation timetable with employee representatives, recipients: [PER-OSULLIVAN], response_due: 2026-10-21}
+  - {code: EV-PPL-05, type: meeting, at: !!timestamp '2026-10-15 14:00:00', kind: meeting, actor: PER-TANAKA, subject: HR-CONSULT, summary: Consultation progress update for Novacore Legal, attendees: [PER-LINDQVIST]}
+  - {code: EV-PPL-06, type: request, at: !!timestamp '2026-10-19 09:00:00', kind: request, actor: PER-TANAKA, subject: HR-CONSULT, summary: Approve the FAQ answers for employee representatives, recipients: [PER-FERREIRA], response_due: 2026-10-22}
+  - {code: EV-PPL-07, type: meeting, at: !!timestamp '2026-10-20 10:00:00', kind: meeting, actor: PER-TANAKA, subject: AC-PPL-LEADERS, summary: Day-1 leadership design workshop, attendees: [PER-FERREIRA, PER-MENON]}
+  - {code: EV-PPL-08, type: response, at: !!timestamp '2026-10-21 17:00:00', kind: response, actor: PER-FERREIRA, subject: HR-CONSULT, summary: FAQ answers approved, reply_to: [EV-PPL-06]}
+  - {code: EV-PPL-09, type: delivery, at: !!timestamp '2026-10-22 12:00:00', kind: delivered, actor: PER-LINDSAY, subject: AC-PPL-IRELAND, summary: Irish information pack issued to staff at Atlas Biologics}
+  - {code: EV-0019, type: meeting, at: !!timestamp '2026-10-23 15:00:00', kind: meeting, actor: PER-TANAKA, subject: HR-CONSULT, summary: Employee consultation sessions held in the UK and Ireland, attendees: [PER-LINDSAY, PER-OSULLIVAN]}
+  - {code: EV-PPL-10, type: meeting, at: !!timestamp '2026-10-22 09:30:00', kind: meeting, actor: PER-FERREIRA, subject: WS-PPL, summary: 'People steering: Day-1 leadership design and the Irish consultation timetable', attendees: [PER-TANAKA, PER-LINDSAY], agenda: [AC-PPL-LEADERS, AC-PPL-IRELAND]}

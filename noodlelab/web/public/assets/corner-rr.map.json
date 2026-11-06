@@ -1,0 +1,31 @@
+{
+  "asset": "corner-rr",
+  "nodes": {
+    "tyre": "tyre-rr",
+    "wheel": "wheel-rr",
+    "wheel-nut-1": "wheel-nut-rr-1",
+    "wheel-nut-2": "wheel-nut-rr-2",
+    "wheel-nut-3": "wheel-nut-rr-3",
+    "wheel-nut-4": "wheel-nut-rr-4",
+    "wheel-nut-5": "wheel-nut-rr-5",
+    "brake-disc": "brake-disc-rr",
+    "caliper": "caliper-rr",
+    "brake-pad-inner": "brake-pad-inner-rr",
+    "brake-pad-outer": "brake-pad-outer-rr",
+    "brake-shield": "brake-shield-rr",
+    "brake-hose": "brake-hose-rr",
+    "hub-nut": "hub-nut-rr",
+    "hub": "hub-rr",
+    "wheel-bearing": "wheel-bearing-rr",
+    "knuckle": "knuckle-rr",
+    "wheel-speed-sensor": "wheel-speed-sensor-rr",
+    "lower-arm": "lower-arm-rr",
+    "upper-arm": "upper-arm-rr",
+    "coilover": "coilover-rr",
+    "spring": "spring-rr",
+    "top-mount": "top-mount-rr",
+    "drop-link": "drop-link-rr",
+    "toe-link": "toe-link-rr",
+    "epb-actuator": "epb-actuator-rr"
+  }
+}

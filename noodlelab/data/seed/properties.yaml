@@ -1,0 +1,305 @@
+# Descriptions and engineering properties of components.
+#
+# CONCEPT DESIGN TARGETS for an original, unbranded vehicle: plausible for a premium dual-motor 800 V
+# electric SUV, but invented. Never present them as measured or real-world data.
+#
+# Each entry applies to every component whose id matches one of the "match" patterns (* = anything).
+# The other keys are attribute names from schema/schema.tql; TypeDB only accepts an attribute on the
+# component types that own it.
+
+properties:
+  # ---- Wheel ends -----------------------------------------------------------------------------------------
+  - match: tyre-*
+    description: "Low-profile performance tyre on a 22-inch rim, with four circumferential grooves and an asymmetric shoulder."
+    size-designation: "275/45 R22"
+    diameter-mm: 806
+  - match: [wheel-fl, wheel-fr, wheel-rl, wheel-rr]
+    description: "Forged aluminium wheel with five Y-shaped spokes and a diamond-cut face."
+    size-designation: "22 x 9.5J"
+    diameter-mm: 559
+    material-name: "forged aluminium"
+  - match: [brake-disc-fl, brake-disc-fr]
+    description: "Two-piece floating disc: a ventilated, slotted iron friction ring on an aluminium hat, joined by ten bobbins so the ring can expand freely."
+    diameter-mm: 380
+    thickness-mm: 34
+    material-name: "grey cast iron ring, aluminium hat"
+  - match: [brake-disc-rl, brake-disc-rr]
+    description: "Ventilated one-piece rear brake disc."
+    diameter-mm: 360
+    thickness-mm: 28
+    material-name: "grey cast iron"
+  - match: [caliper-fl, caliper-fr]
+    description: "Six-piston fixed monobloc calliper: one cast body with three opposed pistons each side, clamping the pads onto the disc."
+    piston-count: 6
+    material-name: "cast aluminium"
+  - match: [caliper-rl, caliper-rr]
+    description: "Four-piston fixed rear calliper."
+    piston-count: 4
+    material-name: "cast aluminium"
+  - match: brake-pad-*
+    description: "Friction pad: a steel backing plate carrying the friction block that presses on the disc."
+  - match: brake-hose-*
+    description: "Flexible brake hose with a banjo fitting, carrying brake fluid from the hard lines to the calliper while the wheel steers and moves."
+  - match: "hub-??"
+    description: "Wheel hub: the flange the brake disc and wheel bolt to, carried by the wheel bearing."
+  - match: wheel-bearing-*
+    description: "Double-row angular-contact ball bearing with a flanged outer race, letting the hub turn in the knuckle."
+    material-name: "bearing steel"
+  - match: [knuckle-fl, knuckle-fr]
+    description: "Cast front knuckle (upright): carries the wheel bearing and calliper, with a steering arm and a tall 'goose neck' reaching over the tyre to the high upper control arm."
+    material-name: "cast aluminium"
+  - match: [knuckle-rl, knuckle-rr]
+    description: "Cast rear knuckle (upright): carries the wheel bearing and the calliper with its parking-brake actuator, and links the wheel to the upper and lower arms and the toe link."
+    material-name: "cast aluminium"
+  - match: wheel-nut-*
+    description: "Conical-seat wheel nut; five clamp the wheel to the hub."
+    material-name: "steel"
+  - match: hub-nut-*
+    description: "Axle nut: holds the hub on the drive shaft's splined end."
+    material-name: "steel"
+  - match: wheel-speed-sensor-*
+    description: "Magnetic sensor reading the toothed ring on the hub: wheel speed for anti-lock braking, stability and traction control, and automated driving."
+
+  # ---- Suspension and steering --------------------------------------------------------------------------
+  - match: coilover-*
+    description: "Damper: a hydraulic shock absorber that controls how fast the suspension moves."
+  - match: spring-*
+    description: "Coil spring carrying the vehicle's weight at this corner."
+    material-name: "spring steel"
+  - match: [lower-arm-*, upper-arm-*]
+    description: "Suspension wishbone: locates the knuckle, with rubber bushes at the body end and a ball joint at the wheel end."
+    material-name: "forged aluminium"
+  - match: [front-anti-roll-bar, rear-anti-roll-bar]
+    description: "Tubular anti-roll bar: twists when one wheel rises more than the other, reducing body roll in corners. Held on the subframe in rubber bushes; drop links join its ends to the dampers."
+    material-name: "spring steel"
+  - match: [front-subframe, rear-subframe]
+    description: "Subframe: a cast aluminium cradle carrying the lower arms, the drive unit's mounts and the anti-roll bar (and at the rear the toe links), mounted to the body on four rubber mounts."
+    material-name: "cast aluminium"
+  - match: drop-link-*
+    description: "Drop link: a rod with a ball joint at each end, joining the anti-roll bar's end to a bracket on the damper."
+  - match: toe-link-*
+    description: "Toe link: an adjustable rod from the subframe to the rear knuckle's arm; it sets the rear wheel's toe and stops it steering."
+  - match: top-mount-*
+    description: "Top mount: a rubber-isolated bearing plate bolting the damper and spring to the body."
+  - match: steering-intermediate-shaft
+    description: "Intermediate shaft: carries the steering column's rotation through the bulkhead to the rack's pinion, with a universal joint at each end and a rubber seal where it passes the bulkhead."
+  - match: steering-torque-sensor
+    description: "Torque sensor on the pinion shaft: a torsion bar twists slightly under the driver's effort and a non-contact sensor reads the twist and the steering angle."
+  - match: steering-rack-mount-*
+    description: "Steering-rack mount: a cast bracket on the subframe with a rubber bush clamped round the rack housing."
+  - match: steering-rack
+    description: "Rack-and-pinion steering gear: turns the rotation of the steering column into side-to-side movement of the tie rods."
+  - match: eps-motor
+    description: "Electric power-steering motor: adds assistance torque to the rack, commanded by the steering control unit."
+  - match: [epb-actuator-rl, epb-actuator-rr]
+    description: "Electric parking-brake actuator: a motor and gear unit on the rear calliper that drives the piston mechanically to hold the pads against the disc, without hydraulic pressure."
+  - match: [front-subframe-mount-*, rear-subframe-mount-*]
+    description: "Subframe mount: a rubber bush in a cast housing at a corner of the subframe, with a spacer tube and through-bolt to the body. It isolates road noise and lets the subframe move slightly."
+  - match: tie-rod-*
+    description: "Tie rod: pushes and pulls the knuckle to steer the wheel."
+
+  # ---- Drive units ----------------------------------------------------------------------------------------
+  - match: front-motor
+    description: "Front traction motor: 8-pole interior permanent-magnet synchronous machine with a hairpin stator, in a water-jacketed cast housing; drives the front wheels."
+    peak-power-kw: 180
+    peak-torque-nm: 340
+    nominal-voltage-v: 800
+  - match: rear-motor
+    description: "Rear traction motor: 8-pole interior permanent-magnet synchronous machine with a hairpin stator and a longer core than the front; the main drive motor."
+    peak-power-kw: 300
+    peak-torque-nm: 520
+    nominal-voltage-v: 800
+  - match: [front-stator, rear-stator]
+    description: "Stator: 48-slot laminated steel core with hairpin copper windings (bent crowns at one end, laser-welded pin pairs at the other); the inverter's currents in it create the rotating magnetic field."
+    material-name: "electrical steel, copper"
+  - match: [front-rotor, rear-rotor]
+    description: "Rotor: laminated core with V-shaped pockets holding the permanent magnets, turned by the stator's rotating field."
+  - match: [front-gearbox, rear-gearbox]
+    description: "Main half of the split gearbox case: single-speed, two-stage helical reduction with an integrated open differential. Carries the motor."
+    gear-ratio: 9.06
+    material-name: "cast aluminium"
+  - match: [front-gearbox-cover, rear-gearbox-cover]
+    description: "Cover half of the split gearbox case: carries the outer bearings of all three shafts."
+    material-name: "cast aluminium"
+  - match: [front-pinion, rear-pinion]
+    description: "Input pinion on the motor shaft: first stage of the reduction (21 to 61 teeth, 2.90:1)."
+    tooth-count: 21
+  - match: [front-intermediate-gear, rear-intermediate-gear]
+    description: "Large first-stage gear on the intermediate shaft."
+    tooth-count: 61
+  - match: [front-intermediate-shaft, rear-intermediate-shaft]
+    description: "Intermediate shaft with its integral second-stage pinion (17 to 53 teeth, 3.12:1)."
+    tooth-count: 17
+  - match: [front-reduction-gear, rear-reduction-gear]
+    description: "Final-drive gear bolted to the differential case: the last of the reduction's two stages."
+    tooth-count: 53
+  - match: [front-side-gear-*, rear-side-gear-*]
+    description: "Differential side gear: a bevel gear splined to one drive shaft."
+    tooth-count: 16
+  - match: [front-spider-gears, rear-spider-gears]
+    description: "Two bevel pinions on a cross pin in the differential case: they let the side gears turn at different speeds."
+    tooth-count: 10
+  - match: [front-resolver, rear-resolver]
+    description: "Variable-reluctance resolver: measures the rotor's angle, which the motor control needs to time the phase currents."
+  - match: [front-current-sensor, rear-current-sensor]
+    description: "Three-phase current sensor: magnetic cores with Hall elements around the phase busbars."
+  - match: [front-control-board, rear-control-board]
+    description: "Motor-control board: turns the VCU's torque request into switching commands, using the rotor angle and phase currents."
+  - match: [front-phase-busbars, rear-phase-busbars]
+    description: "Three copper busbars carrying the phase currents from the power module to the stator windings."
+    material-name: "copper"
+  - match: [front-hv-connector, rear-hv-connector]
+    description: "Sealed high-voltage connector where the harness from the power-distribution unit plugs into the inverter."
+  - match: [front-oil-pump, rear-oil-pump]
+    description: "Electric oil pump: lubricates the gears and bearings and sprays the motor's end windings."
+  - match: [front-oil-cooler, rear-oil-cooler]
+    description: "Plate heat exchanger: passes heat from the drive unit's oil to the vehicle's coolant."
+  - match: [front-drive-unit-mount-*, rear-drive-unit-mount-*]
+    description: "Rubber mount carrying the drive unit on its subframe and isolating its vibration."
+  - match: front-disconnect
+    description: "Dog clutch on the intermediate shaft with a solenoid actuator: lets the front motor stop when only the rear drives, saving its drag losses."
+  - match: rear-park-lock
+    description: "Park lock: an electrically actuated pawl that engages a parking gear on the intermediate shaft."
+  - match: [front-differential, rear-differential]
+    description: "Open differential: splits torque between the left and right drive shafts and lets them turn at different speeds in corners."
+  - match: [front-inverter, rear-inverter]
+    description: "Traction inverter: converts the battery's direct current into the three-phase alternating current that drives the motor."
+    nominal-voltage-v: 800
+  - match: front-inverter
+    peak-power-kw: 200
+  - match: rear-inverter
+    peak-power-kw: 330
+  - match: [front-power-module, rear-power-module]
+    description: "Silicon-carbide MOSFET six-pack module (three half-bridges) on a pin-fin cold plate: the switches that build the motor's three-phase current."
+  - match: [front-gate-driver, rear-gate-driver]
+    description: "Gate-driver board: isolated drivers that switch each of the power module's six transistors on the motor-control board's command."
+  - match: [front-dc-link-capacitor, rear-dc-link-capacitor]
+    description: "Film DC-link capacitor: smooths the high-voltage supply at the inverter input."
+  - match: [front-halfshaft-*, rear-halfshaft-*]
+    description: "Drive shaft: a tripod plunging joint at the gearbox end and a fixed ball joint at the wheel, carrying torque from the differential to the wheel hub. The left one passes under the motor."
+
+  # ---- High-voltage battery and power distribution --------------------------------------------------------
+  - match: battery-module-*
+    description: "Battery module: 14 prismatic lithium-ion cells in series between aluminium end plates and steel straps, cooled from below. Sixteen in one series string make the 800 V pack."
+    energy-capacity-kwh: 6.25
+    nominal-voltage-v: 50
+  - match: battery-enclosure
+    description: "Structural battery enclosure: a cast aluminium tray with a narrower front bay for the junction box and BMS; it seals the pack and carries the coolant ports."
+    material-name: "extruded aluminium"
+  - match: [battery-busbar-l, battery-busbar-r]
+    description: "Copper links joining one column of modules in series, with the column's leads to the junction box and the service disconnect."
+    material-name: "copper"
+  - match: hv-junction-box
+    description: "Junction box housing in the pack's front bay: holds the main contactors, pre-charge circuit, pack fuse and current sensor, and has the outlets to the front inverter, the PDU and the DC charging cable."
+    nominal-voltage-v: 800
+  - match: bms
+    description: "BMS master: reads every cell through the module monitors and the pack current, balances the cells, and opens or closes the main contactors."
+  - match: pdu
+    description: "Front power distribution unit: fused high-voltage outputs to the DC-DC converter, the heat-pump compressor and the on-board charger."
+    nominal-voltage-v: 800
+  - match: dc-dc
+    description: "DC-DC converter beside the 12 V battery: steps 800 V down to 12 V to run the low-voltage electrics and keep the 12 V battery charged."
+    rated-power-kw: 3.5
+    nominal-voltage-v: 800
+  - match: obc
+    description: "On-board charger: converts AC from a charging point into DC for the battery."
+    rated-power-kw: 11
+    nominal-voltage-v: 800
+  - match: lv-battery
+    description: "12 V battery: powers the control units and safety systems, including the battery management system that closes the main contactors."
+    energy-capacity-kwh: 0.72
+    nominal-voltage-v: 12
+  - match: battery-underbody-shield
+    description: "Protection plate under the pack: stops stones and kerbs from reaching the enclosure floor."
+    material-name: "high-strength steel"
+  - match: [battery-monitor-1, battery-monitor-2, battery-monitor-3, battery-monitor-4, battery-monitor-5, battery-monitor-6, battery-monitor-7, battery-monitor-8]
+    description: "Module monitor: measures each cell's voltage and the modules' temperatures for two modules, balances the cells, and reports to the BMS over the chain."
+  - match: battery-monitor-chain
+    description: "Isolated daisy-chain link from the module monitors to the BMS master."
+  - match: battery-vent
+    description: "Pressure-relief and degassing valve: lets gas out of the pack in a cell fault while keeping water out."
+  - match: service-disconnect
+    description: "Manual service disconnect: a fused plug at the middle of the series string; pulling it splits the pack into two safe halves for servicing."
+  - match: battery-rear-feed
+    description: "High-voltage cable pair inside the pack from the junction box to the rear outlets, where the rear inverter's cable and the DC charging cable plug in."
+  - match: [main-contactor-pos, main-contactor-neg]
+    description: "Main contactor: a sealed high-current switch that connects the pack to the vehicle; closed by the BMS, open when unpowered."
+  - match: precharge-circuit
+    description: "Pre-charge relay and resistor: charge the inverters' capacitors slowly before the positive contactor closes, avoiding a current surge."
+  - match: pack-fuse
+    description: "Pack fuse: opens the string on a short circuit."
+  - match: pack-current-sensor
+    description: "Shunt current sensor on the negative side: the BMS's measure of current, used for state of charge and power limits."
+  - match: lv-fuse-box
+    description: "12 V fuse box: fuses and distributes the 12 V battery's supply to the low-voltage harness."
+  - match: hv-harness-aux
+    description: "High-voltage cable from the junction box over the front drive unit to the front PDU."
+  - match: hv-harness-charge
+    description: "DC charging cable from the charge port, under the rear-left drive shaft, to the pack's rear charging outlet."
+  - match: charge-port
+    description: "Combined charging inlet: AC pins for the on-board charger and two DC pins for fast charging."
+
+  # ---- Sensors and control ----------------------------------------------------------------------------------
+  - match: front-camera
+    description: "Forward camera behind the windscreen: lanes, signs, vehicles and pedestrians."
+    sensing-range-m: 200
+  - match: [rear-camera, side-camera-l, side-camera-r]
+    description: "Surround-view camera."
+    sensing-range-m: 60
+  - match: front-radar
+    description: "Long-range 77 GHz radar: distance and speed of vehicles ahead, in any weather."
+    sensing-range-m: 250
+  - match: corner-radar-*
+    description: "Short-range corner radar: blind spots and cross traffic."
+    sensing-range-m: 100
+  - match: lidar
+    description: "Roof lidar: a laser scanner building a 3D point cloud of the surroundings."
+    sensing-range-m: 250
+  - match: gnss-antenna
+    description: "Satellite positioning receiver and antenna."
+  - match: ad-compute
+    description: "Automated-driving computer: fuses the sensors, plans the path and commands steering, braking and drive torque."
+  - match: vcu
+    description: "Vehicle control unit: turns the accelerator pedal and driving mode into torque requests for the two drive units, including traction control."
+  - match: brake-fluid-reservoir
+    description: "Brake-fluid reservoir: a translucent tank on the master cylinder with a level sensor, keeping both brake circuits filled."
+  - match: brake-line-*
+    description: "Rigid brake line: coated steel tube from the stability-control module's outlet to the corner's flexible hose."
+  - match: master-cylinder
+    description: "Tandem master cylinder: turns pedal and booster force into brake-fluid pressure, in two separate circuits."
+  - match: brake-pedal
+    description: "Brake pedal: the driver's brake demand, and the mechanical fallback that still applies the brakes if the booster fails."
+  - match: esc-module
+    description: "Electronic stability control: valve block and controller that modulate brake pressure at each wheel (anti-lock braking, stability control)."
+  - match: brake-booster
+    description: "Electromechanical brake booster: builds brake pressure from the pedal or on command from the automated-driving computer."
+  - match: steering-ecu
+    description: "Steering control unit: commands the power-steering motor from the driver's input or the automated-driving computer."
+  - match: gateway
+    description: "Central gateway: connects the vehicle's networks and filters messages between them."
+  - match: bcm
+    description: "Body control module: doors, windows, locks and lights."
+  - match: telematics
+    description: "Telematics unit: mobile connection for remote services and software updates."
+
+  # ---- Thermal ----------------------------------------------------------------------------------------------
+  - match: battery-cooling-plate
+    description: "Liquid cooling plate under the modules: carries heat away from the cells."
+  - match: coolant-reservoir
+    description: "Coolant expansion tank: keeps the sealed circuit filled and takes up the coolant's expansion as it warms."
+  - match: coolant-valve
+    description: "Thermal-mode valve: routes the coolant through the radiator, the battery chiller or the heater, depending on whether the battery, drive units and cabin need cooling or warmth."
+  - match: coolant-heater
+    description: "High-voltage coolant heater: warms the coolant for the battery and cabin in cold weather."
+  - match: condenser
+    description: "Condenser: in front of the radiator, it passes the heat pump's heat to the outside air."
+  - match: refrigerant-lines
+    description: "Refrigerant lines: aluminium pipes joining the compressor, condenser, battery chiller and cabin climate module."
+  - match: [front-coolant-lines, rear-coolant-lines]
+    description: "Drive-unit coolant lines: supply and return hoses to the inverter's cold plate and the oil cooler."
+  - match: coolant-pump
+    description: "Electric coolant pump circulating coolant through the battery and drive-unit circuits."
+  - match: battery-chiller
+    description: "Chiller: a heat exchanger where the heat pump's refrigerant cools the battery coolant."
+  - match: heat-pump-compressor
+    description: "High-voltage electric compressor for the heat pump (cabin heating and cooling, battery chilling)."

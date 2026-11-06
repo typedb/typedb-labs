@@ -1,0 +1,65 @@
+# Control loops: a controller reads sensors and commands actuators to govern a system.
+# One relation with four roles, because that is how the engineering works: no pair of these makes
+# sense on its own. Component lists accept id patterns (* = anything).
+
+control-loops:
+  - name: "Anti-lock braking and stability control"
+    description: "Reads every wheel's speed and releases or adds brake pressure at individual wheels to stop them locking and keep the vehicle stable."
+    controller: esc-module
+    sensors: [wheel-speed-sensor-*]
+    actuators: [caliper-*, brake-booster]
+    system: brake-control
+  - name: "Traction control"
+    description: "Compares wheel speeds and cuts drive torque to an axle whose wheels start to spin."
+    controller: vcu
+    sensors: [wheel-speed-sensor-*]
+    actuators: [front-motor, rear-motor]
+    system: traction-control
+  - name: "Electric power steering"
+    description: "Reads the driver's torque on the pinion shaft and adds matching assistance through the rack-mounted motor; the automated-driving computer can command it too."
+    controller: steering-ecu
+    sensors: [steering-torque-sensor]
+    actuators: [eps-motor]
+    system: steering
+  - name: "Automated driving"
+    description: "Fuses cameras, radars, lidar, satellite positioning and wheel speeds, plans a path and commands steering, braking and drive torque."
+    controller: ad-compute
+    sensors: [front-camera, rear-camera, side-camera-*, front-radar, corner-radar-*, lidar, gnss-antenna, wheel-speed-sensor-*]
+    actuators: [eps-motor, brake-booster, front-motor, rear-motor]
+    system: automated-driving
+  - name: "Front motor current control"
+    description: "The motor-control board reads the rotor angle and the three phase currents and sets the power module's switching so the motor produces the torque the VCU requests."
+    controller: front-control-board
+    sensors: [front-resolver, front-current-sensor]
+    actuators: [front-motor]
+    system: front-axle-drive
+  - name: "Rear motor current control"
+    description: "The motor-control board reads the rotor angle and the three phase currents and sets the power module's switching so the motor produces the torque the VCU requests."
+    controller: rear-control-board
+    sensors: [rear-resolver, rear-current-sensor]
+    actuators: [rear-motor]
+    system: rear-axle-drive
+  - name: "Front axle disconnect"
+    description: "The VCU engages the front axle's dog clutch when all-wheel drive is needed (traction, hard acceleration) and opens it to stop the front motor's drag."
+    controller: vcu
+    sensors: [wheel-speed-sensor-*]
+    actuators: [front-disconnect]
+    system: front-axle-drive
+  - name: "Park lock"
+    description: "The VCU engages the rear park lock in Park and releases it when a gear is selected."
+    controller: vcu
+    sensors: []
+    actuators: [rear-park-lock]
+    system: parking
+  - name: "Electric parking brake"
+    description: "The stability-control module applies and releases the rear callipers' parking-brake motors (switch, automatic hold on stopping, release on driving away)."
+    controller: esc-module
+    sensors: []
+    actuators: [epb-actuator-*]
+    system: parking
+  - name: "Battery management"
+    description: "The BMS reads every cell's voltage and temperature through the module monitors and the pack current through the shunt, and closes or opens the main contactors (through the pre-charge path first)."
+    controller: bms
+    sensors: [battery-monitor-1, battery-monitor-2, battery-monitor-3, battery-monitor-4, battery-monitor-5, battery-monitor-6, battery-monitor-7, battery-monitor-8, pack-current-sensor]
+    actuators: [main-contactor-pos, main-contactor-neg, precharge-circuit]
+    system: battery-management

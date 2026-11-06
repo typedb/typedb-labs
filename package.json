@@ -1,0 +1,12 @@
+{
+  "name": "typedb-labs",
+  "private": true,
+  "description": "TypeDB Labs: demonstration projects built on TypeDB, served together at labs.typedb.com",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": { "node": ">=22.6" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "cd apex/api && npm run typecheck && cd ../../noodlelab/api && npm run typecheck"
+  }
+}

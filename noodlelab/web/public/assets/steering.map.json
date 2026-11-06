@@ -1,0 +1,13 @@
+{
+  "asset": "steering",
+  "nodes": {
+    "steering-rack": "steering-rack",
+    "steering-rack-mount-l": "steering-rack-mount-l",
+    "steering-rack-mount-r": "steering-rack-mount-r",
+    "eps-motor": "eps-motor",
+    "steering-ecu": "steering-ecu",
+    "steering-torque-sensor": "steering-torque-sensor",
+    "steering-intermediate-shaft": "steering-intermediate-shaft",
+    "steering-column": "steering-column"
+  }
+}

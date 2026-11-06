@@ -1,0 +1,52 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Communications workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-COM, name: Communications, status: in-progress, planned_start: 2026-06-22, due: 2026-12-03, criticality: medium, description: 'Announcements to the market, investors, employees and partners, from the firm offer to completion.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-COM-ANNOUNCE, type: activity, name: Announcement communications pack, workstream: WS-COM, status: complete, planned_start: 2026-06-22, due: 2026-07-13, criticality: high, progress: 100}
+  - {code: AC-COM-INVESTORS, type: activity, name: Investor and analyst engagement after the announcement, workstream: WS-COM, status: complete, planned_start: 2026-07-14, due: 2026-09-30, criticality: medium, progress: 100}
+  - {code: AC-COM-DAY1, type: activity, name: Day-1 communications materials, workstream: WS-COM, status: in-progress, planned_start: 2026-10-01, due: 2026-11-17, criticality: medium, progress: 65}
+  - {code: AC-COM-RNS, type: activity, name: Completion announcement timetable and drafts, workstream: WS-COM, status: not-started, planned_start: 2026-11-02, due: 2026-11-30, criticality: high, progress: 0}
+  - {code: MS-COMMS-PLAN, type: milestone, name: Day-1 communications plan approved, workstream: WS-COM, status: in-progress, progress: 65, due: 2026-11-18, criticality: medium}
+  - {code: MS-RNS, type: milestone, name: Completion announcement, workstream: WS-COM, status: not-started, progress: 0, due: 2026-12-02, criticality: high}
+  - {code: CM-TOWNHALL, type: milestone, name: Employee town halls, workstream: WS-COM, status: not-started, progress: 0, due: 2026-12-03, criticality: medium}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-COMPLETION, to: MS-RNS, lag: 0}
+  - {kind: sequencing, from: MS-DAY1, to: CM-TOWNHALL, lag: 1}
+  - {kind: informing, from: MS-COMMS-PLAN, to: MS-RNS, lag: 0}
+  - {kind: sequencing, from: AC-COM-DAY1, to: MS-COMMS-PLAN, lag: 0}
+  - {kind: sequencing, from: AC-COM-RNS, to: MS-RNS, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-COM: {A: PER-WHITFIELD, R: [PER-GRANT], C: [PER-PETROVA], I: [PER-HARTLEY]}
+  AC-COM-ANNOUNCE: {A: PER-WHITFIELD, R: [PER-GRANT, PER-PATEL], C: [PER-PETROVA, PER-THORNTON], I: [PER-HARTLEY]}
+  AC-COM-INVESTORS: {A: PER-WHITFIELD, R: [PER-PATEL], C: [PER-HOLLIS, PER-ELLISON], I: [PER-HARTLEY]}
+  AC-COM-DAY1: {A: PER-WHITFIELD, R: [PER-BARLOW, PER-GRANT], C: [PER-PETROVA, PER-ELLISON], I: [PER-REYES]}
+  AC-COM-RNS: {A: PER-WHITFIELD, R: [PER-GRANT], C: [PER-PRITCHARD, PER-ELLISON], I: [PER-HARTLEY]}
+  MS-COMMS-PLAN: {A: PER-WHITFIELD, R: [PER-GRANT], C: [PER-PETROVA], I: [PER-REYES]}
+  MS-RNS: {A: PER-WHITFIELD, R: [PER-GRANT], C: [PER-PRITCHARD, PER-PETROVA], I: [PER-HARTLEY]}
+  CM-TOWNHALL: {A: PER-FERREIRA, R: [PER-GRANT], C: [PER-REYES], I: [PER-MENON]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-COM-01, type: delivery, at: !!timestamp '2026-07-14 07:05:00', kind: delivered, actor: PER-GRANT, subject: AC-COM-ANNOUNCE, summary: Announcement pack released to the media}
+  - {code: EV-COM-02, type: meeting, at: !!timestamp '2026-07-14 09:00:00', kind: meeting, actor: PER-WHITFIELD, subject: AC-COM-INVESTORS, summary: Investor call on the announcement, attendees: [PER-HOLLIS, PER-PATEL]}
+  - {code: EV-COM-03, type: delivery, at: !!timestamp '2026-09-30 16:00:00', kind: delivered, actor: PER-PATEL, subject: AC-COM-INVESTORS, summary: Investor feedback summary delivered}
+  - {code: EV-COM-04, type: delivery, at: !!timestamp '2026-10-13 15:00:00', kind: delivered, actor: PER-GRANT, subject: AC-COM-DAY1, summary: Draft media Q&A for Day 1}
+  - {code: EV-COM-05, type: request, at: !!timestamp '2026-10-19 10:00:00', kind: request, actor: PER-BARLOW, subject: AC-COM-DAY1, summary: Atlas review of the Day-1 employee messages wanted by 28 October, recipients: [PER-PETROVA, PER-ELLISON], response_due: 2026-10-28}
+  - {code: EV-COM-06, type: meeting, at: !!timestamp '2026-10-21 11:00:00', kind: meeting, actor: PER-WHITFIELD, subject: MS-COMMS-PLAN, summary: Day-1 communications plan review, attendees: [PER-GRANT, PER-PETROVA]}
+  - {code: EV-COM-07, type: response, at: !!timestamp '2026-10-23 14:00:00', kind: response, actor: PER-ELLISON, subject: AC-COM-DAY1, summary: Atlas comments on the Day-1 employee messages, reply_to: [EV-COM-05]}
+  - {code: EV-COM-08, type: delivery, at: !!timestamp '2026-10-24 10:00:00', kind: delivered, actor: PER-BARLOW, subject: AC-COM-DAY1, summary: 'Day-1 message house, version 2'}
+  - {code: EV-COM-09, type: decision, at: !!timestamp '2026-10-25 18:00:00', kind: approved, actor: PER-WHITFIELD, subject: AC-COM-DAY1, summary: Day-1 message house approved}
+  - {code: EV-COM-10, type: meeting, at: !!timestamp '2026-10-20 16:00:00', kind: meeting, actor: PER-WHITFIELD, subject: WS-COM, summary: 'Communications steering: announcement sequence for completion and the RNS drafting plan', attendees: [PER-GRANT, PER-BARLOW], agenda: [MS-COMMS-PLAN, AC-COM-RNS]}

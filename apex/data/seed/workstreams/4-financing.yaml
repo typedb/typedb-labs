@@ -1,0 +1,60 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Financing workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-FIN, name: Financing, status: in-progress, planned_start: 2026-06-01, due: 2027-12-02, criticality: critical, description: 'The £1.8bn bridge facility from Albion and Northmere, cash confirmation for the offer, drawdown and settlement of the consideration through the registrar, and refinancing the bridge with a bond.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-FIN-TERMS, type: activity, name: Negotiate the bridge facility terms, workstream: WS-FIN, status: complete, planned_start: 2026-06-01, due: 2026-07-10, criticality: critical, progress: 100}
+  - {code: AC-FIN-CASHCONF, type: activity, name: Cash confirmation for the offer, workstream: WS-FIN, status: complete, planned_start: 2026-07-01, due: 2026-07-13, criticality: critical, progress: 100, description: 'Harrowgate confirms, as the Takeover Code requires, that Novacore has the cash to pay the offer in full.'}
+  - {code: MS-FACILITY, type: milestone, name: Bridge facility agreement signed, workstream: WS-FIN, status: complete, progress: 100, due: 2026-07-13, criticality: critical, description: Needed before the firm offer so Harrowgate could confirm cash was available.}
+  - {code: AC-FIN-CP, type: activity, name: Satisfy the facility's conditions to drawdown, workstream: WS-FIN, status: not-started, planned_start: 2026-11-02, due: 2026-12-01, criticality: critical, progress: 0}
+  - {code: AC-FIN-FLOW, type: activity, name: Funds flow and settlement with the registrar, workstream: WS-FIN, status: not-started, planned_start: 2026-11-16, due: 2026-12-01, criticality: high, progress: 0}
+  - {code: MS-FUNDS, type: milestone, name: Bridge facility drawn, workstream: WS-FIN, status: not-started, progress: 0, due: 2026-12-02, criticality: critical}
+  - {code: OB-SETTLE, type: covenant, name: Atlas shareholders paid, workstream: WS-FIN, status: not-started, progress: 0, due: 2026-12-16, criticality: critical, legal_basis: 'Takeover Code, Appendix 7 (settlement within 14 days of the effective date)'}
+  - {code: DL-FUNDS, type: deadline, name: Bridge "certain funds" period ends, workstream: WS-FIN, status: in-progress, due: 2027-04-30, criticality: critical, legal_basis: Bridge facility agreement, consequence: The lenders' committed funding ends. Without new financing Novacore could not pay Atlas shareholders.}
+  - {code: AC-FIN-BOND, type: activity, name: 'Bond refinancing: rating and prospectus', workstream: WS-FIN, status: not-started, planned_start: 2027-05-03, due: 2027-11-15, criticality: high, progress: 0}
+  - {code: CV-REFI, type: covenant, name: Bridge refinanced (bond issue), workstream: WS-FIN, status: not-started, progress: 0, due: 2027-12-02, criticality: high, legal_basis: Bridge facility agreement}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-COMPLETION, to: MS-FUNDS, lag: 0}
+  - {kind: sequencing, from: MS-COMPLETION, to: OB-SETTLE, lag: 14}
+  - {kind: sequencing, from: MS-FUNDS, to: OB-SETTLE, lag: 0}
+  - {kind: sequencing, from: MS-FUNDS, to: CV-REFI, lag: 365}
+  - {kind: sequencing, from: AC-FIN-TERMS, to: MS-FACILITY, lag: 0}
+  - {kind: sequencing, from: AC-FIN-CP, to: MS-FUNDS, lag: 0}
+  - {kind: sequencing, from: AC-FIN-FLOW, to: OB-SETTLE, lag: 0}
+  - {kind: sequencing, from: AC-FIN-BOND, to: CV-REFI, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-FIN: {A: PER-ADEBAYO, R: [PER-KARIM], C: [PER-HOLT, PER-MCKENZIE], I: [PER-HARTLEY]}
+  AC-FIN-TERMS: {A: PER-ADEBAYO, R: [PER-KARIM], C: [PER-HOLT, PER-MCKENZIE, PER-FOSTER]}
+  AC-FIN-CASHCONF: {A: PER-ADEBAYO, R: [PER-THORNTON], C: [PER-KARIM], I: [PER-HARTLEY]}
+  MS-FACILITY: {A: PER-ADEBAYO, R: [PER-KARIM], C: [PER-HOLT, PER-MCKENZIE]}
+  AC-FIN-CP: {A: PER-ADEBAYO, R: [PER-FOSTER], C: [PER-HOLT, PER-MCKENZIE, PER-MENSAH], I: [PER-KARIM]}
+  AC-FIN-FLOW: {A: PER-ADEBAYO, R: [PER-FOSTER], C: [PER-DALE], I: [PER-PRITCHARD]}
+  MS-FUNDS: {A: PER-ADEBAYO, R: [PER-KARIM], C: [PER-HOLT, PER-MCKENZIE], I: [PER-OKAFOR]}
+  OB-SETTLE: {A: PER-ADEBAYO, R: [PER-KARIM], C: [PER-PRITCHARD], I: [PER-WHITFIELD]}
+  DL-FUNDS: {A: PER-ADEBAYO, R: [PER-KARIM], C: [ORG-ALB, ORG-NMB], I: [PER-HARTLEY]}
+  AC-FIN-BOND: {A: PER-ADEBAYO, R: [PER-FOSTER], C: [PER-KARIM, PER-HOLLIS], I: [PER-HARTLEY]}
+  CV-REFI: {A: PER-ADEBAYO, R: [PER-THORNTON], C: [PER-HOLT], I: [PER-HARTLEY]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-FIN-01, type: request, at: !!timestamp '2026-06-02 10:00:00', kind: request, actor: PER-ADEBAYO, subject: AC-FIN-TERMS, summary: Bridge term sheets wanted from both banks by 12 June, recipients: [PER-KARIM], response_due: 2026-06-12}
+  - {code: EV-FIN-02, type: response, at: !!timestamp '2026-06-11 17:00:00', kind: response, actor: PER-KARIM, subject: AC-FIN-TERMS, summary: Term sheets from Albion and Northmere received and compared, reply_to: [EV-FIN-01]}
+  - {code: EV-FIN-03, type: meeting, at: !!timestamp '2026-06-25 14:00:00', kind: meeting, actor: PER-KARIM, subject: AC-FIN-TERMS, summary: Bridge facility negotiation with both lenders, attendees: [PER-HOLT, PER-MCKENZIE, PER-FOSTER]}
+  - {code: EV-FIN-04, type: delivery, at: !!timestamp '2026-07-10 16:00:00', kind: delivered, actor: PER-KARIM, subject: AC-FIN-TERMS, summary: Agreed facility agreement circulated for signing}
+  - {code: EV-FIN-05, type: decision, at: !!timestamp '2026-07-13 12:00:00', kind: signed, actor: PER-THORNTON, subject: AC-FIN-CASHCONF, summary: Harrowgate signs off its cash confirmation}
+  - {code: EV-0003, type: decision, at: !!timestamp '2026-07-13 18:00:00', kind: signed, actor: PER-KARIM, subject: MS-FACILITY, summary: £1.8bn bridge facility signed with Albion Commercial Bank and Northmere Bank}
+  - {code: EV-FIN-06, type: request, at: !!timestamp '2026-10-19 11:00:00', kind: request, actor: PER-HOLT, subject: AC-FIN-CP, summary: Lenders send their checklist of conditions to drawdown, recipients: [PER-FOSTER], response_due: 2026-10-30}
+  - {code: EV-FIN-07, type: notice, at: !!timestamp '2026-10-21 08:00:00', kind: notification, actor: ORG-NMB, subject: AC-FIN-CP, summary: 'Agency portal: version 2 of the drawdown checklist uploaded', recipients: [PER-FOSTER, PER-MENSAH], automated: true}
+  - {code: EV-FIN-08, type: meeting, at: !!timestamp '2026-10-21 10:00:00', kind: meeting, actor: PER-ADEBAYO, subject: WS-FIN, summary: 'Financing steering: the lenders'' drawdown checklist and the certain-funds timetable against completion', attendees: [PER-KARIM, PER-FOSTER], agenda: [AC-FIN-CP, MS-FUNDS]}

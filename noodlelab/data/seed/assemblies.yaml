@@ -1,0 +1,34 @@
+# Physical structure: every assembly and the assembly it sits in (null = the whole vehicle).
+# Loaded into TypeDB by api/explorer/seed.py. Ids are stable: never rename one.
+
+assemblies:
+  - {id: vehicle, name: "Vehicle", parent: null}
+  - {id: body, name: "Body and closures", parent: vehicle}
+  - {id: greenhouse, name: "Roof and glasshouse", parent: body}
+  - {id: front-end, name: "Front end", parent: body}
+  - {id: rear-end, name: "Rear end", parent: body}
+  - {id: door-fl, name: "Front left door", parent: body}
+  - {id: door-fr, name: "Front right door", parent: body}
+  - {id: door-rl, name: "Rear left door", parent: body}
+  - {id: door-rr, name: "Rear right door", parent: body}
+  - {id: body-frame, name: "Body frame (pillars and roof structure)", parent: body}
+  - {id: chassis, name: "Chassis", parent: vehicle}
+  - {id: structure, name: "Body structure", parent: chassis}
+  - {id: front-suspension, name: "Front suspension", parent: chassis}
+  - {id: rear-suspension, name: "Rear suspension", parent: chassis}
+  - {id: corner-fl, name: "Front left wheel end", parent: chassis}
+  - {id: corner-fr, name: "Front right wheel end", parent: chassis}
+  - {id: corner-rl, name: "Rear left wheel end", parent: chassis}
+  - {id: corner-rr, name: "Rear right wheel end", parent: chassis}
+  - {id: steering, name: "Steering system", parent: chassis}
+  - {id: brake-control, name: "Brake control", parent: chassis}
+  - {id: powertrain, name: "Electric powertrain", parent: vehicle}
+  - {id: front-drive-unit, name: "Front drive unit", parent: powertrain}
+  - {id: rear-drive-unit, name: "Rear drive unit", parent: powertrain}
+  - {id: hv-battery, name: "High-voltage battery", parent: powertrain}
+  - {id: battery-junction-box, name: "Battery junction box", parent: hv-battery}
+  - {id: power-distribution, name: "Power distribution", parent: vehicle}
+  - {id: sensor-suite, name: "Driving sensor suite", parent: vehicle}
+  - {id: electronics, name: "Control electronics", parent: vehicle}
+  - {id: thermal, name: "Thermal management", parent: vehicle}
+  - {id: interior, name: "Interior", parent: vehicle}

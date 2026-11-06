@@ -1,0 +1,30 @@
+{
+  "asset": "corner-fl",
+  "nodes": {
+    "tyre": "tyre-fl",
+    "wheel": "wheel-fl",
+    "wheel-nut-1": "wheel-nut-fl-1",
+    "wheel-nut-2": "wheel-nut-fl-2",
+    "wheel-nut-3": "wheel-nut-fl-3",
+    "wheel-nut-4": "wheel-nut-fl-4",
+    "wheel-nut-5": "wheel-nut-fl-5",
+    "brake-disc": "brake-disc-fl",
+    "caliper": "caliper-fl",
+    "brake-pad-inner": "brake-pad-inner-fl",
+    "brake-pad-outer": "brake-pad-outer-fl",
+    "brake-shield": "brake-shield-fl",
+    "brake-hose": "brake-hose-fl",
+    "hub-nut": "hub-nut-fl",
+    "hub": "hub-fl",
+    "wheel-bearing": "wheel-bearing-fl",
+    "knuckle": "knuckle-fl",
+    "wheel-speed-sensor": "wheel-speed-sensor-fl",
+    "lower-arm": "lower-arm-fl",
+    "upper-arm": "upper-arm-fl",
+    "coilover": "coilover-fl",
+    "spring": "spring-fl",
+    "top-mount": "top-mount-fl",
+    "drop-link": "drop-link-fl",
+    "tie-rod": "tie-rod-fl"
+  }
+}

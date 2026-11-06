@@ -1,0 +1,79 @@
+# Docker Compose file for the TypeDB Noodlelab Visual Explorer.
+# Start everything:   docker compose up -d --build        then open http://127.0.0.1:5180
+# Stop everything:    docker compose down                 (TypeDB's data is kept in its volume)
+#
+#   typedb   TypeDB 3.14.1, the application's only database (docs/decisions/0001-typedb-sole-database.md)
+#   seed     one-off: creates the "vehicle" database from schema/ and data/seed/ if it doesn't exist yet
+#   api      the read-only semantic API (TypeScript on Node.js); reached only through the web server, no published port
+#   web-dev  the web app's development server; forwards /api requests to the api service
+#
+# Node.js runs inside containers, so nothing needs installing on this computer.
+# Published ports are bound to 127.0.0.1, so only this computer can connect.
+
+name: typedb-noodlelab-visual-explorer
+
+x-api: &api
+  build: ./api
+  environment:
+    TYPEDB_ADDRESS: http://typedb:8000  # the typedb service's HTTP port on Compose's private network
+    TYPEDB_DATABASE: vehicle
+    API_HOST: 0.0.0.0                   # answer on the private network, not only inside the container
+  volumes:
+    - .:/project:ro                     # code, schema and seed data, read-only
+    - /project/api/node_modules         # the packages come from the image, not from this folder
+
+services:
+  typedb:
+    image: typedb/typedb:3.14.1        # pinned exact version; change deliberately
+    container_name: noodlelab-typedb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1733:1729"          # driver port (TypeDB Studio and scripts on this computer)
+      - "127.0.0.1:8004:8000"          # HTTP port (the API when run outside Docker, TypeDB Studio)
+    volumes:
+      - noodlelab-typedb-data:/var/lib/typedb/data
+    healthcheck:
+      # The image has no curl or wget; bash's /dev/tcp checks the HTTP port is accepting.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  seed:
+    <<: *api
+    container_name: noodlelab-seed
+    command: ["node", "scripts/create-database.ts", "--if-missing"]
+    restart: "no"
+    depends_on:
+      typedb:
+        condition: service_healthy
+
+  api:
+    <<: *api
+    container_name: noodlelab-api
+    restart: unless-stopped
+    # --watch: restarts when the code changes (development only)
+    command: ["node", "--watch", "server.ts"]
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  web-dev:
+    image: node:24.22.1-alpine
+    container_name: noodlelab-web-dev
+    working_dir: /web
+    command: ["sh", "-c", "npm install --no-audit --no-fund && npm run dev -- --host 0.0.0.0 --port 5180"]
+    ports:
+      - "127.0.0.1:5180:5180"
+    environment:
+      PROJECT_ROOT: /project
+      API_URL: http://api:8000             # where the dev server forwards /api requests
+    volumes:
+      - ./web:/web
+      - noodlelab-node-modules:/web/node_modules   # dependencies live in the container, not in the project folder
+      - .:/project:ro                       # read-only view of the whole project, for the architecture tests
+
+volumes:
+  noodlelab-node-modules:
+  noodlelab-typedb-data:

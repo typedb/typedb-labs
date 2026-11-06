@@ -1,0 +1,55 @@
+# Project Apex: saved queries (functions), stored in the schema so every query can call them.
+# Explained in docs/schema-design.md §5. Loaded after schema.tql, in a SCHEMA transaction.
+
+define
+
+# Everything whose dates move if $start moves: follows hard dependencies to any depth.
+# Reachability only (no value carried), so it is safe on cycles.
+fun downstream($start: deal-item) -> { deal-item }:
+  match
+    { hard-dependency (prerequisite: $start, dependent: $next); }
+    or { let $mid in downstream($start); hard-dependency (prerequisite: $mid, dependent: $next); };
+  return { $next };
+
+# The same walk, returning each step with its dependency (so callers can read lag-days).
+fun impact_edges($start: deal-item) -> { deal-item, hard-dependency, deal-item }:
+  match
+    { $d isa hard-dependency (prerequisite: $from, dependent: $to); $from is $start; }
+    or { let $p, $e, $from in impact_edges($start);
+         $d isa hard-dependency (prerequisite: $from, dependent: $to); };
+  return { $from, $d, $to };
+
+# Everything that must happen before $end ("what is blocking completion?").
+fun upstream($end: deal-item) -> { deal-item }:
+  match
+    { hard-dependency (prerequisite: $prev, dependent: $end); }
+    or { let $mid in upstream($end); hard-dependency (prerequisite: $prev, dependent: $mid); };
+  return { $prev };
+
+# The one Accountable party for an item (the schema allows at most one).
+fun accountable_for($item: deal-item) -> party:
+  match accountability (holder: $p, accountable-item: $item);
+  return first $p;
+
+# Every company $parent holds, at any depth, with the effective stake along EACH route.
+# A company reached by two routes comes back twice: callers sum them.
+# Only correct when ownership has no cycles: always run ownership_cycles() and the
+# over-100% check first (apex/queries.py does this).
+fun group_members($parent: company) -> { company, decimal }:
+  match
+    { ownership (owner: $parent, owned: $sub), has stake $s; let $eff = $s; }
+    or { let $mid, $m in group_members($parent);
+         ownership (owner: $mid, owned: $sub), has stake $s; let $eff = $m * $s; };
+  return { $sub, $eff };
+
+# Everyone above $c in the ownership chain. Reachability only: safe on cycles.
+fun owners_above($c: company) -> { company }:
+  match
+    { ownership (owner: $o, owned: $c); }
+    or { let $mid in owners_above($c); ownership (owner: $o, owned: $mid); };
+  return { $o };
+
+# Companies that (indirectly) own themselves. Must always be empty.
+fun ownership_cycles() -> { company }:
+  match $c isa company; let $o in owners_above($c); $o is $c;
+  return { $c };

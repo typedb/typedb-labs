@@ -1,0 +1,35 @@
+# FICTIONAL DEMONSTRATION DATA. See docs/dataset.md.
+
+deal:
+  code: DEAL-APEX
+  name: Project Apex
+  description: >-
+    Recommended all-cash acquisition of Atlas Biopharma plc by Novacore plc, implemented by a
+    court-sanctioned scheme of arrangement under the UK Takeover Code.
+  value: "2400000000"          # string: kept as an exact decimal
+  currency: GBP
+  structure: Scheme of arrangement
+  as_of: 2026-10-26            # the demo's "today"
+  acquirer: ORG-NOV
+  target: ORG-ATL
+
+# Who advises whom on this deal. The adviser's people hold their RACI letters "via" the mandate.
+mandates:
+  - {code: MAN-HAR, client: ORG-NOV, adviser: ORG-HAR, type: Lead financial adviser}
+  - {code: MAN-BWM, client: ORG-NOV, adviser: ORG-BWM, type: Legal and competition counsel}
+  - {code: MAN-KF,  client: ORG-NOV, adviser: ORG-KF,  type: Financial and tax due diligence}
+  - {code: MAN-COR, client: ORG-NOV, adviser: ORG-COR, type: Integration Management Office}
+  - {code: MAN-HAL, client: ORG-NOV, adviser: ORG-HAL, type: PR and investor communications}
+  - {code: MAN-LKH, client: ORG-ATL, adviser: ORG-LKH, type: Rule 3 financial adviser}
+  - {code: MAN-PH,  client: ORG-ATL, adviser: ORG-PH,  type: Legal counsel}
+  - {code: MAN-CRB, client: ORG-ATL, adviser: ORG-CRB, type: PR}
+  - {code: MAN-MLS, client: ORG-NOV, adviser: ORG-MLS, type: Corporate broker}
+  - {code: MAN-TCM, client: ORG-ATL, adviser: ORG-TCM, type: Corporate broker}
+  - {code: MAN-ASH, client: ORG-ATL, adviser: ORG-ASH, type: Registrar and receiving agent}
+
+# The £1.8bn bridge facility: one relation per lender. The other £0.6bn is Novacore's own cash.
+financing:
+  - {code: FIN-ALB, name: Bridge facility (Albion tranche), borrower: ORG-NOV, lender: ORG-ALB,
+     value: "1000000000", currency: GBP}
+  - {code: FIN-NMB, name: Bridge facility (Northmere tranche), borrower: ORG-NOV, lender: ORG-NMB,
+     value: "800000000", currency: GBP}

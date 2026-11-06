@@ -1,0 +1,280 @@
+# Physical connections between components: joints, cables, pipes and network links.
+#
+# kind: mechanical (joint), power (voltage), data (network) or fluid (fluid).
+# Placeholders repeat an entry:
+#   <c>  each wheel corner: fl, fr, rl, rr; it also sets <a> (front/rear axle) and <s> (left/right side)
+#   <a>  each axle: front, rear (when there is no <c>)
+#   <s>  each side: l, r (when there is no <c>)
+#   anything else comes from the entry's "each" list.
+
+connections:
+  # ---- Wheel ends (every corner) ----------------------------------------------------------------------------
+  - {kind: mechanical, joint: seated, ends: [tyre-<c>, wheel-<c>], description: "Tyre beads seated on the rim"}
+  - {kind: mechanical, joint: bolted, ends: [wheel-<c>, hub-<c>], description: "Wheel clamped to the hub flange by five nuts"}
+  - {kind: mechanical, joint: threaded, ends: [wheel-nut-<c>-<n>, hub-<c>], each: {n: [1, 2, 3, 4, 5]}, description: "Nut on a wheel stud"}
+  - {kind: mechanical, joint: seated, ends: [wheel-nut-<c>-<n>, wheel-<c>], each: {n: [1, 2, 3, 4, 5]}, description: "Conical seat in the wheel"}
+  - {kind: mechanical, joint: bolted, ends: [brake-disc-<c>, hub-<c>], description: "Disc hat clamped between hub and wheel"}
+  - {kind: mechanical, joint: press-fit, ends: [hub-<c>, wheel-bearing-<c>]}
+  - {kind: mechanical, joint: bolted, ends: [wheel-bearing-<c>, knuckle-<c>], description: "Flanged bearing bolted to the knuckle"}
+  - {kind: mechanical, joint: threaded, ends: [hub-nut-<c>, hub-<c>]}
+  - {kind: mechanical, joint: splined, ends: ["<a>-halfshaft-<s>", hub-<c>], description: "Drive shaft splined into the hub"}
+  - {kind: mechanical, joint: threaded, ends: [hub-nut-<c>, "<a>-halfshaft-<s>"], description: "Axle nut on the drive shaft"}
+  - {kind: mechanical, joint: bolted, ends: [caliper-<c>, knuckle-<c>], description: "Calliper mounting lugs"}
+  - {kind: mechanical, joint: seated, ends: [brake-pad-inner-<c>, caliper-<c>], description: "Pad held by the pad pin"}
+  - {kind: mechanical, joint: seated, ends: [brake-pad-outer-<c>, caliper-<c>], description: "Pad held by the pad pin"}
+  - {kind: mechanical, joint: bolted, ends: [brake-shield-<c>, knuckle-<c>]}
+  - {kind: mechanical, joint: bolted, ends: [wheel-speed-sensor-<c>, knuckle-<c>]}
+  - {kind: fluid, fluid: brake fluid, ends: [brake-hose-<c>, caliper-<c>], description: "Banjo fitting"}
+  - {kind: fluid, fluid: brake fluid, ends: [brake-hose-<c>, brake-line-<c>], description: "Hose fitting at the body bracket"}
+  - {kind: fluid, fluid: brake fluid, ends: [brake-line-<c>, esc-module], description: "Rigid steel line from the hydraulic unit"}
+  - {kind: data, network: hard-wired signal, ends: [epb-actuator-r<s>, esc-module], description: "Motor drive from the module's parking-brake stage"}
+  - {kind: data, network: hard-wired signal, ends: [wheel-speed-sensor-<c>, esc-module]}
+
+  # ---- Suspension -----------------------------------------------------------------------------------------
+  - {kind: mechanical, joint: ball-joint, ends: [knuckle-<c>, lower-arm-<c>]}
+  - {kind: mechanical, joint: ball-joint, ends: [knuckle-<c>, upper-arm-<c>]}
+  - {kind: mechanical, joint: bushed, ends: [lower-arm-<c>, "<a>-subframe"]}
+  - {kind: mechanical, joint: bushed, ends: [upper-arm-<c>, "<a>-tower-<s>"], description: "Upper arm pivots in two brackets on the suspension tower"}
+  - {kind: mechanical, joint: bushed, ends: [coilover-<c>, lower-arm-<c>], description: "Damper lower eye"}
+  - {kind: mechanical, joint: seated, ends: [spring-<c>, coilover-<c>], description: "Spring between the damper's seats"}
+  - {kind: mechanical, joint: bolted, ends: [top-mount-<c>, coilover-<c>]}
+  - {kind: mechanical, joint: bolted, ends: [top-mount-<c>, "<a>-tower-<s>"], description: "Top mount bolted under the tower's turret"}
+  - {kind: mechanical, joint: ball-joint, ends: [drop-link-<c>, coilover-<c>], description: "Drop link to a bracket on the damper body"}
+  - {kind: mechanical, joint: ball-joint, ends: [drop-link-<c>, "<a>-anti-roll-bar"]}
+  - {kind: mechanical, joint: bushed, ends: ["<a>-anti-roll-bar", "<a>-subframe"]}
+  - {kind: mechanical, joint: bushed, ends: ["<a>-subframe", "<a>-subframe-mount-<n>"], each: {n: [1, 2, 3, 4]}}
+  - {kind: mechanical, joint: bolted, ends: [front-subframe-mount-1, front-rail-l], description: "To the front rail"}
+  - {kind: mechanical, joint: bolted, ends: [front-subframe-mount-2, front-rail-r], description: "To the front rail"}
+  - {kind: mechanical, joint: bolted, ends: [front-subframe-mount-3, front-floor-rail-l], description: "To the floor rail's bracket"}
+  - {kind: mechanical, joint: bolted, ends: [front-subframe-mount-4, front-floor-rail-r], description: "To the floor rail's bracket"}
+  - {kind: mechanical, joint: bolted, ends: [rear-subframe-mount-<n>, floor-crossmember-3], each: {n: [1, 2]}, description: "To the rear seat crossmember's brackets"}
+  - {kind: mechanical, joint: bolted, ends: [rear-subframe-mount-3, rear-rail-l], description: "To the chassis rail"}
+  - {kind: mechanical, joint: bolted, ends: [rear-subframe-mount-4, rear-rail-r], description: "To the chassis rail"}
+  - {kind: mechanical, joint: ball-joint, ends: [tie-rod-f<s>, knuckle-f<s>], description: "Outer tie-rod end"}
+  - {kind: mechanical, joint: ball-joint, ends: [tie-rod-f<s>, steering-rack], description: "Inner tie-rod joint"}
+  - {kind: mechanical, joint: ball-joint, ends: [toe-link-r<s>, knuckle-r<s>]}
+  - {kind: mechanical, joint: bushed, ends: [toe-link-r<s>, rear-subframe]}
+  - {kind: mechanical, joint: bolted, ends: [epb-actuator-r<s>, caliper-r<s>], description: "Motor-on-calliper parking brake"}
+
+  # ---- Steering -------------------------------------------------------------------------------------------
+  - {kind: mechanical, joint: bushed, ends: [steering-rack, steering-rack-mount-l], description: "Rubber bush round the rack housing"}
+  - {kind: mechanical, joint: bushed, ends: [steering-rack, steering-rack-mount-r], description: "Rubber bush round the rack housing"}
+  - {kind: mechanical, joint: bolted, ends: [steering-rack-mount-l, front-subframe]}
+  - {kind: mechanical, joint: bolted, ends: [steering-rack-mount-r, front-subframe]}
+  - {kind: mechanical, joint: meshed, ends: [eps-motor, steering-rack], description: "Belt-and-ball-nut drive on the rack"}
+  - {kind: mechanical, joint: universal-joint, ends: [steering-column, steering-intermediate-shaft], description: "Upper universal joint, inside the cabin"}
+  - {kind: mechanical, joint: universal-joint, ends: [steering-intermediate-shaft, steering-rack], description: "Lower universal joint on the pinion shaft"}
+  - {kind: mechanical, joint: bolted, ends: [steering-torque-sensor, steering-rack], description: "On the pinion housing"}
+  - {kind: data, network: hard-wired signal, ends: [steering-torque-sensor, steering-ecu], description: "Torque and steering-angle signals"}
+  - {kind: mechanical, joint: splined, ends: [steering-wheel, steering-column]}
+  - {kind: mechanical, joint: bolted, ends: [steering-column, cross-car-beam]}
+  - {kind: data, network: hard-wired signal, ends: [steering-ecu, eps-motor], description: "Motor phase and position signals"}
+
+  # ---- Drive units (each axle) --------------------------------------------------------------------------
+  - {kind: mechanical, joint: press-fit, ends: ["<a>-stator", "<a>-motor"], description: "Stator pressed into the housing"}
+  - {kind: mechanical, joint: press-fit, ends: ["<a>-rotor", "<a>-rotor-shaft"]}
+  - {kind: mechanical, joint: press-fit, ends: ["<a>-motor-bearing-<n>", "<a>-rotor-shaft"], each: {n: [1, 2]}}
+  - {kind: mechanical, joint: bearing, ends: ["<a>-motor-bearing-1", "<a>-motor-end-cover"], description: "Outer bearing, in the end cover"}
+  - {kind: mechanical, joint: bearing, ends: ["<a>-motor-bearing-2", "<a>-gearbox"], description: "Inner bearing, seated in the gearbox casing's wall"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-motor-end-cover", "<a>-motor"]}
+  - {kind: mechanical, joint: splined, ends: ["<a>-rotor-shaft", "<a>-pinion"]}
+  - {kind: mechanical, joint: meshed, ends: ["<a>-pinion", "<a>-intermediate-gear"], description: "First-stage helical mesh"}
+  - {kind: mechanical, joint: press-fit, ends: ["<a>-intermediate-gear", "<a>-intermediate-shaft"]}
+  - {kind: mechanical, joint: meshed, ends: ["<a>-intermediate-shaft", "<a>-reduction-gear"], description: "Second-stage helical mesh: the shaft's integral pinion drives the final-drive gear"}
+  - {kind: mechanical, joint: bearing, ends: ["<a>-intermediate-shaft", "<a>-<half>"], each: {half: [gearbox, gearbox-cover]}}
+  - {kind: mechanical, joint: bearing, ends: ["<a>-differential", "<a>-gearbox-cover"]}
+  - {kind: mechanical, joint: seated, ends: ["<a>-spider-gears", "<a>-differential"], description: "Cross pin through the differential case"}
+  - {kind: mechanical, joint: seated, ends: ["<a>-side-gear-<s>", "<a>-differential"]}
+  - {kind: mechanical, joint: meshed, ends: ["<a>-spider-gears", "<a>-side-gear-<s>"], description: "Bevel mesh"}
+  - {kind: mechanical, joint: press-fit, ends: ["<a>-resolver", "<a>-rotor-shaft"], description: "Resolver rotor on the shaft"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-resolver", "<a>-motor-end-cover"], description: "Resolver stator in the end cover"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-<part>", "<a>-gearbox"], each: {part: [oil-pump, oil-cooler]}}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-drive-unit-mount-1", "<a>-motor"]}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-drive-unit-mount-<n>", "<a>-gearbox"], each: {n: [2, 3]}}
+  - {kind: mechanical, joint: bushed, ends: ["<a>-drive-unit-mount-<n>", "<a>-subframe"], each: {n: [1, 2, 3]}, description: "Rubber mount to the subframe"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-<part>", "<a>-inverter"], each: {part: [control-board, current-sensor, phase-busbars, hv-connector]}}
+  - {kind: mechanical, joint: splined, ends: [front-disconnect, front-intermediate-shaft], description: "Dog-clutch sleeve on the intermediate shaft"}
+  - {kind: mechanical, joint: bolted, ends: [front-disconnect, front-gearbox-cover]}
+  - {kind: mechanical, joint: splined, ends: [rear-park-lock, rear-intermediate-shaft], description: "Parking gear on the intermediate shaft; the pawl engages it"}
+  - {kind: mechanical, joint: bolted, ends: [rear-park-lock, rear-gearbox-cover]}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-reduction-gear", "<a>-differential"], description: "Ring gear bolted to the differential case"}
+  - {kind: mechanical, joint: bearing, ends: ["<a>-differential", "<a>-gearbox"]}
+  - {kind: mechanical, joint: splined, ends: ["<a>-halfshaft-<s>", "<a>-side-gear-<s>"], description: "Drive shaft splined into the side gear"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-gearbox", "<a>-motor"]}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-gearbox-cover", "<a>-gearbox"]}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-inverter", "<a>-motor"], description: "Inverter mounted on the drive unit"}
+  - {kind: mechanical, joint: bolted, ends: ["<a>-<part>", "<a>-inverter"], each: {part: [power-module, gate-driver, dc-link-capacitor, inverter-busbars, inverter-lid]}}
+  - {kind: power, voltage: high-voltage, ends: ["<a>-inverter-busbars", "<a>-dc-link-capacitor"]}
+  - {kind: power, voltage: high-voltage, ends: ["<a>-dc-link-capacitor", "<a>-power-module"]}
+  - {kind: power, voltage: high-voltage, ends: ["<a>-power-module", "<a>-phase-busbars"], description: "Three-phase output"}
+  - {kind: power, voltage: high-voltage, ends: ["<a>-phase-busbars", "<a>-stator"], description: "Phase busbars to the winding terminals"}
+  - {kind: data, network: hard-wired signal, ends: ["<a>-gate-driver", "<a>-power-module"], description: "Gate signals"}
+  - {kind: power, voltage: high-voltage, ends: ["hv-harness-<a>", "<a>-hv-connector"]}
+  - {kind: power, voltage: high-voltage, ends: ["<a>-hv-connector", "<a>-inverter-busbars"]}
+  - {kind: power, voltage: low-voltage, ends: [lv-harness, "<a>-<part>"], each: {part: [control-board, gate-driver, oil-pump]}}
+  - {kind: power, voltage: low-voltage, ends: [lv-harness, "<unit>"], each: {unit: [front-disconnect, rear-park-lock]}}
+  - {kind: data, network: hard-wired signal, ends: ["<a>-control-board", "<a>-<part>"], each: {part: [gate-driver, resolver, current-sensor]}}
+  - {kind: data, network: hard-wired signal, ends: [vcu, "<unit>"], each: {unit: [front-disconnect, rear-park-lock]}}
+  - {kind: fluid, fluid: oil, ends: ["<a>-oil-pump", "<a>-oil-cooler"]}
+  - {kind: data, network: CAN FD, ends: [vcu, "<a>-control-board"], description: "Torque requests"}
+
+  # ---- Battery and power distribution -------------------------------------------------------------------
+  - {kind: mechanical, joint: bolted, ends: [battery-module-<n>, battery-enclosure], each: {n: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}}
+  - {kind: power, voltage: high-voltage, ends: [battery-module-<n>, battery-busbar-l], each: {n: [1, 3, 5, 7, 9, 11, 13, 15]}}
+  - {kind: power, voltage: high-voltage, ends: [battery-module-<n>, battery-busbar-r], each: {n: [2, 4, 6, 8, 10, 12, 14, 16]}}
+  # C3b: monitors, the string's path through the service disconnect, fuse and contactors, and the bay
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-1, "battery-module-<m>"], each: {m: [1, 2]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-2, "battery-module-<m>"], each: {m: [3, 4]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-3, "battery-module-<m>"], each: {m: [5, 6]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-4, "battery-module-<m>"], each: {m: [7, 8]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-5, "battery-module-<m>"], each: {m: [9, 10]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-6, "battery-module-<m>"], each: {m: [11, 12]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-7, "battery-module-<m>"], each: {m: [13, 14]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-8, "battery-module-<m>"], each: {m: [15, 16]}, description: "Cell voltage and temperature sensing"}
+  - {kind: data, network: hard-wired signal, ends: ["battery-monitor-<n>", battery-monitor-chain], each: {n: [1, 2, 3, 4, 5, 6, 7, 8]}, description: "Daisy chain"}
+  - {kind: data, network: hard-wired signal, ends: [battery-monitor-chain, bms]}
+  - {kind: mechanical, joint: bolted, ends: ["battery-monitor-<n>", battery-enclosure], each: {n: [1, 2, 3, 4, 5, 6, 7, 8]}}
+  - {kind: power, voltage: high-voltage, ends: [battery-busbar-<s>, service-disconnect], description: "The two halves of the string meet at the service disconnect"}
+  - {kind: power, voltage: high-voltage, ends: [battery-busbar-l, pack-fuse], description: "Positive end of the string"}
+  - {kind: power, voltage: high-voltage, ends: [pack-fuse, main-contactor-pos]}
+  - {kind: power, voltage: high-voltage, ends: [battery-busbar-r, pack-current-sensor], description: "Negative end of the string, through the shunt"}
+  - {kind: power, voltage: high-voltage, ends: [pack-current-sensor, main-contactor-neg]}
+  - {kind: power, voltage: high-voltage, ends: [precharge-circuit, main-contactor-pos], description: "Pre-charge path in parallel with the positive contactor"}
+  - {kind: power, voltage: high-voltage, ends: ["main-contactor-<pole>", hv-junction-box], each: {pole: [pos, neg]}}
+  - {kind: mechanical, joint: bolted, ends: ["<part>", hv-junction-box], each: {part: [main-contactor-pos, main-contactor-neg, precharge-circuit, pack-fuse, pack-current-sensor]}}
+  - {kind: data, network: hard-wired signal, ends: [bms, "<part>"], each: {part: [main-contactor-pos, main-contactor-neg, precharge-circuit]}, description: "Contactor drive"}
+  - {kind: data, network: hard-wired signal, ends: [bms, pack-current-sensor]}
+  - {kind: mechanical, joint: bolted, ends: ["<part>", battery-enclosure], each: {part: [hv-junction-box, bms, service-disconnect, battery-vent, battery-underbody-shield]}}
+  - {kind: mechanical, joint: clipped, ends: [battery-rear-feed, battery-enclosure]}
+  - {kind: power, voltage: high-voltage, ends: [hv-junction-box, battery-rear-feed]}
+  - {kind: power, voltage: high-voltage, ends: [battery-rear-feed, hv-harness-rear], description: "Rear outlet of the pack"}
+  - {kind: mechanical, joint: bolted, ends: [battery-lid, battery-enclosure]}
+  - {kind: mechanical, joint: bonded, ends: [battery-cooling-plate, battery-enclosure]}
+  - {kind: mechanical, joint: welded, ends: [battery-crossmember-<n>, battery-enclosure], each: {n: [1, 2, 3]}}
+  - {kind: mechanical, joint: welded, ends: [battery-side-rail-<s>, battery-enclosure]}
+  - {kind: mechanical, joint: bolted, ends: [battery-enclosure, sill-<s>], description: "Pack bolted to the sills: part of the body structure"}
+  - {kind: power, voltage: high-voltage, ends: [hv-junction-box, "<cable>"], each: {cable: [hv-harness-front, hv-harness-aux]}}
+  - {kind: power, voltage: high-voltage, ends: [battery-rear-feed, hv-harness-charge], description: "Rear charging outlet of the pack"}
+  - {kind: power, voltage: high-voltage, ends: [hv-harness-aux, pdu]}
+  - {kind: power, voltage: high-voltage, ends: [charge-port, hv-harness-charge], description: "DC charging"}
+  - {kind: power, voltage: high-voltage, ends: [charge-port, obc], description: "AC charging"}
+  - {kind: power, voltage: low-voltage, ends: [lv-battery, lv-fuse-box]}
+  - {kind: power, voltage: low-voltage, ends: [lv-fuse-box, lv-harness]}
+  - {kind: power, voltage: low-voltage, ends: [lv-harness, "<unit>"], each: {unit: [obc, charge-port, pack-current-sensor]}}
+  - {kind: mechanical, joint: bolted, ends: [lv-fuse-box, lv-battery]}
+  - {kind: mechanical, joint: bolted, ends: [charge-port, quarter-l], description: "Behind the charging door in the left rear quarter"}
+  - {kind: power, voltage: high-voltage, ends: [pdu, dc-dc]}
+  - {kind: power, voltage: high-voltage, ends: [pdu, obc]}
+  - {kind: power, voltage: high-voltage, ends: [pdu, heat-pump-compressor]}
+  - {kind: power, voltage: low-voltage, ends: [dc-dc, lv-battery]}
+  - {kind: power, voltage: low-voltage, ends: [lv-harness, "<unit>"], each: {unit: [bms, vcu, bcm, gateway, telematics, ad-compute, steering-ecu, esc-module, brake-booster, eps-motor, coolant-pump, cooling-fan-l, cooling-fan-r]}}
+
+  # ---- Vehicle network and sensors ----------------------------------------------------------------------
+  - {kind: data, network: automotive Ethernet, ends: [gateway, "<unit>"], each: {unit: [ad-compute, telematics, vcu]}}
+  - {kind: data, network: CAN FD, ends: [gateway, "<unit>"], each: {unit: [bcm, steering-ecu, esc-module, bms]}}
+  - {kind: data, network: automotive Ethernet, ends: [ad-compute, "<sensor>"], each: {sensor: [front-camera, rear-camera, side-camera-l, side-camera-r, lidar]}}
+  - {kind: data, network: CAN FD, ends: [ad-compute, "<sensor>"], each: {sensor: [front-radar, corner-radar-fl, corner-radar-fr, corner-radar-rl, corner-radar-rr]}}
+  - {kind: data, network: hard-wired signal, ends: [ad-compute, gnss-antenna]}
+  - {kind: data, network: hard-wired signal, ends: [bcm, "<unit>"], each: {unit: [door-latch-fl, door-latch-fr, door-latch-rl, door-latch-rr, window-regulator-fl, window-regulator-fr, window-regulator-rl, window-regulator-rr, headlamp-l, headlamp-r, tail-lamp-l, tail-lamp-r]}}
+  - {kind: data, network: CAN FD, ends: [esc-module, brake-booster]}
+
+  # ---- Thermal ------------------------------------------------------------------------------------------
+  - {kind: fluid, fluid: coolant, ends: [coolant-pump, coolant-lines]}
+  - {kind: fluid, fluid: coolant, ends: [coolant-lines, "<unit>"], each: {unit: [battery-coolant-manifold, radiator, battery-chiller, coolant-valve]}}
+  - {kind: fluid, fluid: coolant, ends: [coolant-valve, "<a>-coolant-lines"], description: "The valve's outlet to that drive unit"}
+  - {kind: fluid, fluid: coolant, ends: ["<a>-coolant-lines", "<a>-inverter"]}
+  - {kind: fluid, fluid: coolant, ends: ["<a>-coolant-lines", "<a>-oil-cooler"]}
+  - {kind: fluid, fluid: coolant, ends: [coolant-reservoir, coolant-pump], description: "Expansion tank feeding the pump's inlet"}
+  - {kind: fluid, fluid: coolant, ends: [coolant-valve, coolant-heater]}
+  - {kind: power, voltage: high-voltage, ends: [pdu, coolant-heater]}
+  - {kind: power, voltage: low-voltage, ends: [lv-harness, coolant-valve]}
+  - {kind: fluid, fluid: coolant, ends: [battery-coolant-manifold, battery-cooling-plate]}
+  - {kind: fluid, fluid: refrigerant, ends: [refrigerant-lines, "<unit>"], each: {unit: [heat-pump-compressor, condenser, battery-chiller, hvac-module]}}
+  - {kind: mechanical, joint: bolted, ends: [condenser, radiator], description: "Condenser clipped ahead of the radiator in one cooling module"}
+  - {kind: mechanical, joint: ball-joint, ends: [brake-pedal, brake-booster], description: "Pedal pushrod"}
+  - {kind: mechanical, joint: bolted, ends: [master-cylinder, brake-booster]}
+  - {kind: fluid, fluid: brake fluid, ends: [brake-fluid-reservoir, master-cylinder], description: "Reservoir plugged into the master cylinder's inlets"}
+  - {kind: fluid, fluid: brake fluid, ends: [master-cylinder, esc-module], description: "Two brake circuits"}
+  - {kind: mechanical, joint: bolted, ends: [brake-booster, bulkhead]}
+
+  # ---- Body ---------------------------------------------------------------------------------------------
+  - {kind: mechanical, joint: hinged, ends: [door-f<s>, a-pillar-<s>]}
+  - {kind: mechanical, joint: hinged, ends: [door-r<s>, b-pillar-<s>]}
+  - {kind: mechanical, joint: bolted, ends: [mirror-<s>, door-f<s>]}
+  - {kind: mechanical, joint: bolted, ends: [side-camera-<s>, mirror-<s>], description: "Camera in the mirror housing"}
+  # sensor mountings (D1.4: each sensor now sits on a real mounting point on the new body)
+  - {kind: mechanical, joint: bolted, ends: [lidar, front-header], description: "Lidar pod on the roof's front edge, over the front header"}
+  - {kind: mechanical, joint: bolted, ends: [gnss-antenna, roof], description: "Antenna fin bolted through the roof skin"}
+  - {kind: mechanical, joint: bonded, ends: [front-camera, windscreen], description: "Camera bracket bonded to the top of the windscreen"}
+  - {kind: mechanical, joint: clipped, ends: [rear-camera, tailgate], description: "Camera in the tailgate under the light bar"}
+  - {kind: mechanical, joint: bolted, ends: [front-radar, front-crash-beam], description: "Radar bracket on the bumper beam, behind the fascia above the intake"}
+  - {kind: mechanical, joint: clipped, ends: [glass-<c>, window-regulator-<c>]}
+  - {kind: mechanical, joint: bolted, ends: [door-latch-<c>, door-structure-<c>]}
+  - {kind: mechanical, joint: bonded, ends: [windscreen, a-pillar-<s>]}
+  - {kind: mechanical, joint: bonded, ends: [windscreen, front-header]}
+  - {kind: mechanical, joint: hinged, ends: [bonnet, bulkhead]}
+  - {kind: mechanical, joint: hinged, ends: [tailgate, rear-header]}
+  - {kind: mechanical, joint: bonded, ends: [roof, roof-rail-<s>]}
+  - {kind: mechanical, joint: bolted, ends: [front-crash-beam, front-crash-box-<s>]}
+  - {kind: mechanical, joint: bolted, ends: [rear-crash-beam, rear-crash-box-<s>]}
+  # ---- Body-in-white (D1.2, blender/structure.py): the load paths through the structure ----------------------
+  - {kind: mechanical, joint: bolted, ends: ["<a>-crash-box-<s>", "<a>-rail-<s>"], description: "Crash box bolted to the rail's end plate"}
+  - {kind: mechanical, joint: welded, ends: [front-rail-<s>, front-tower-<s>], description: "Rail ends in the tower's inboard wall"}
+  - {kind: mechanical, joint: welded, ends: [front-tower-<s>, bulkhead], description: "Tower brace to the cowl"}
+  - {kind: mechanical, joint: bolted, ends: [front-end-carrier, front-rail-<s>], description: "Carrier flanged to the rail's front end"}
+  - {kind: mechanical, joint: bolted, ends: [radiator, front-end-carrier], description: "Cooling module carried in the front-end carrier"}
+  - {kind: mechanical, joint: welded, ends: [front-floor-rail-<s>, sill-<s>]}
+  - {kind: mechanical, joint: welded, ends: [a-pillar-<s>, bulkhead]}
+  - {kind: mechanical, joint: welded, ends: [sill-<s>, "<p>-pillar-<s>"], each: {p: [a, b, c]}}
+  - {kind: mechanical, joint: welded, ends: ["<p>-pillar-<s>", roof-rail-<s>], each: {p: [a, b, c, d]}}
+  - {kind: mechanical, joint: welded, ends: ["<bow>", roof-rail-<s>], each: {bow: [front-header, roof-bow-1, roof-bow-2, rear-header]}}
+  - {kind: mechanical, joint: bolted, ends: [cross-car-beam, a-pillar-<s>]}
+  - {kind: mechanical, joint: welded, ends: [cabin-floor, sill-<s>]}
+  - {kind: mechanical, joint: welded, ends: [cabin-floor, bulkhead]}
+  - {kind: mechanical, joint: welded, ends: [cabin-floor, "floor-crossmember-<n>"], each: {n: [1, 2, 3]}}
+  - {kind: mechanical, joint: welded, ends: ["floor-crossmember-<n>", sill-<s>], each: {n: [1, 2]}}
+  - {kind: mechanical, joint: welded, ends: [floor-crossmember-3, rear-rail-<s>]}
+  - {kind: mechanical, joint: welded, ends: [cabin-floor, rear-floor], description: "Heel kick-up into the boot floor"}
+  - {kind: mechanical, joint: welded, ends: [rear-rail-<s>, rear-tower-<s>]}
+  - {kind: mechanical, joint: welded, ends: [rear-tower-<s>, "wheelhouse-r<s>"]}
+  - {kind: mechanical, joint: welded, ends: [rear-tower-<s>, rear-floor]}
+  - {kind: mechanical, joint: welded, ends: ["wheelhouse-r<s>", rear-floor]}
+  - {kind: mechanical, joint: welded, ends: ["wheelhouse-r<s>", c-pillar-<s>]}
+  - {kind: mechanical, joint: welded, ends: [rear-rail-<s>, rear-floor], description: "Back panel on the rails' ends"}
+  - {kind: mechanical, joint: welded, ends: [d-pillar-<s>, rear-floor], description: "Through the rear corner to the back panel"}
+  - {kind: mechanical, joint: clipped, ends: [brake-line-f<s>, front-tower-<s>], description: "Through a grommet in the tower's wall"}
+  - {kind: mechanical, joint: clipped, ends: [brake-hose-r<s>, "wheelhouse-r<s>"], description: "Through a grommet in the wheelhouse"}
+  - {kind: mechanical, joint: clipped, ends: [lv-harness, bulkhead], description: "Through a grommet in the bulkhead"}
+  - {kind: mechanical, joint: clipped, ends: [lv-harness, rear-floor], description: "Through a grommet in the boot floor"}
+  # ---- Exterior panels and closures (D1.3, blender/exterior_panels.py): how each panel is held ---------------------
+  - {kind: mechanical, joint: bolted, ends: [underbody, battery-underbody-shield], description: "Coolant channel and aero trays fixed under the pack"}
+  - {kind: mechanical, joint: bolted, ends: [underbody, "<a>-subframe"], description: "Aero tray on stand-offs under the subframe"}
+  - {kind: mechanical, joint: bonded, ends: [door-<c>, door-structure-<c>], description: "Outer skin hemmed and bonded to the inner panel"}
+  - {kind: mechanical, joint: clipped, ends: [door-trim-<c>, door-structure-<c>]}
+  - {kind: mechanical, joint: bolted, ends: ["<part>-<c>", door-structure-<c>], each: {part: [window-regulator, door-speaker]}}
+  - {kind: mechanical, joint: clipped, ends: [door-seal-<c>, door-structure-<c>]}
+  - {kind: mechanical, joint: bolted, ends: [door-handle-<c>, door-<c>], description: "Flush handle in the outer skin"}
+  - {kind: mechanical, joint: seated, ends: [door-latch-f<s>, b-pillar-<s>], description: "Latch closes on the striker in the B pillar"}
+  - {kind: mechanical, joint: seated, ends: [door-latch-r<s>, c-pillar-<s>], description: "Latch closes on the striker in the C pillar"}
+  - {kind: mechanical, joint: bonded, ends: [bonnet, bonnet-inner], description: "Outer skin hemmed and bonded to the inner frame"}
+  - {kind: mechanical, joint: seated, ends: [bonnet-inner, front-end-carrier], description: "Bonnet latch on the carrier's top bar"}
+  - {kind: mechanical, joint: bonded, ends: [tailgate, tailgate-inner], description: "Outer skin hemmed and bonded to the inner panel"}
+  - {kind: mechanical, joint: bonded, ends: [tailgate-glass, tailgate]}
+  - {kind: mechanical, joint: bolted, ends: [tail-lamp-<s>, tailgate], description: "Half of the light bar on the tailgate's ledge"}
+  - {kind: mechanical, joint: bolted, ends: [tail-lamp-<s>, quarter-<s>], description: "The light bar's outer end and the lamp cluster on the quarter panel"}
+  - {kind: mechanical, joint: bolted, ends: [front-bumper, front-crash-beam], description: "Bumper fascia on the crash beam"}
+  - {kind: mechanical, joint: clipped, ends: [grille, front-bumper]}
+  - {kind: mechanical, joint: bolted, ends: [headlamp-<s>, front-end-carrier]}
+  - {kind: mechanical, joint: bonded, ends: [headlamp-lens-<s>, headlamp-<s>]}
+  - {kind: mechanical, joint: bolted, ends: [rear-bumper, rear-crash-beam], description: "Bumper fascia on the crash beam"}
+  - {kind: mechanical, joint: clipped, ends: [rear-diffuser, rear-bumper]}
+  - {kind: mechanical, joint: bolted, ends: [fender-<s>, a-pillar-<s>], description: "Wing bolted to the hinge pillar and the apron"}
+  - {kind: mechanical, joint: clipped, ends: [fender-<s>, front-bumper]}
+  - {kind: mechanical, joint: welded, ends: [body-side-<s>, a-pillar-<s>], description: "Body side outer over the A pillar"}
+  - {kind: mechanical, joint: welded, ends: [body-side-<s>, roof-rail-<s>]}
+  - {kind: mechanical, joint: welded, ends: [quarter-<s>, "wheelhouse-r<s>"], description: "Quarter panel round the rear wheel opening"}
+  - {kind: mechanical, joint: welded, ends: [quarter-<s>, c-pillar-<s>]}
+  - {kind: mechanical, joint: bonded, ends: [quarter-glass-<s>, c-pillar-<s>]}
+  - {kind: mechanical, joint: clipped, ends: [rocker-<s>, sill-<s>], description: "Sill trim clipped over the sill"}
+  - {kind: mechanical, joint: clipped, ends: [arch-liner-f<s>, fender-<s>]}
+  - {kind: mechanical, joint: clipped, ends: [arch-liner-r<s>, "wheelhouse-r<s>"]}

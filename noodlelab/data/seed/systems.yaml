@@ -1,0 +1,190 @@
+# Functional systems: what components do, as opposed to where they sit (assemblies.yaml).
+# A system can have a parent system; a component can take part in several systems.
+# "members" are component-id patterns (* = anything); each pattern must match at least one component.
+
+systems:
+  - id: propulsion
+    name: "Propulsion"
+    description: "Turns battery energy into torque at the wheels: two drive units, one per axle."
+    members: [vcu]
+  - id: front-axle-drive
+    parent: propulsion
+    name: "Front axle drive"
+    description: "Front motor, inverter, two-stage gearbox with differential, drive shafts, and the disconnect clutch that lets the front motor stop when its drive is not needed."
+    members: [front-motor, front-stator, front-rotor, front-rotor-shaft, front-motor-*, front-gearbox, front-gearbox-cover,
+              front-reduction-gear, front-pinion, front-differential, front-inverter, front-inverter-*, front-gate-driver,
+              front-power-module, front-dc-link-capacitor, front-halfshaft-*, front-resolver, front-intermediate-*, front-side-gear-*,
+              front-spider-gears, front-disconnect, front-oil-pump, front-oil-cooler, front-control-board, front-current-sensor, front-phase-busbars,
+              front-hv-connector, front-drive-unit-mount-*]
+  - id: rear-axle-drive
+    parent: propulsion
+    name: "Rear axle drive"
+    description: "Rear motor, inverter, two-stage gearbox with differential and park lock, and drive shafts: the main drive."
+    members: [rear-motor, rear-stator, rear-rotor, rear-rotor-shaft, rear-motor-*, rear-gearbox, rear-gearbox-cover,
+              rear-reduction-gear, rear-pinion, rear-differential, rear-inverter, rear-inverter-*, rear-gate-driver,
+              rear-power-module, rear-dc-link-capacitor, rear-halfshaft-*, rear-resolver, rear-intermediate-*, rear-side-gear-*,
+              rear-spider-gears, rear-park-lock, rear-oil-pump, rear-oil-cooler, rear-control-board, rear-current-sensor, rear-phase-busbars,
+              rear-hv-connector, rear-drive-unit-mount-*]
+  - id: traction-control
+    parent: propulsion
+    name: "Traction control"
+    description: "Limits drive torque when a wheel starts to spin, using the wheel-speed sensors."
+    members: [vcu, wheel-speed-sensor-*]
+
+  - id: high-voltage
+    name: "High-voltage power"
+    description: "The 800 V system: stores energy and distributes it to the drive units and high-voltage consumers."
+  - id: energy-storage
+    parent: high-voltage
+    name: "Energy storage"
+    description: "The battery pack: modules, busbars, enclosure, contactors and battery management."
+    members: [battery-module-*, battery-busbar-*, battery-enclosure, battery-lid, battery-crossmember-*, battery-side-rail-*,
+              hv-junction-box, bms, battery-underbody-shield, battery-vent, battery-cooling-plate, service-disconnect, pack-fuse,
+              main-contactor-*]
+  - id: battery-management
+    parent: energy-storage
+    name: "Battery management"
+    description: "Watches every cell and the pack current, and opens or closes the main contactors: the BMS master, eight module monitors on their chain, the current sensor, contactors and pre-charge."
+    members: [bms, battery-monitor-*, battery-monitor-chain, pack-current-sensor, main-contactor-*, precharge-circuit]
+  - id: hv-distribution
+    parent: high-voltage
+    name: "High-voltage distribution"
+    description: "Routes battery power from the junction box to the inverters (the rear through the pack's internal feed) and, through the front PDU, to the DC-DC converter, charger and heat pump."
+    members: [hv-junction-box, battery-rear-feed, pdu, hv-harness-front, hv-harness-rear, hv-harness-aux, dc-dc]
+  - id: charging
+    parent: high-voltage
+    name: "Charging"
+    description: "Takes energy from a charging point into the battery: DC straight to the junction box, AC through the on-board charger."
+    members: [charge-port, hv-harness-charge, obc, pdu, hv-junction-box]
+
+  - id: low-voltage
+    name: "12 V power"
+    description: "The 12 V supply for control units, safety systems and body electrics."
+    members: [lv-battery, lv-fuse-box, dc-dc, lv-harness]
+
+  - id: braking
+    name: "Braking"
+    description: "Slows and stops the vehicle."
+  - id: service-brakes
+    parent: braking
+    name: "Friction brakes"
+    description: "Discs, callipers, pads and brake lines at each wheel."
+    members: [brake-disc-*, caliper-*, brake-pad-*, brake-hose-*, brake-shield-*, epb-actuator-*]
+  - id: brake-control
+    parent: braking
+    name: "Brake control and stability"
+    description: "Builds and modulates brake pressure: anti-lock braking and stability control."
+    members: [brake-pedal, brake-booster, master-cylinder, brake-fluid-reservoir, esc-module, brake-line-*, wheel-speed-sensor-*]
+  - id: parking
+    parent: braking
+    name: "Parking"
+    description: "Holds the parked vehicle: the park lock in the rear drive unit and the electric parking brake at the rear callipers, each the other's backup. Neither stands in for the service brakes."
+    members: [rear-park-lock, epb-actuator-*]
+
+  - id: steering
+    name: "Steering"
+    description: "Turns the front wheels, with electric power assistance."
+    members: [steering-wheel, steering-column, steering-intermediate-shaft, steering-torque-sensor, steering-rack, steering-rack-mount-*, eps-motor, steering-ecu, tie-rod-*]
+
+  - id: suspension
+    name: "Suspension"
+    description: "Locates the wheels and controls their movement over bumps and in corners."
+  - id: front-suspension
+    parent: suspension
+    name: "Front suspension"
+    description: "Double-wishbone front suspension."
+    members: [lower-arm-f*, upper-arm-f*, coilover-f*, spring-f*, top-mount-f*, drop-link-f*, front-anti-roll-bar, front-subframe,
+              front-subframe-mount-*]
+  - id: rear-suspension
+    parent: suspension
+    name: "Rear suspension"
+    description: "Multi-link rear suspension."
+    members: [lower-arm-r*, upper-arm-r*, toe-link-r*, coilover-r*, spring-r*, top-mount-r*, drop-link-r*, rear-anti-roll-bar,
+              rear-subframe, rear-subframe-mount-*]
+  - id: wheel-ends
+    parent: suspension
+    name: "Wheel ends"
+    description: "Knuckles, bearings and hubs: where each wheel turns."
+    members: [knuckle-*, wheel-bearing-*, "hub-??", hub-nut-*]
+
+  - id: wheels-and-tyres
+    name: "Wheels and tyres"
+    description: "The wheels, tyres and wheel nuts: the vehicle's contact with the road."
+    members: [tyre-*, wheel-fl, wheel-fr, wheel-rl, wheel-rr, wheel-nut-*]
+
+  - id: automated-driving
+    name: "Automated driving"
+    description: "Perceives the surroundings, plans a path and commands steering, braking and drive torque."
+  - id: perception
+    parent: automated-driving
+    name: "Perception"
+    description: "Cameras, radars, lidar, satellite positioning and wheel speed."
+    members: [front-camera, rear-camera, side-camera-*, front-radar, corner-radar-*, lidar, gnss-antenna, wheel-speed-sensor-*]
+  - id: planning-and-control
+    parent: automated-driving
+    name: "Planning and control"
+    description: "The automated-driving computer."
+    members: [ad-compute]
+
+  - id: thermal-management
+    name: "Thermal management"
+    description: "Keeps the battery, drive units and cabin at the right temperature."
+  - id: battery-thermal
+    parent: thermal-management
+    name: "Battery cooling and heating"
+    description: "Coolant circuit through the battery's cooling plate, chilled by the heat pump."
+    members: [battery-cooling-plate, battery-coolant-manifold, battery-chiller, coolant-pump, coolant-lines, coolant-reservoir, coolant-valve, coolant-heater]
+  - id: front-end-cooling
+    parent: thermal-management
+    name: "Front-end cooling"
+    description: "Radiator and fans rejecting heat to the outside air."
+    members: [radiator, condenser, cooling-fan-*]
+  - id: drive-unit-cooling
+    parent: thermal-management
+    name: "Drive-unit oil cooling"
+    description: "In each drive unit an electric pump circulates oil over the gears and motor windings, and an oil cooler passes the heat to the coolant circuit."
+    members: [front-oil-pump, front-oil-cooler, rear-oil-pump, rear-oil-cooler, front-coolant-lines, rear-coolant-lines]
+  - id: cabin-climate
+    parent: thermal-management
+    name: "Cabin climate"
+    description: "Heat pump and air-conditioning module for the cabin."
+    members: [hvac-module, heat-pump-compressor, condenser, refrigerant-lines]
+
+  - id: electronic-architecture
+    name: "Electronic architecture"
+    description: "Control units and the networks connecting them."
+    members: [gateway, telematics, vcu, bcm, steering-ecu, esc-module, bms, ad-compute, lv-harness]
+
+  - id: body-and-structure
+    name: "Body and structure"
+    description: "The load-carrying structure, crash structures, closures and glazing."
+  - id: body-structure
+    parent: body-and-structure
+    name: "Body structure"
+    description: "Underbody, rails, sills, pillars and crash beams: carries loads and protects occupants in a crash."
+    members: [underbody, sill-*, front-rail-*, rear-rail-*, front-crash-beam, rear-crash-beam, bulkhead, cabin-floor,
+              floor-crossmember-*, "?-pillar-*", roof-rail-*, front-header, rear-header, roof-bow-*, cross-car-beam,
+              arch-liner-*, battery-enclosure, front-floor-rail-*, front-tower-*, rear-tower-*, wheelhouse-*,
+              front-crash-box-*, rear-crash-box-*, front-end-carrier, rear-floor]
+  - id: closures
+    parent: body-and-structure
+    name: "Doors and closures"
+    description: "Doors, bonnet and tailgate with their latches, handles and window mechanisms."
+    members: [door-fl, door-fr, door-rl, door-rr, door-structure-*, door-handle-*, door-latch-*, door-seal-*,
+              window-regulator-*, bonnet, bonnet-inner, tailgate, tailgate-inner]
+  - id: glazing
+    parent: body-and-structure
+    name: "Glazing"
+    description: "Windscreen, side windows and rear window."
+    members: [windscreen, glass-*, quarter-glass-*, tailgate-glass]
+
+  - id: lighting
+    name: "Exterior lighting"
+    description: "Headlamps, daytime running lights and rear lamps."
+    members: [headlamp-*, tail-lamp-*]
+
+  - id: cabin
+    name: "Cabin"
+    description: "Seats, displays and interior trim."
+    members: [seat-*, headrest-*, dashboard, centre-console, driver-display, centre-display, headliner, door-trim-*,
+              door-speaker-*]

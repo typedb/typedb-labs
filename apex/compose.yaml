@@ -1,0 +1,83 @@
+# Docker Compose file: everything Project Apex needs, started with one command.
+# Start:  docker compose up -d --build      then open http://127.0.0.1:8091
+# Stop:   docker compose down               (data is kept in the apex-typedb-data volume)
+#
+# Apex has its OWN TypeDB server, separate from the other projects on this computer:
+# own container names, own data volume, own ports (1732/8003/8091). Every published port is
+# bound to 127.0.0.1, so only this computer can connect. The API has no published port: the
+# browser reaches it through the web container.
+
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: api/Dockerfile
+  env_file:
+    - path: .env              # optional: the defaults work on a fresh clone (see .env.example)
+      required: false
+  environment:
+    TYPEDB_ADDRESS: http://typedb:8000   # the typedb service's HTTP endpoint on Compose's private network
+
+services:
+  typedb:
+    image: typedb/typedb:3.14.1        # pinned exact version; change deliberately
+    container_name: apex-typedb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1732:1729"   # gRPC: for the TypeDB console and other drivers
+      - "127.0.0.1:8003:8000"   # HTTP: used by the API and by TypeDB Studio
+    volumes:
+      - apex-typedb-data:/var/lib/typedb/data
+    healthcheck:
+      # The image has no curl or wget; bash's /dev/tcp checks the HTTP port is accepting.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  # One-off: creates the "apex" database (schema + checked fictional data) if it doesn't exist
+  # yet, then exits. An existing database is left exactly as it is.
+  seed:
+    <<: *backend
+    container_name: apex-seed
+    command: ["node", "scripts/create-database.ts", "--if-missing"]
+    restart: "no"
+    depends_on:
+      typedb:
+        condition: service_healthy
+
+  api:
+    <<: *backend
+    container_name: apex-api
+    restart: unless-stopped
+    environment:
+      TYPEDB_ADDRESS: http://typedb:8000
+      API_HOST: 0.0.0.0             # reachable by the web container; no port is published
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8000/api/health').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  web:
+    build: ./web
+    container_name: apex-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8091:8080"   # open http://127.0.0.1:8091 in your browser
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+volumes:
+  apex-typedb-data:
+    name: apex-typedb-data

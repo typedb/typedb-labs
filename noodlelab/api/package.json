@@ -1,0 +1,30 @@
+{
+  "name": "typedb-noodlelab-visual-explorer-api",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Read-only semantic API for the TypeDB Noodlelab Visual Explorer: named TypeQL queries over TypeDB 3",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "dev": "node --experimental-strip-types --watch server.ts",
+    "start": "node --experimental-strip-types server.ts",
+    "gen": "node --experimental-strip-types scripts/gen.ts",
+    "create-database": "node --experimental-strip-types scripts/create-database.ts",
+    "animation": "node --experimental-strip-types scripts/animation.ts",
+    "export-check": "node --experimental-strip-types scripts/export-check.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@typedb/driver-http": "3.14.0",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "6.0.3",
+    "vitest": "5.0.5"
+  }
+}

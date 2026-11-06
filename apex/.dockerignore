@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+.env.*
+**/node_modules
+notes
+tests
+docs
+web
+backups

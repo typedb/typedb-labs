@@ -1,0 +1,17 @@
+{
+  "asset": "chassis",
+  "nodes": {
+    "front-subframe": "front-subframe",
+    "front-anti-roll-bar": "front-anti-roll-bar",
+    "front-subframe-mount-1": "front-subframe-mount-1",
+    "front-subframe-mount-2": "front-subframe-mount-2",
+    "front-subframe-mount-3": "front-subframe-mount-3",
+    "front-subframe-mount-4": "front-subframe-mount-4",
+    "rear-subframe": "rear-subframe",
+    "rear-anti-roll-bar": "rear-anti-roll-bar",
+    "rear-subframe-mount-1": "rear-subframe-mount-1",
+    "rear-subframe-mount-2": "rear-subframe-mount-2",
+    "rear-subframe-mount-3": "rear-subframe-mount-3",
+    "rear-subframe-mount-4": "rear-subframe-mount-4"
+  }
+}

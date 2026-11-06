@@ -1,0 +1,77 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+#
+# Integration Planning workstream. Items, the dependencies INTO them, who is responsible (RACI) and what has
+# happened (the activity history). Lags are calendar days. Workstream progress is not stored: it is derived
+# from the items (docs/phase6-plan.md §12).
+
+workstreams:
+  - {code: WS-INT, name: Integration Planning, status: in-progress, planned_start: 2026-08-03, due: 2027-03-12, criticality: high, description: 'Planning to run the combined business from Day 1: the Integration Management Office, a clean-team process for competitively sensitive data, the synergy baseline, interim finance and IT arrangements, and the first 100 days.'}
+
+# Activities have a planned start and a due date; milestones and conditions are points in time.
+items:
+  - {code: AC-INT-IMO, type: activity, name: Set up the Integration Management Office, workstream: WS-INT, status: complete, planned_start: 2026-08-03, due: 2026-08-28, criticality: medium, progress: 100}
+  - {code: AC-INT-CLEAN, type: activity, name: Clean-team review of competitively sensitive data, workstream: WS-INT, status: complete, planned_start: 2026-08-17, due: 2026-10-09, criticality: high, progress: 100, description: 'Only a ring-fenced clean team sees Atlas''s pricing and pipeline data before completion, so planning doesn''t become gun-jumping.'}
+  - {code: AC-INT-SYNERGY, type: activity, name: Synergy validation and baseline, workstream: WS-INT, status: in-progress, planned_start: 2026-09-01, due: 2026-11-12, criticality: medium, progress: 55}
+  - {code: AC-INT-DAY1, type: activity, name: Day-1 readiness checklist, workstream: WS-INT, status: in-progress, planned_start: 2026-09-01, due: 2026-11-24, criticality: high, progress: 70}
+  - {code: AC-INT-INTERIM, type: activity, name: Interim finance and IT arrangements for Day 1, workstream: WS-INT, status: in-progress, planned_start: 2026-10-01, due: 2026-11-30, criticality: high, progress: 30}
+  - {code: IN-SYNERGY, type: milestone, name: Synergy plan baseline approved, workstream: WS-INT, status: in-progress, progress: 50, due: 2026-11-13, criticality: medium}
+  - {code: MS-IMO-READY, type: milestone, name: Day-1 readiness sign-off, workstream: WS-INT, status: in-progress, progress: 70, due: 2026-11-25, criticality: high}
+  - {code: MS-DAY1, type: milestone, name: 'Day 1: combined operations start', workstream: WS-INT, status: not-started, progress: 0, due: 2026-12-02, criticality: critical}
+  - {code: AC-INT-SYSTEMS, type: activity, name: Finance systems migration, workstream: WS-INT, status: not-started, planned_start: 2026-12-03, due: 2027-01-04, criticality: medium, progress: 0}
+  - {code: AC-INT-100DAY, type: activity, name: 100-day plan delivery, workstream: WS-INT, status: not-started, planned_start: 2026-12-03, due: 2027-03-12, criticality: medium, progress: 0}
+  - {code: IN-SYSTEMS, type: milestone, name: Finance systems cut-over, workstream: WS-INT, status: not-started, progress: 0, due: 2027-01-04, criticality: medium}
+  - {code: MS-DAY100, type: milestone, name: Day-100 integration review, workstream: WS-INT, status: not-started, progress: 0, due: 2027-03-12, criticality: medium}
+
+# gating: a condition must be met first; sequencing: X must finish before Y;
+# informing: soft, Y needs input from X and dates don't move.
+dependencies:
+  - {kind: sequencing, from: MS-COMPLETION, to: MS-DAY1, lag: 0}
+  - {kind: sequencing, from: MS-DAY1, to: IN-SYSTEMS, lag: 33}
+  - {kind: sequencing, from: MS-DAY1, to: MS-DAY100, lag: 100}
+  - {kind: informing, from: MS-IMO-READY, to: MS-DAY1, lag: 0}
+  - {kind: informing, from: HR-CONSULT, to: MS-DAY1, lag: 0}
+  - {kind: informing, from: IN-SYNERGY, to: MS-DAY100, lag: 0}
+  - {kind: informing, from: AC-INT-CLEAN, to: IN-SYNERGY, lag: 0}
+  - {kind: sequencing, from: AC-INT-SYNERGY, to: IN-SYNERGY, lag: 0}
+  - {kind: sequencing, from: AC-INT-DAY1, to: MS-IMO-READY, lag: 0}
+  - {kind: sequencing, from: AC-INT-INTERIM, to: MS-DAY1, lag: 0}
+  - {kind: sequencing, from: MS-DAY1, to: AC-INT-SYSTEMS, lag: 1}
+  - {kind: sequencing, from: AC-INT-SYSTEMS, to: IN-SYSTEMS, lag: 0}
+  - {kind: sequencing, from: MS-DAY1, to: AC-INT-100DAY, lag: 1}
+  - {kind: sequencing, from: AC-INT-100DAY, to: MS-DAY100, lag: 0}
+
+# Exactly one Accountable per item; holders are people (PER-) or organisations (ORG-).
+raci:
+  WS-INT: {A: PER-REYES, R: [PER-BRENNAN, PER-TANAKA], I: [PER-HARTLEY]}
+  AC-INT-IMO: {A: PER-REYES, R: [PER-BRENNAN, PER-HADDAD], I: [PER-HARTLEY]}
+  AC-INT-CLEAN: {A: PER-REYES, R: [PER-NAVARRO, PER-TANAKA], C: [PER-SHAW], I: [PER-LINDQVIST]}
+  AC-INT-SYNERGY: {A: PER-ADEBAYO, R: [PER-BRENNAN], C: [PER-BRANDT, PER-WHITCOMBE], I: [PER-HARTLEY]}
+  AC-INT-DAY1: {A: PER-REYES, R: [PER-BRANDT], C: [PER-HADDAD], I: [PER-OKAFOR]}
+  AC-INT-INTERIM: {A: PER-REYES, R: [PER-WHITCOMBE], C: [PER-DONNELLY, PER-TANAKA], I: [PER-ADEBAYO]}
+  IN-SYNERGY: {A: PER-ADEBAYO, R: [PER-BRENNAN], C: [PER-REYES], I: [PER-HARTLEY]}
+  MS-IMO-READY: {A: PER-REYES, R: [PER-BRENNAN], C: [PER-TANAKA], I: [PER-OKAFOR]}
+  MS-DAY1: {A: PER-REYES, R: [PER-BRENNAN], C: [PER-FERREIRA, PER-WHITFIELD], I: [PER-HARTLEY]}
+  AC-INT-SYSTEMS: {A: PER-REYES, R: [PER-WHITCOMBE], C: [PER-DONNELLY], I: [PER-ADEBAYO]}
+  AC-INT-100DAY: {A: PER-REYES, R: [PER-HADDAD], C: [PER-BRENNAN], I: [PER-HARTLEY]}
+  IN-SYSTEMS: {A: PER-REYES, R: [PER-TANAKA], C: [PER-DONNELLY], I: [PER-ADEBAYO]}
+  MS-DAY100: {A: PER-HARTLEY, R: [PER-REYES], C: [PER-BRENNAN], I: [PER-MENON]}
+
+# Event types: response, meeting, delivery, decision (engagement); request, notice (outreach); status-change.
+events:
+  - {code: EV-INT-01, type: delivery, at: !!timestamp '2026-08-17 10:00:00', kind: signed, actor: PER-NAVARRO, subject: AC-INT-CLEAN, summary: Clean-team protocol signed by both parties}
+  - {code: EV-INT-02, type: decision, at: !!timestamp '2026-08-28 15:00:00', kind: approved, actor: PER-REYES, subject: AC-INT-IMO, summary: IMO charter and governance approved}
+  - {code: EV-INT-03, type: status-change, at: !!timestamp '2026-10-01 09:00:00', kind: status-change, actor: PER-WHITCOMBE, subject: AC-INT-INTERIM, summary: Interim arrangements work starts, previous_status: not-started, new_status: in-progress}
+  - {code: EV-INT-04, type: delivery, at: !!timestamp '2026-10-09 17:00:00', kind: delivered, actor: PER-TANAKA, subject: AC-INT-CLEAN, summary: Clean-team report on pricing and pipeline delivered}
+  - {code: EV-INT-05, type: request, at: !!timestamp '2026-10-12 10:00:00', kind: request, actor: PER-WHITCOMBE, subject: AC-INT-INTERIM, summary: Atlas asked for its finance calendar and system access for Day 1, recipients: [PER-DONNELLY], response_due: 2026-10-19}
+  - {code: EV-INT-06, type: request, at: !!timestamp '2026-10-20 09:00:00', kind: request, actor: PER-BRENNAN, subject: AC-INT-SYNERGY, summary: Finance validation of the cost synergies wanted by 27 October, recipients: [PER-WHITCOMBE], response_due: 2026-10-27}
+  - {code: EV-INT-07, type: meeting, at: !!timestamp '2026-10-20 14:00:00', kind: meeting, actor: PER-BRENNAN, subject: AC-INT-SYNERGY, summary: Synergy model review, attendees: [PER-BRANDT, PER-WHITCOMBE]}
+  - {code: EV-INT-08, type: meeting, at: !!timestamp '2026-10-22 11:00:00', kind: meeting, actor: PER-BRANDT, subject: AC-INT-DAY1, summary: Day-1 readiness review, attendees: [PER-HADDAD, PER-REYES]}
+  - {code: EV-INT-09, type: meeting, at: !!timestamp '2026-10-22 15:00:00', kind: meeting, actor: PER-ADEBAYO, subject: AC-INT-SYNERGY, summary: Synergy steering review with the CFO, attendees: [PER-BRENNAN]}
+  - {code: EV-0017, type: delivery, at: !!timestamp '2026-10-22 16:00:00', kind: update, actor: PER-BRENNAN, subject: MS-IMO-READY, summary: 'Day-1 readiness review: 70% of the checklist complete'}
+  - {code: EV-INT-10, type: delivery, at: !!timestamp '2026-10-23 16:00:00', kind: delivered, actor: PER-WHITCOMBE, subject: AC-INT-INTERIM, summary: 'Interim arrangements design note, version 1'}
+  - {code: EV-INT-11, type: response, at: !!timestamp '2026-10-24 11:00:00', kind: response, actor: PER-WHITCOMBE, subject: AC-INT-SYNERGY, summary: Finance team validates the cost synergies, reply_to: [EV-INT-06]}
+  - {code: EV-INT-12, type: decision, at: !!timestamp '2026-10-24 15:00:00', kind: approved, actor: PER-REYES, subject: MS-IMO-READY, summary: Day-1 readiness gate criteria approved}
+  - {code: EV-INT-13, type: delivery, at: !!timestamp '2026-10-25 12:00:00', kind: update, actor: PER-BRANDT, subject: AC-INT-DAY1, summary: 'Day-1 checklist update: 112 of 160 items ready'}
+  - {code: EV-0020, type: delivery, at: !!timestamp '2026-10-26 09:00:00', kind: update, actor: PER-BRENNAN, subject: IN-SYNERGY, summary: Synergy plan baseline circulated for review}
+  - {code: EV-INT-14, type: meeting, at: !!timestamp '2026-10-21 14:00:00', kind: meeting, actor: PER-REYES, subject: WS-INT, summary: 'Integration steering (IMO): Day-1 readiness gate, and interim finance arrangements held up by Atlas''s unanswered request', attendees: [PER-BRENNAN, PER-TANAKA, PER-WHITCOMBE, PER-BRANDT], agenda: [AC-INT-DAY1, AC-INT-INTERIM, MS-IMO-READY]}

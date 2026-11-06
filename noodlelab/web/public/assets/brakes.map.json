@@ -1,0 +1,14 @@
+{
+  "asset": "brakes",
+  "nodes": {
+    "brake-pedal": "brake-pedal",
+    "brake-booster": "brake-booster",
+    "master-cylinder": "master-cylinder",
+    "brake-fluid-reservoir": "brake-fluid-reservoir",
+    "esc-module": "esc-module",
+    "brake-line-fl": "brake-line-fl",
+    "brake-line-fr": "brake-line-fr",
+    "brake-line-rl": "brake-line-rl",
+    "brake-line-rr": "brake-line-rr"
+  }
+}

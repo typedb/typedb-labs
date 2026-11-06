@@ -1,0 +1,45 @@
+# FICTIONAL DEMONSTRATION DATA. All companies, people and events are invented; real public authorities
+# appear only in an invented scenario. See docs/dataset.md.
+
+# A deadline doesn't move when things slip: it gets breached.
+deadline_limits:
+  - {deadline: DL-LONGSTOP, item: MS-COMPLETION}
+  - {deadline: DL-HELIX-WAIVER, item: MS-COMPLETION}
+  - {deadline: DL-FUNDS, item: MS-FUNDS}
+  - {deadline: DL-FUNDS, item: OB-SETTLE}
+
+# One review per authority (the HSR filing goes to both the FTC and the DOJ).
+reviews:
+  - {subject: CP-HSR, reviewer: ORG-FTC, applicant: ORG-NOV, legal_basis: Hart-Scott-Rodino Act, phase: Initial 30-day waiting period}
+  - {subject: CP-HSR, reviewer: ORG-DOJ, applicant: ORG-NOV, legal_basis: Hart-Scott-Rodino Act, phase: Initial 30-day waiting period}
+  - {subject: CP-NSIA, reviewer: ORG-ISU, applicant: ORG-NOV, legal_basis: National Security and Investment Act 2021, phase: Review period (30 working days)}
+  - {subject: CP-EC, reviewer: ORG-EC, applicant: ORG-NOV, legal_basis: EU Merger Regulation, phase: Phase 1 (25 working days)}
+  - {subject: CP-CMA, reviewer: ORG-CMA, applicant: ORG-NOV, legal_basis: Enterprise Act 2002, phase: Phase 1 (40 working days)}
+  - {subject: CP-COURT, reviewer: ORG-HCJ, applicant: ORG-ATL, legal_basis: 'Companies Act 2006, Part 26', phase: Sanction hearing}
+
+# The legal duty-holder (different from the operational RACI).
+bound_by:
+  - {obligation: CP-HSR, obligor: ORG-NOV}
+  - {obligation: CP-NSIA, obligor: ORG-NOV}
+  - {obligation: CP-EC, obligor: ORG-NOV}
+  - {obligation: CP-CMA, obligor: ORG-NOV}
+  - {obligation: CP-SHAREHOLDERS, obligor: ORG-ATL}
+  - {obligation: CP-COURT, obligor: ORG-ATL}
+  - {obligation: CV-CONDUCT, obligor: ORG-ATL}
+  - {obligation: CV-COC-CALDER, obligor: ORG-ATL-IP}
+  - {obligation: CV-COC-HELIX, obligor: ORG-ATL-IE}
+  - {obligation: DL-HELIX-WAIVER, obligor: ORG-ATL-IE}
+  - {obligation: DL-LONGSTOP, obligor: ORG-NOV}
+  - {obligation: DL-LONGSTOP, obligor: ORG-ATL}
+  - {obligation: OB-SETTLE, obligor: ORG-NOV}
+  - {obligation: DL-FUNDS, obligor: ORG-NOV}
+  - {obligation: CV-REFI, obligor: ORG-NOV}
+  - {obligation: HR-CONSULT, obligor: ORG-NOV}
+  - {obligation: HR-CONSULT, obligor: ORG-ATL}
+  - {obligation: CV-RETENTION, obligor: ORG-NOV}
+
+# Who must give consent.
+consents:
+  - {obligation: CV-COC-CALDER, grantor: ORG-CALDER}
+  - {obligation: CV-COC-HELIX, grantor: ORG-HELIX}
+  - {obligation: DL-HELIX-WAIVER, grantor: ORG-HELIX}

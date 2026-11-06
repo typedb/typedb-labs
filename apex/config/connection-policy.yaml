@@ -1,0 +1,52 @@
+# Connection paths (decision D12, docs/phase6-plan.md §7 and §18). Configuration, not business data.
+#
+# A path alternates thing → relation → thing. Stepping stones are always entities (people, organisations,
+# work items, risks): the acquisition, mandates and events are relations in the schema, so "A is on the
+# deal and so is B" can never be a path. Paths are ranked by cost, lowest first:
+#   cost = hop_cost × hops + Σ relation weight + Σ hub_penalty × log2(1 + links of each stepping stone)
+
+hop_cost: 1.0
+hub_penalty: 0.25
+
+# Light for specific facts, heavier for generic context, and heaviest for activity records, so a standing
+# relationship outranks a one-off interaction. Every type stays usable; weights only rank.
+relation_weights:
+  acquisition: 0.0
+  mandate: 0.0
+  financing: 0.0
+  authority-review: 0.0
+  ownership: 0.0
+  consent-right: 0.0
+  bound-by: 0.0
+  deadline-limit: 0.0
+  risk-exposure: 0.0
+  risk-ownership: 0.0
+  accountability: 0.1
+  responsibility: 0.1
+  gating: 0.1
+  sequencing: 0.1
+  consultation: 0.4
+  notification: 0.5
+  informing: 0.4
+  employment: 0.5
+  request: 1.4
+  response: 1.4
+  meeting: 1.6
+  delivery: 1.6
+  decision: 1.4
+  notice: 2.0
+  status-change: 2.0
+  work-breakdown: 1.2
+
+# Bounds, so results are never silently partial: the middle query (three steps) is capped, the request has
+# a time budget, and the answer reports any cap or skipped depth.
+max_hops: 3
+row_cap: 2000
+budget_ms: 1500
+default_results: 20
+max_results: 50
+# Activity records (meetings, requests and other events) are interactions, not standing relationships:
+# they may be a step in paths of up to this many hops only.
+event_max_hops: 2
+# A stepping stone with at least this many links is called out as a hub in the path's notes.
+hub_note_links: 60

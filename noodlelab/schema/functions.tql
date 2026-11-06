@@ -1,0 +1,94 @@
+# Functions: named, reusable query logic stored in the database. The recursive ones walk relationships
+# to any depth, which is how "multi-step" questions are answered.
+
+define
+
+# Every assembly above $a, at any depth (sub-assembly > assembly > ... > vehicle).
+fun assembly_ancestors($a: assembly) -> { assembly }:
+  match
+    { assembly-membership (assembly: $parent, member: $a); }
+    or { let $mid in assembly_ancestors($a); assembly-membership (assembly: $parent, member: $mid); };
+  return { $parent };
+
+# Every component inside $a, including those in its sub-assemblies.
+fun assembly_components($a: assembly) -> { component }:
+  match
+    { assembly-membership (assembly: $a, member: $c); $c isa component; }
+    or { assembly-membership (assembly: $a, member: $sub); $sub isa assembly;
+         let $c in assembly_components($sub); };
+  return { $c };
+
+# Every system that $s is part of, at any depth.
+fun system_ancestors($s: system) -> { system }:
+  match
+    { system-membership (system: $parent, member: $s); }
+    or { let $mid in system_ancestors($s); system-membership (system: $parent, member: $mid); };
+  return { $parent };
+
+# Every component taking part in $s, directly or through its subsystems.
+fun system_components($s: system) -> { component }:
+  match
+    { system-membership (system: $s, member: $c); $c isa component; }
+    or { system-membership (system: $s, member: $sub); $sub isa system;
+         let $c in system_components($sub); };
+  return { $c };
+
+# Failure impact, function by function (docs/dependency-semantics.md, C1). When $start fails, all its functions
+# are lost; each dependency then applies its effects. Two functions call each other:
+#   lost_steps      the dependent's function is LOST
+#   degraded_steps  the dependent's function is DEGRADED
+# Each returns the steps (provider, its function, dependent, its function). A function reached both ways is
+# lost (callers apply that). Fallbacks: a backup counts unless it is the failed part itself, or the failure takes
+# away one of the backup's functions through dependencies that have no fallback of their own (hard_losses below:
+# a shared cause, such as the charge port feeding both DC charging and its backup, the on-board charger, or the
+# 12 V supply behind both the park lock and the electric parking brake). The tests compare every failure with an
+# exact oracle, which checks this rule is sufficient for the data.
+
+# Functions the failure of $start takes away for certain: through "lost" dependencies that no fallback covers.
+# It never consults fallbacks, so lost_steps and degraded_steps can use it inside a negation.
+fun hard_losses($start: component) -> { component, vehicle-function }:
+  match
+    $d isa dependency (provider: $p, required-function: $g, dependent: $c, affected-function: $f), has loss-effect "lost";
+    not { fallback (protected: $d); };
+    { $p is $start; } or { let $p, $g in hard_losses($start); };
+  return { $c, $f };
+
+# Lost when the required function is lost and nothing takes over, or when it is degraded and the dependency
+# says that degradation is enough to lose the function.
+fun lost_steps($start: component) -> { component, vehicle-function, component, vehicle-function }:
+  match
+    $d isa dependency (provider: $p, required-function: $g, dependent: $c, affected-function: $f);
+    {
+      $d has loss-effect "lost";
+      not { fallback (protected: $d, backup: $b); not { $b is $start; };
+            not { let $b, $bf in hard_losses($start); }; };
+      { $p is $start; } or { let $p0, $g0, $p, $g in lost_steps($start); };
+    } or {
+      $d has degradation-effect "lost";
+      let $p1, $g1, $p, $g in degraded_steps($start);
+    };
+  return { $p, $g, $c, $f };
+
+# Degraded when the required function is lost but the dependency only degrades (or a backup takes over),
+# or when the required function is degraded and the dependency passes that on.
+fun degraded_steps($start: component) -> { component, vehicle-function, component, vehicle-function }:
+  match
+    $d isa dependency (provider: $p, required-function: $g, dependent: $c, affected-function: $f);
+    {
+      { $d has loss-effect "degraded"; }
+      or { $d has loss-effect "lost"; fallback (protected: $d, backup: $b); not { $b is $start; };
+           not { let $b, $bf in hard_losses($start); }; };
+      { $p is $start; } or { let $p0, $g0, $p, $g in lost_steps($start); };
+    } or {
+      $d has degradation-effect "degraded";
+      let $p1, $g1, $p, $g in degraded_steps($start);
+    };
+  return { $p, $g, $c, $f };
+
+# The reverse walk: every (provider, function) that $end's functions rely on, directly or indirectly.
+# Returns each step: dependent, its function, provider, the function it supplies.
+fun requirement_steps($end: component) -> { component, vehicle-function, component, vehicle-function }:
+  match
+    dependency (dependent: $c, affected-function: $f, provider: $p, required-function: $g);
+    { $c is $end; } or { let $c0, $f0, $c, $f in requirement_steps($end); };
+  return { $c, $f, $p, $g };

@@ -1,0 +1,53 @@
+# Migration 001 (Phase 6A.2): the data foundation for the Workstreams, Parties and Gantt views.
+# Additions only: every type, role and attribute from schema.tql is unchanged, so existing queries keep
+# working. Loaded after schema.tql and functions.tql (apex/database.py). Explained in docs/schema-design.md.
+
+define
+
+# ---- attributes ------------------------------------------------------------------------
+attribute actual-start-date, value date;      # when work really began (bars start here if known)
+attribute response-due-date, value date;      # when an answer to a request is expected
+attribute email, value string;                # fictional only: reserved .example domains
+attribute phone, value string;                # fictional only: Ofcom drama range 07700 900xxx
+attribute automated, value boolean;           # a system-generated notification, not a person writing
+attribute previous-status, value string @values("not-started", "in-progress", "at-risk", "delayed", "complete");
+attribute new-status, value string @values("not-started", "in-progress", "at-risk", "delayed", "complete");
+attribute likelihood, value string @values("low", "medium", "high");
+attribute severity, value string @values("low", "medium", "high", "critical");
+attribute risk-status, value string @values("open", "mitigating", "closed");
+attribute mitigation, value string;
+
+# ---- work: activities have a duration; milestones are points in time ----------------------
+entity activity sub deal-item;
+entity deal-item, owns actual-start-date;
+
+# ---- people and organisations ------------------------------------------------------------
+entity person, owns email @unique, owns phone @unique;
+entity registrar sub professional-services-firm;        # share registrar / receiving agent
+relation ownership, owns description;                   # why a holding exists, minority rights
+
+# ---- activity history: what happened, and what counts as engagement ----------------------
+# Every event keeps deal-event's roles (actor, subject) and attributes; queries on deal-event see all.
+relation deal-event, owns code @key;
+# engagement and outreach group their subtypes. They can't be @abstract because deal-event (Phase 1) isn't,
+# and TypeDB requires an abstract type's parent to be abstract; the loader never inserts them directly.
+relation engagement sub deal-event;                     # counts as a meaningful response by the actor
+relation response sub engagement, plays reply:answer;   # answers a request
+relation meeting sub engagement, relates attendee @card(0..);   # attended by people or organisations (any number)
+relation delivery sub engagement;                       # a deliverable submitted: report, filing, draft
+relation decision sub engagement;                       # an approval, sign-off, signature or clearance
+relation outreach sub deal-event, relates recipient @card(0..);   # does not count as engagement by its recipients
+relation request sub outreach, owns response-due-date, plays reply:original;
+relation notice sub outreach, owns automated;            # an outbound notice (automated or not)
+relation status-change sub deal-event, owns previous-status, owns new-status;
+relation reply, relates original, relates answer;       # a relation between two relations
+entity party, plays outreach:recipient, plays meeting:attendee;
+
+# ---- risk register -------------------------------------------------------------------------
+entity risk, owns code @key, owns name, owns description, owns likelihood, owns severity,
+  owns risk-status, owns mitigation,
+  plays risk-exposure:risk, plays risk-ownership:owned-risk;
+relation risk-exposure, relates risk, relates exposed;  # which work a risk threatens
+relation risk-ownership, relates risk-owner, relates owned-risk @card(1..1);
+entity deal-item, plays risk-exposure:exposed;
+entity party, plays risk-ownership:risk-owner;

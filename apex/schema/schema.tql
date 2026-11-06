@@ -1,0 +1,106 @@
+# Project Apex: TypeDB 3.x schema (types, attributes, relations and roles).
+# Saved queries (functions) are in functions.tql. Explained in docs/schema-design.md.
+# Run in a SCHEMA transaction on a new database: uv run python -m scripts.create_database
+
+define
+
+# ---- attributes ------------------------------------------------------------------------
+attribute code, value string;                 # stable readable ID; unique across the database
+attribute name, value string;
+attribute description, value string;
+attribute job-title, value string;
+attribute jurisdiction, value string;
+attribute sector, value string;
+attribute deal-value, value decimal;          # exact money, never floating point
+attribute currency, value string @values("GBP", "USD", "EUR");
+attribute deal-structure, value string;
+attribute as-of-date, value date;             # the demo's "today", stored in the data
+attribute status, value string @values("not-started", "in-progress", "at-risk", "delayed", "complete");
+attribute criticality, value string @values("low", "medium", "high", "critical");
+attribute planned-start, value date;
+attribute due-date, value date;
+attribute baseline-due-date, value date;
+attribute completed-date, value date;
+attribute progress, value integer @range(0..100);
+attribute lag-days, value integer @range(0..365);
+attribute legal-basis, value string;
+attribute review-phase, value string;
+attribute consequence, value string;          # what happens if an obligation is not met
+attribute mandate-type, value string;
+attribute occurred-at, value datetime;
+attribute summary, value string;
+attribute event-kind, value string;
+attribute stake, value decimal @range(0.0dec..1.0dec);   # 0.6 = 60%
+
+# ---- parties ---------------------------------------------------------------------------
+entity party @abstract, owns code @key, owns name, owns description,
+  plays raci-assignment:holder, plays deal-event:actor;
+entity person sub party, plays employment:employee;
+entity organisation @abstract, sub party, owns jurisdiction, owns sector,
+  plays employment:employer, plays bound-by:obligor, plays consent-right:grantor;
+entity company sub organisation,
+  plays acquisition:acquirer, plays acquisition:target, plays mandate:client,
+  plays financing:borrower, plays authority-review:applicant,
+  plays ownership:owner, plays ownership:owned;
+entity financial-institution @abstract, sub organisation, plays financing:lender;
+entity investment-bank sub financial-institution, plays mandate:adviser;
+entity commercial-bank sub financial-institution;
+entity professional-services-firm @abstract, sub organisation, plays mandate:adviser;
+entity law-firm sub professional-services-firm;
+entity accounting-firm sub professional-services-firm;
+entity consultancy sub professional-services-firm;
+entity communications-firm sub professional-services-firm;
+entity authority @abstract, sub organisation, plays authority-review:reviewer;
+entity regulator sub authority;
+entity court sub authority;
+
+# ---- work ------------------------------------------------------------------------------
+entity deal-item @abstract, owns code @key, owns name, owns description, owns status,
+  owns criticality, owns planned-start, owns due-date, owns baseline-due-date,
+  owns completed-date, owns progress,
+  plays deal-scope:item, plays work-breakdown:part @card(0..1),
+  plays dependency:prerequisite, plays dependency:dependent,
+  plays deadline-limit:limited-item,
+  plays raci-assignment:item, plays accountability:accountable-item @card(0..1),
+  plays deal-event:subject;
+entity workstream sub deal-item, plays work-breakdown:whole;
+entity milestone sub deal-item;
+entity obligation @abstract, sub deal-item, owns legal-basis, owns consequence,
+  plays bound-by:obligation, plays consent-right:obligation;
+entity condition sub obligation;
+entity regulatory-clearance sub condition, plays authority-review:subject;
+entity shareholder-approval sub condition;
+entity court-sanction sub condition, plays authority-review:subject;
+entity covenant sub obligation;
+entity deadline sub obligation, plays deadline-limit:deadline;
+
+# ---- relations -------------------------------------------------------------------------
+relation transaction @abstract, relates buyer, relates seller,
+  owns code @key, owns name, owns description, owns deal-value, owns currency,
+  owns deal-structure, owns as-of-date,
+  plays deal-scope:deal, plays mandate:engagement, plays financing:purpose;
+relation acquisition sub transaction, relates acquirer as buyer, relates target as seller;
+relation employment, relates employee, relates employer, owns job-title;
+relation mandate, relates client, relates adviser, relates engagement,
+  owns code @key, owns mandate-type, plays raci-assignment:via;
+relation financing, relates borrower, relates lender, relates purpose,
+  owns code @key, owns name, owns deal-value, owns currency;
+relation deal-scope, relates deal, relates item;
+relation work-breakdown, relates whole, relates part;
+relation authority-review, relates reviewer, relates subject, relates applicant,
+  owns legal-basis, owns review-phase;
+relation bound-by, relates obligor, relates obligation;
+relation consent-right, relates grantor, relates obligation;
+relation deadline-limit, relates limited-item, relates deadline;
+relation ownership, relates owner, relates owned, owns stake;
+relation dependency @abstract, relates prerequisite, relates dependent, owns lag-days;
+relation hard-dependency @abstract, sub dependency;
+relation gating sub hard-dependency;          # a condition must be met first
+relation sequencing sub hard-dependency;      # X must finish before Y
+relation informing sub dependency;            # soft: Y needs input from X; dates don't move
+relation raci-assignment @abstract, relates holder, relates item, relates via @card(0..1);
+relation responsibility sub raci-assignment;                                   # R
+relation accountability sub raci-assignment, relates accountable-item as item; # A
+relation consultation sub raci-assignment;                                     # C
+relation notification sub raci-assignment;                                     # I
+relation deal-event, relates actor, relates subject, owns occurred-at, owns summary, owns event-kind;

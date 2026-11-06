@@ -1,0 +1,205 @@
+# The vehicle's engineering model in TypeDB 3.
+#
+# Three independent ways of organising the same components:
+#   physical   assembly-membership   where a component sits (wheel end > chassis > vehicle)
+#   functional system-membership     what it does (braking, propulsion, automated driving...); a component
+#                                    can take part in several systems
+#   behaviour  connection, dependency (function to function, with fallbacks) and control-loop: how components
+#              are joined, what each function relies on to
+#              work, and which controllers, sensors and actuators work together
+# Plus the link from each component to the 3D object that draws it (visual-representation).
+#
+# All specifications are design targets for an original concept vehicle, not measured data.
+
+define
+
+# ---- Identity and description ----------------------------------------------------------------------------
+
+attribute component-id, value string @regex("^[a-z0-9]+(-[a-z0-9]+)*$");   # stable; never renamed
+attribute assembly-id, value string @regex("^[a-z0-9]+(-[a-z0-9]+)*$");
+attribute system-id, value string @regex("^[a-z0-9]+(-[a-z0-9]+)*$");
+attribute asset-name, value string;
+attribute node-key, value string;
+attribute name, value string;
+attribute description, value string;
+
+# ---- Engineering properties (only on the components they apply to) ------------------------------------
+
+attribute material-name, value string;
+attribute size-designation, value string;           # e.g. tyre "275/45 R22", wheel "22 x 9.5J"
+attribute diameter-mm, value double;
+attribute thickness-mm, value double;
+attribute piston-count, value integer;
+attribute peak-power-kw, value double;
+attribute rated-power-kw, value double;
+attribute peak-torque-nm, value double;
+attribute gear-ratio, value double;
+attribute tooth-count, value integer;
+attribute nominal-voltage-v, value double;
+attribute energy-capacity-kwh, value double;
+attribute sensing-range-m, value double;
+
+# ---- Kinds of connection --------------------------------------------------------------------------------
+
+attribute joint-type, value string @values("bolted", "splined", "press-fit", "bearing", "ball-joint", "bushed", "welded", "bonded", "clipped", "threaded", "seated", "meshed", "hinged", "universal-joint");
+attribute voltage-class, value string @values("high-voltage", "low-voltage");
+attribute network, value string @values("CAN FD", "automotive Ethernet", "hard-wired signal");
+attribute fluid, value string @values("brake fluid", "coolant", "refrigerant", "oil");
+attribute dependency-kind, value string @values("power", "torque", "control", "data", "hydraulic", "cooling", "lubrication", "support");
+attribute loss-effect, value string @values("lost", "degraded");
+attribute degradation-effect, value string @values("lost", "degraded");
+attribute function-name, value string;
+
+# ---- Components: a type hierarchy, so questions can be asked at any level ("every sensor") ------------------
+
+entity component @abstract,
+  owns component-id @key, owns name, owns description, owns material-name,
+  plays assembly-membership:member @card(1..1),
+  plays system-membership:member,
+  plays connection:endpoint,
+  plays dependency:dependent, plays dependency:provider, plays fallback:backup,
+  plays visual-representation:represented @card(1..1);
+
+entity body-component @abstract, sub component;
+entity body-panel sub body-component;
+entity glazing sub body-component;
+entity lighting-unit sub body-component;
+entity structural-member sub body-component;
+entity trim-part sub body-component;
+entity interior-component sub component;
+
+entity chassis-component @abstract, sub component;
+entity wheel sub chassis-component, owns size-designation, owns diameter-mm;
+entity tyre sub chassis-component, owns size-designation, owns diameter-mm;
+entity brake-component sub chassis-component;
+entity brake-disc sub brake-component, owns diameter-mm, owns thickness-mm;
+entity brake-caliper sub brake-component, owns piston-count, plays control-loop:actuator;
+entity brake-pad sub brake-component;
+entity wheel-end-component sub chassis-component;         # hub, bearing, knuckle
+entity suspension-component sub chassis-component;
+entity subframe-mount sub chassis-component;           # rubber mounts carrying a subframe on the body
+entity steering-component sub chassis-component;
+entity fastener sub component;
+entity driver-control sub component;                 # pedals and other direct driver inputs
+
+entity powertrain-component @abstract, sub component;
+entity electric-motor sub powertrain-component, owns peak-power-kw, owns peak-torque-nm, owns nominal-voltage-v,
+  plays control-loop:actuator;
+entity motor-component sub powertrain-component;
+entity gearbox sub powertrain-component, owns gear-ratio;
+entity gearbox-component sub powertrain-component;
+entity gear sub gearbox-component, owns tooth-count;      # gears and shafts with integral gear teeth
+entity park-lock sub gearbox-component, plays control-loop:actuator;
+entity axle-disconnect sub gearbox-component, plays control-loop:actuator;
+entity mount sub powertrain-component;                    # rubber mounts carrying a drive unit on its subframe
+entity drive-shaft sub powertrain-component;
+entity inverter sub powertrain-component, owns peak-power-kw, owns nominal-voltage-v;
+entity inverter-component sub powertrain-component;
+
+entity electrical-component @abstract, sub component;
+entity battery-module sub electrical-component, owns energy-capacity-kwh, owns nominal-voltage-v;
+entity battery-component sub electrical-component;
+entity low-voltage-battery sub electrical-component, owns energy-capacity-kwh, owns nominal-voltage-v;
+entity power-electronics sub electrical-component, owns rated-power-kw, owns nominal-voltage-v;
+entity wiring-harness sub electrical-component;
+entity connector sub electrical-component;
+entity contactor sub electrical-component, plays control-loop:actuator;   # main contactors, pre-charge relay
+entity fuse sub electrical-component;                     # pack fuse, service disconnect, 12 V fuse box
+
+entity sensor @abstract, sub component, owns sensing-range-m, plays control-loop:sensor;
+entity camera sub sensor;
+entity radar sub sensor;
+entity lidar sub sensor;
+entity gnss-receiver sub sensor;
+entity wheel-speed-sensor sub sensor;
+entity position-sensor sub sensor;                      # motor resolvers
+entity current-sensor sub sensor;
+entity torque-sensor sub sensor;                        # steering torque on the pinion shaft
+entity cell-monitor sub sensor;                          # battery module monitoring boards
+
+entity control-unit sub component, plays control-loop:controller;
+entity compute-unit sub control-unit;
+entity actuator sub component, plays control-loop:actuator;
+entity thermal-component sub component;
+
+# ---- Physical structure: assemblies and sub-assemblies ---------------------------------------------------
+
+entity assembly,
+  owns assembly-id @key, owns name, owns description,
+  plays assembly-membership:assembly,
+  plays assembly-membership:member @card(0..1);
+
+# Every component and every assembly except the vehicle itself sits in exactly one assembly.
+relation assembly-membership,
+  relates assembly,
+  relates member;
+
+# ---- Function: systems and subsystems -------------------------------------------------------------------
+
+entity system,
+  owns system-id @key, owns name, owns description,
+  plays system-membership:system,
+  plays system-membership:member,
+  plays control-loop:controlled-system;
+
+relation system-membership,
+  relates system,
+  relates member;
+
+# ---- Behaviour ------------------------------------------------------------------------------------------
+
+# A physical joint or line between two components. Undirected: both ends play "endpoint".
+relation connection @abstract, relates endpoint @card(2..2), owns description;
+relation mechanical-connection sub connection, owns joint-type;
+relation power-connection sub connection, owns voltage-class;
+relation data-connection sub connection, owns network;
+relation fluid-connection sub connection, owns fluid;
+
+# What a part does: "drive torque", "brake pressure", "anti-lock braking"... Shared across components. Failure
+# states belong to (component, function) pairs, so a failure can take one function and leave others.
+entity vehicle-function,
+  owns function-name @key,
+  plays dependency:affected-function, plays dependency:required-function;
+
+# "The dependent's affected function needs the provider's required function." Directed, one of three families.
+# loss-effect: what happens to the affected function if the required function is lost.
+# degradation-effect (optional): what happens if the required function is only degraded; absent = nothing.
+relation dependency @abstract,
+  relates dependent @card(1..1),
+  relates affected-function @card(1..1),
+  relates provider @card(1..1),
+  relates required-function @card(1..1),
+  owns dependency-kind,
+  owns loss-effect @card(1..1),
+  owns degradation-effect,
+  owns description,
+  plays fallback:protected;
+relation physical-dependency sub dependency;        # load paths, mechanical support, torque transmission
+relation operational-dependency sub dependency;     # energy and working media: power, cooling, hydraulic pressure
+relation control-dependency sub dependency;         # commands and sensor information
+
+# If the provider's function is lost but the backup still works, the dependent is degraded, not lost
+# (for example the brake pedal pushing the master cylinder without the booster).
+relation fallback,
+  relates protected @card(1..1),
+  relates backup @card(1..1),
+  owns description;
+
+# A closed loop: a controller reads sensors and commands actuators to govern a system.
+relation control-loop,
+  relates controller @card(1..1),
+  relates sensor @card(0..),
+  relates actuator @card(1..),
+  relates controlled-system @card(1..1),
+  owns name, owns description;
+
+# ---- The link to 3D geometry ----------------------------------------------------------------------------
+
+# A visual asset is a model file (or "procedural": built in the browser). The node key names the object in
+# that file. Node keys are only visual keys: the component id is the identity.
+entity visual-asset, owns asset-name @key, plays visual-representation:asset;
+
+relation visual-representation,
+  relates represented,
+  relates asset,
+  owns node-key;

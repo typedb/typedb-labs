@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  /* Brand and status colours (status meanings come from the data; these only colour them). */
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-typedb-tint: var(--typedb-tint);
+  --color-typedb-line: var(--typedb-line);
+  --color-typedb: var(--typedb);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-risk: var(--risk);
+  --color-risk-soft: var(--risk-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-idle: var(--idle);
+  --color-idle-soft: var(--idle-soft);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.975 0.004 247);
+  --foreground: oklch(0.22 0.03 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.03 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.03 255);
+  --primary: oklch(0.29 0.06 252);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.955 0.008 250);
+  --secondary-foreground: oklch(0.29 0.05 255);
+  --muted: oklch(0.955 0.008 250);
+  --muted-foreground: oklch(0.52 0.025 255);
+  --accent: oklch(0.95 0.012 250);
+  --accent-foreground: oklch(0.25 0.05 255);
+  --destructive: oklch(0.56 0.2 25);
+  --border: oklch(0.91 0.01 252);
+  --input: oklch(0.91 0.01 252);
+  --ring: oklch(0.6 0.09 195);
+
+  --ink: oklch(0.24 0.055 252);
+  --ink-soft: oklch(0.33 0.06 252);
+  --brand: oklch(0.6 0.11 188);
+  --brand-soft: oklch(0.95 0.035 188);
+  /* TypeDB purple: the "Show TypeQL" drawers and the TypeDB Advantage panel */
+  --typedb-tint: #f5f1fc;
+  --typedb-line: #ddd1f2;
+  --typedb: #65459a;
+  --ok: oklch(0.56 0.13 155);
+  --ok-soft: oklch(0.955 0.04 155);
+  --warn: oklch(0.64 0.15 65);
+  --warn-soft: oklch(0.965 0.045 80);
+  --risk: oklch(0.56 0.19 27);
+  --risk-soft: oklch(0.955 0.03 25);
+  --info: oklch(0.55 0.14 255);
+  --info-soft: oklch(0.955 0.025 255);
+  --idle: oklch(0.6 0.02 255);
+  --idle-soft: oklch(0.955 0.006 255);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01"; }
+  body { @apply bg-background text-foreground font-sans; }
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* The Impact Explorer's delay slider (filled up to the current value). */
+.apex-range { appearance: none; height: 28px; background: transparent; cursor: pointer; }
+.apex-range::-webkit-slider-runnable-track { height: 6px; border-radius: 9999px;
+  background: linear-gradient(to right, #fbbf24 0%, #f87171 var(--fill), rgba(255,255,255,0.16) var(--fill)); }
+.apex-range::-moz-range-track { height: 6px; border-radius: 9999px; background: rgba(255,255,255,0.16); }
+.apex-range::-moz-range-progress { height: 6px; border-radius: 9999px; background: linear-gradient(to right, #fbbf24, #f87171); }
+.apex-range::-webkit-slider-thumb { appearance: none; margin-top: -8px; width: 22px; height: 22px; border-radius: 9999px;
+  background: #fff; border: 3px solid #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+.apex-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 9999px; background: #fff; border: 3px solid #f59e0b; }
+.apex-range:focus-visible { outline: none; }
+.apex-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(251,191,36,0.4); }
+
+/* The TypeDB Advantage button's one-time attention pulse (three rings, then still). */
+@keyframes advantage-attention {
+  0% { box-shadow: 0 0 0 0 rgb(101 69 154 / 0.6); }
+  70% { box-shadow: 0 0 0 9px rgb(101 69 154 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(101 69 154 / 0); }
+}
+.advantage-attention { animation: advantage-attention 1.8s ease-out 3; }
+@media (prefers-reduced-motion: reduce) { .advantage-attention { animation: none; } }
