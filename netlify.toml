@@ -20,6 +20,9 @@
 
 [build.environment]
   NODE_VERSION = "24"
+  # The TypeDB username is "admin" in every lab's local defaults, docs and seed data; it is not a secret.
+  # The password is, and stays scanned.
+  SECRETS_SCAN_OMIT_KEYS = "TYPEDB_USERNAME,APEX_TYPEDB_USERNAME,NOODLELAB_TYPEDB_USERNAME"
 
 [[edge_functions]]
   function = "apex-api"
