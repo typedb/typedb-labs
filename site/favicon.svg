@@ -1,0 +1,18 @@
+<!-- The TypeDB bot (typedb-web/main/src/assets/logo/typedb-bot.svg) wearing lab glasses in place of its eyes. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="54 80 528 528">
+  <defs>
+    <linearGradient id="lens" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e6ecef"/>
+      <stop offset="1" stop-color="#b3c1c9"/>
+    </linearGradient>
+    <path id="glass" fill="url(#lens)" stroke="#8a9499" stroke-width="3" d="M78 204H200Q214 204 213 218L206 300Q205 314 190 314H86Q72 314 70 300L60 218Q58 204 78 204Z"/>
+  </defs>
+  <rect x="106" y="253" width="422" height="234" rx="117" fill="#1a182a"/>
+  <path fill="#02dac9" fill-rule="evenodd" d="M318 131.276C449.444 131.276 556 237.77 556 369.138C556 500.506 449.444 607 318 607C186.556 607 80 500.506 80 369.138C80 237.77 186.556 131.276 318 131.276ZM410.82 253.852L222.166 253.852L221.868 253.853C157.86 254.182 106.237 306.308 106.566 370.28C106.897 434.692 159.212 486.746 223.662 486.795L410.907 486.936C475.285 486.936 527.473 434.778 527.473 370.438C527.473 306.049 475.245 253.852 410.82 253.852Z"/>
+  <path fill="#02dac9" d="M134.797 80C160.075 80 180.566 100.48 180.566 125.743C180.566 144.461 169.317 160.553 153.207 167.634L153.207 271.148H116.591L116.591 167.723C100.372 160.688 89.028 144.539 89.028 125.743C89.028 100.48 109.52 80 134.797 80Z"/>
+  <g transform="translate(123.4 175.4) scale(0.76)">
+    <path fill="#333" stroke="#5c5c5c" stroke-width="6" stroke-linejoin="round" d="M16 192Q110 172 256 188Q402 172 496 192L497 212Q480 216 478 232L462 318Q458 336 438 336H316Q298 336 294 318L282 246Q278 226 256 226Q234 226 230 246L218 318Q214 336 196 336H74Q54 336 50 318L34 232Q32 216 15 212Z"/>
+    <use xlink:href="#glass"/>
+    <use xlink:href="#glass" transform="matrix(-1 0 0 1 512 0)"/>
+  </g>
+</svg>

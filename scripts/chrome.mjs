@@ -12,7 +12,8 @@ const common = resolve(root, "typedb-web/common/src");
 const scripts = resolve(common, "scripts");
 const MAIN_SITE = "https://typedb.com";
 
-const HEAD = `<link rel="stylesheet" href="/_site/css/chrome.css" />
+const HEAD = `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/_site/css/chrome.css" />
 <script src="https://kit.fontawesome.com/f7ba4755e0.js" crossorigin="anonymous"></script>
 <script defer src="/_site/chrome.js"></script>
 `;
@@ -74,6 +75,8 @@ export function applyChrome(file, chrome, { name, title, footer = false, fill = 
   const classes = [name && `lab-${name}`, fill && "labs-fill"].filter(Boolean).join(" ");
   const top = chrome.header + (title ? breadcrumb(title) : "");
   let html = readFileSync(file, "utf8")
+    // Every page takes the site's favicon in place of its own.
+    .replace(/\s*<link rel="icon"[^>]*>/g, "")
     .replace("</head>", () => `${HEAD}</head>`)
     .replace(/<body[^>]*>/, (body) => `${classes ? `<body class="${classes}">` : body}${top}`);
   if (footer) html = html.replace("</body>", () => `${chrome.footer}</body>`);
