@@ -31,7 +31,7 @@ export function EngagementBadge({ level, category, className }: { level: string;
   const l = LEVEL[level] ?? LEVEL.none
   const c = category ? CATEGORY[category] : ''
   return (
-    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-full px-2 py-0.5 text-[11.5px] font-medium whitespace-nowrap ring-1 ring-inset', l.cls, className)}>
+    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-medium whitespace-nowrap ring-1 ring-inset', l.cls, className)}>
       <span className={cn('size-1.5 shrink-0 rounded-full', l.dot)} aria-hidden />
       {l.label}{c && c !== l.label && <span className="truncate font-normal opacity-90">· {c}</span>}
     </span>
@@ -84,7 +84,7 @@ export function Assessments({ assessments, onItem }: { assessments: Assessment[]
         const quiet = title === 'Not assessed' || title === 'Not yet active' || title === 'Engaged'
         return (
           <section key={title}>
-            <h3 className="mb-1.5 text-[11.5px] font-semibold tracking-wide text-muted-foreground uppercase">{title} · {rows.length}</h3>
+            <h3 className="mb-1.5 text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">{title} · {rows.length}</h3>
             <ul className={cn('space-y-1.5', quiet && 'text-muted-foreground')}>
               {rows.map((a, n) => <Finding key={`${a.item}-${a.letter}-${n}`} a={a} onItem={onItem} quiet={quiet} />)}
             </ul>
@@ -100,9 +100,9 @@ function Finding({ a, onItem, quiet }: { a: Assessment; onItem: (code: string) =
     <li className={cn('rounded-lg border px-3 py-2', quiet ? 'border-dashed bg-transparent' : 'bg-white')}>
       <div className="flex items-start gap-2">
         <EngagementBadge level={a.level} className="mt-0.5 shrink-0" />
-        <p className={cn('min-w-0 text-[12.5px] leading-snug', quiet ? 'text-muted-foreground' : 'text-ink-soft')}>{a.reason}</p>
+        <p className={cn('min-w-0 text-[13px] leading-snug', quiet ? 'text-muted-foreground' : 'text-ink-soft')}>{a.reason}</p>
       </div>
-      {a.context && <p className="mt-1 pl-1 text-[11.5px] text-muted-foreground italic">{a.context}</p>}
+      {a.context && <p className="mt-1 pl-1 text-[12px] text-muted-foreground italic">{a.context}</p>}
       {!quiet && a.evidence.length > 0 && (
         <div className="mt-1.5 flex flex-wrap items-center gap-1 text-[11px]">
           <span className="text-muted-foreground">Records:</span>
@@ -111,7 +111,7 @@ function Finding({ a, onItem, quiet }: { a: Assessment; onItem: (code: string) =
               title={`${e.code}${e.date ? ` · ${formatDate(e.date)}` : ''}`}
               className="inline-flex max-w-72 cursor-pointer items-center gap-1 rounded border bg-muted/40 px-1.5 py-0.5 text-ink-soft hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
               <FileText className="size-3 shrink-0" aria-hidden />
-              <span className="shrink-0 font-mono text-[10.5px] whitespace-nowrap text-muted-foreground">{e.code}</span>
+              <span className="shrink-0 font-mono text-[11px] whitespace-nowrap text-muted-foreground">{e.code}</span>
               <span className="truncate">{e.label}</span>
             </button>
           ))}
@@ -127,7 +127,7 @@ export function AccessRequestDemo() {
   return (
     <>
       <button type="button" onClick={() => setOpen(true)}
-        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-ink-soft shadow-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand">
+        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-ink-soft shadow-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand">
         <Lock className="size-3.5" aria-hidden />Request full contact details
       </button>
       {open && (

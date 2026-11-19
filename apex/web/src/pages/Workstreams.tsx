@@ -60,7 +60,7 @@ export function Workstreams() {
         note="Workstream items through work-breakdown and their dates, the deadlines each open item can still reach (the recursive downstream function), risks through risk-exposure, organisations through RACI and employment, and the latest event of every kind."
         subtitle={q.data ? `${shown.length} of ${plural(all.length, 'workstream')} · activity progress is weighted by planned duration; it is not readiness to close` : undefined}
         action={() => (
-          <div className="flex flex-wrap items-center justify-end gap-2 text-[12.5px]">
+          <div className="flex flex-wrap items-center justify-end gap-2 text-[13px]">
             <Select label="Status" value={status} onChange={(v) => set('status', v === 'all' ? null : v)}
               options={[['all', 'All statuses'], ...statuses.map((s) => [s, humanise(s)] as [string, string])]} />
             <Select label="Organisation" value={org} onChange={(v) => set('org', v === 'all' ? null : v)}
@@ -101,10 +101,10 @@ function Card({ w }: { w: Summary }) {
       <RowChevron className="absolute top-5 right-4" />
       <div className="pr-6">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-[15px] font-semibold tracking-tight text-ink">{w.name}</h3>
+          <h3 className="text-[15px] font-semibold text-ink">{w.name}</h3>
           <StatusBadge status={w.status} />
         </div>
-        <p className="mt-1 line-clamp-2 text-[12.5px] leading-relaxed text-muted-foreground" title={w.description ?? undefined}>{w.description}</p>
+        <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-muted-foreground" title={w.description ?? undefined}>{w.description}</p>
         <div className="mt-1.5 text-[12px] text-ink-soft">
           Led by <span className="font-medium text-ink">{w.lead?.name}</span> · {formatDate(w.planned_start)} → {formatDate(w.due)} · {plural(w.items, 'item')}
         </div>
@@ -112,7 +112,7 @@ function Card({ w }: { w: Summary }) {
 
       <Measures w={w} />
 
-      <div className="grid gap-3 text-[12.5px] sm:grid-cols-2">
+      <div className="grid gap-3 text-[13px] sm:grid-cols-2">
         <Fact icon={Flag} label="Next milestone">
           {w.next_milestone
             ? <><span className="font-medium text-ink">{w.next_milestone.name}</span> · {formatDate(w.next_milestone.due)} ({inDays(w.next_milestone.days_remaining)})</>
@@ -126,20 +126,20 @@ function Card({ w }: { w: Summary }) {
       </div>
 
       <div className="space-y-1.5">
-        <div className="text-[11.5px] font-medium text-muted-foreground">Risks</div>
+        <div className="text-[12px] font-medium text-muted-foreground">Risks</div>
         {risks.length
           ? <div className="flex flex-col items-start gap-1">{risks.map((r) => <RiskBadge key={r.code} risk={r} />)}</div>
-          : <div className="text-[12.5px] text-muted-foreground">No open risks recorded</div>}
-        {closedRisks > 0 && <div className="text-[11.5px] text-muted-foreground">and {plural(closedRisks, 'closed risk')}</div>}
+          : <div className="text-[13px] text-muted-foreground">No open risks recorded</div>}
+        {closedRisks > 0 && <div className="text-[12px] text-muted-foreground">and {plural(closedRisks, 'closed risk')}</div>}
       </div>
 
       <div className="mt-auto grid gap-3 border-t pt-3 text-[12px] sm:grid-cols-2">
         <div className="min-w-0">
-          <div className="text-[11.5px] font-medium text-muted-foreground">Organisations involved ({w.organisations.length})</div>
+          <div className="text-[12px] font-medium text-muted-foreground">Organisations involved ({w.organisations.length})</div>
           <div className="truncate text-ink-soft" title={w.organisations.map((o) => o.name).join(', ')}>{w.organisations.map((o) => o.name).join(', ')}</div>
         </div>
         <div className="min-w-0">
-          <div className="text-[11.5px] font-medium text-muted-foreground">Latest activity · {plural(w.events, 'event')} recorded</div>
+          <div className="text-[12px] font-medium text-muted-foreground">Latest activity · {plural(w.events, 'event')} recorded</div>
           {w.latest_event
             ? <div className="truncate text-ink-soft" title={w.latest_event.summary ?? undefined}>
                 {formatDateTime(w.latest_event.when)}: {w.latest_event.summary}</div>
@@ -153,7 +153,7 @@ function Card({ w }: { w: Summary }) {
 function Fact({ icon: Icon, label, children }: { icon: typeof Flag; label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <div className={cn('mb-0.5 flex items-center gap-1.5 text-[11.5px] font-medium text-muted-foreground')}><Icon className="size-3.5" aria-hidden />{label}</div>
+      <div className={cn('mb-0.5 flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground')}><Icon className="size-3.5" aria-hidden />{label}</div>
       <div className="text-ink-soft">{children}</div>
     </div>
   )

@@ -34,9 +34,9 @@ const ItemNode = memo(function ItemNode({ data }: NodeProps & { data: ItemNodeDa
       <Handle type="target" position={Position.Left} className={hidden} isConnectable={false} />
       <div className="flex items-center gap-1.5">
         {isDeadline && <Flag className={cn('size-3 shrink-0', dl.breached ? 'text-risk' : 'text-risk/60')} />}
-        <span className="line-clamp-2 text-[11.5px] leading-tight font-semibold text-ink">{it.name}</span>
+        <span className="line-clamp-2 text-[12px] leading-tight font-semibold text-ink">{it.name}</span>
       </div>
-      <div className="mt-0.5 flex items-center justify-between gap-1 text-[10.5px]">
+      <div className="mt-0.5 flex items-center justify-between gap-1 text-[11px]">
         <span className="truncate text-muted-foreground">{isDeadline ? `Deadline ${formatDate(dl.due, { year: false })}` : humanise(it.type)}</span>
         {isDeadline
           ? <span className={cn('shrink-0 font-semibold tabular', dl.breached ? 'text-risk' : 'text-ok')}>{dl.breached ? `+${dl.days_over}d over` : `${dl.headroom_days}d left`}</span>
@@ -64,7 +64,7 @@ function DepEdge({ id, sourceX, sourceY, targetX, targetY, data, markerEnd }: Ed
         style={{ stroke: colour, strokeWidth: width, strokeDasharray: !data.hard ? (isLimit ? '5 4' : '2 4') : undefined, opacity: data.state === 'dim' ? 0.12 : 0.95 }} />
       {data.hard && !!data.lag && data.state !== 'dim' && (
         <EdgeLabelRenderer>
-          <div className="nodrag nopan absolute rounded bg-white px-1 text-[9.5px] font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200"
+          <div className="nodrag nopan absolute rounded bg-white px-1 text-[10px] font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200"
             style={{ transform: `translate(-50%, -50%) translate(${(mid.x + mid2.x) / 2}px, ${(mid.y + mid2.y) / 2}px)` }}>+{data.lag}d</div>
         </EdgeLabelRenderer>
       )}
@@ -145,7 +145,7 @@ export function DependencyGraph(props: { data: Impact; showSoft: boolean; showAl
 export function GraphLegend({ data }: { data: Impact }) {
   const hard = data.hard_kinds.filter((k) => k !== 'hard-dependency')
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11.5px] text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] text-muted-foreground">
       <span className="inline-flex items-center gap-1.5"><svg width="22" height="6"><line x1="1" y1="3" x2="21" y2="3" stroke="#c7811c" strokeWidth="2.5" /></svg>Hard dependency that moved a date ({hard.map(humanise).join(', ')})</span>
       <span className="inline-flex items-center gap-1.5"><svg width="22" height="6"><line x1="1" y1="3" x2="21" y2="3" stroke="#64748b" strokeWidth="1.5" /></svg>Hard dependency, slack absorbed</span>
       <span className="inline-flex items-center gap-1.5"><svg width="22" height="6"><line x1="1" y1="3" x2="21" y2="3" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2 4" /></svg>Soft dependency (informing: dates don't move)</span>

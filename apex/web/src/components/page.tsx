@@ -8,7 +8,7 @@ export function PageHeader({ title, description, note, actions }: { title: strin
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
       <div className="min-w-0">
-        <h1 className="text-2xl font-semibold tracking-tight text-ink">{title}</h1>
+        <h1 className="text-2xl font-semibold text-ink">{title}</h1>
         <p className="mt-1 max-w-2xl text-[14px] text-muted-foreground">{description}</p>
         {note && <div className="mt-2">{note}</div>}
       </div>

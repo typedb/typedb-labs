@@ -24,7 +24,7 @@ uv run --project blender python -I blender/exterior_panels.py
 
 for src in web/assets-src/*.glb; do
   name=$(basename "$src" .glb)
-  "$DOCKER" exec noodlelab-web-dev sh -c "
+  "$DOCKER" exec nuts-and-volts-web-dev sh -c "
     npx gltfpack -i assets-src/$name.glb -o public/assets/$name.glb -cc -kn -km -ke -kv -vtf &&
     npx gltfpack -i assets-src/$name.glb -o public/assets/$name.lod1.glb -cc -kn -km -ke -kv -vtf -si 0.3"
 done

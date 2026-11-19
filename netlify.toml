@@ -2,16 +2,18 @@
 #
 #   /apex/*           Project Apex (apex/web, built with VITE_BASE=/apex/)
 #   /apex/api/*       its API, as an Edge Function over TypeDB Cloud (netlify/edge-functions/apex-api.ts)
-#   /noodlelab/*      NoodleLab Visual Explorer (noodlelab/web, built with VITE_BASE=/noodlelab/)
-#   /noodlelab/api/*  its API (netlify/edge-functions/noodlelab-api.ts)
+#   /nuts-and-volts/*      Nuts & Volts (nuts-and-volts/web, built with VITE_BASE=/nuts-and-volts/)
+#   /nuts-and-volts/api/*  its API (netlify/edge-functions/nuts-and-volts-api.ts)
 #   /                 the index page (site/index.html)
+#   /_site/*          the typedb.com top bar's styles, fonts and script (scripts/chrome.mjs, from the
+#                     typedb-web submodule, which Netlify checks out with the repository)
 #
 # The edge functions import the TypeDB HTTP driver as an npm package, which Netlify's bundler takes from the
 # root node_modules: it is a dependency of the root package.json, installed before the build. Nothing else on
 # the request path uses an npm package (each lab's build-time generator parses its YAML into plain objects).
 #
 # Site env vars: for each lab, <PREFIX>TYPEDB_ADDRESS, <PREFIX>TYPEDB_USERNAME, <PREFIX>TYPEDB_PASSWORD and the
-# database name (APEX_DATABASE, NOODLELAB_TYPEDB_DATABASE), with PREFIX = APEX_ or NOODLELAB_. A plain
+# database name (APEX_DATABASE, NUTS_AND_VOLTS_TYPEDB_DATABASE), with PREFIX = APEX_ or NUTS_AND_VOLTS_. A plain
 # TYPEDB_ADDRESS / TYPEDB_USERNAME / TYPEDB_PASSWORD is used by any lab without its own.
 
 [build]
@@ -22,15 +24,15 @@
   NODE_VERSION = "24"
   # The TypeDB username is "admin" in every lab's local defaults, docs and seed data; it is not a secret.
   # The password is, and stays scanned.
-  SECRETS_SCAN_OMIT_KEYS = "TYPEDB_USERNAME,APEX_TYPEDB_USERNAME,NOODLELAB_TYPEDB_USERNAME"
+  SECRETS_SCAN_OMIT_KEYS = "TYPEDB_USERNAME,APEX_TYPEDB_USERNAME,NUTS_AND_VOLTS_TYPEDB_USERNAME"
 
 [[edge_functions]]
   function = "apex-api"
   path = "/apex/api/*"
 
 [[edge_functions]]
-  function = "noodlelab-api"
-  path = "/noodlelab/api/*"
+  function = "nuts-and-volts-api"
+  path = "/nuts-and-volts/api/*"
 
 # Each lab is a single-page app: its own paths serve its own index.
 [[redirects]]
@@ -44,11 +46,11 @@
   status = 200
 
 [[redirects]]
-  from = "/noodlelab"
-  to = "/noodlelab/"
+  from = "/nuts-and-volts"
+  to = "/nuts-and-volts/"
   status = 301
 
 [[redirects]]
-  from = "/noodlelab/*"
-  to = "/noodlelab/index.html"
+  from = "/nuts-and-volts/*"
+  to = "/nuts-and-volts/index.html"
   status = 200

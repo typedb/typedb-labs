@@ -250,8 +250,8 @@ route("/schema/{name}", async (db, [n]) => {
 /** The downloadable TypeDB model: schema.tql, data.tql and README.md, exported from the live database. */
 route("/export/model.zip", async (db) => {
   const files = await db.model();
-  return new Response(await zip(Object.entries(files).map(([name, text]) => [`noodlelab-vehicle-typedb-model/${name}`, text])), {
-    headers: { "content-type": "application/zip", "content-disposition": 'attachment; filename="noodlelab-vehicle-typedb-model.zip"' },
+  return new Response(await zip(Object.entries(files).map(([name, text]) => [`nuts-and-volts-vehicle-typedb-model/${name}`, text])), {
+    headers: { "content-type": "application/zip", "content-disposition": 'attachment; filename="nuts-and-volts-vehicle-typedb-model.zip"' },
   });
 });
 

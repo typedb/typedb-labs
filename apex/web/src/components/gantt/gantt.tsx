@@ -66,7 +66,7 @@ export function Gantt({ workstream, title = 'Deal schedule', subtitle }: { works
         subtitle={subtitle ?? 'Every workstream, activity, milestone and contractual deadline, with the dates TypeDB holds. Select any item for its details.'}
         action={() => data && (
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <label className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2 py-1 text-[12.5px] shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-brand">
+            <label className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2 py-1 text-[13px] shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-brand">
               <span className="font-medium text-muted-foreground">Deadline-critical chain</span>
               <select value={critical ?? ''} onChange={(e) => setCritical(e.target.value || undefined)} aria-label="Show the chain of items with the least float before a contractual deadline"
                 className="max-w-56 cursor-pointer bg-transparent py-0.5 text-ink outline-none">
@@ -93,7 +93,7 @@ function ExpandAll({ count, open, onAll, onNone }: { count: number; open: Set<st
   const all = open !== null && open.size === count
   return (
     <button type="button" onClick={all ? onNone : onAll}
-      className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-muted-foreground shadow-sm hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
+      className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground shadow-sm hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
       {all ? <><ChevronsDownUp className="size-3.5" />Collapse all</> : <><ChevronsUpDown className="size-3.5" />Expand all</>}
     </button>
   )
@@ -186,15 +186,15 @@ function Chart({ data, zoom, open, setOpen, selected, onSelect, critical, filter
         <div style={{ width: Math.max(total, LABEL_W + available) }} className="relative">
           {/* Time axis: months, weeks (when zoomed in), then the scenario date and deadlines. */}
           <div className="relative z-20 flex border-b bg-white">
-            <div className="sticky left-0 z-20 flex shrink-0 items-end border-r bg-white px-4 pb-2 text-[11.5px] font-medium tracking-wide text-muted-foreground uppercase" style={{ width: LABEL_W }}>
+            <div className="sticky left-0 z-20 flex shrink-0 items-end border-r bg-white px-4 pb-2 text-[12px] font-medium tracking-wide text-muted-foreground uppercase" style={{ width: LABEL_W }}>
               Workstream / item
             </div>
             <div className="relative" style={{ width: scale.width, height: 24 + (weeks.length ? 18 : 0) + laneCount * LANE_H + 8 }}>
               {months.map((m) => (
-                <div key={m.x} className="absolute top-0 h-6 truncate border-l border-border/80 pl-1.5 text-[11.5px] leading-6 font-medium text-ink-soft" style={{ left: m.x, width: m.width }} title={m.label}>{m.label}</div>
+                <div key={m.x} className="absolute top-0 h-6 truncate border-l border-border/80 pl-1.5 text-[12px] leading-6 font-medium text-ink-soft" style={{ left: m.x, width: m.width }} title={m.label}>{m.label}</div>
               ))}
               {weeks.map((w) => (
-                <div key={w.x} className="absolute top-6 h-[18px] border-l border-border/60 pl-1 text-[10.5px] leading-[18px] text-muted-foreground tabular" style={{ left: w.x }}>{w.label}</div>
+                <div key={w.x} className="absolute top-6 h-[18px] border-l border-border/60 pl-1 text-[11px] leading-[18px] text-muted-foreground tabular" style={{ left: w.x }}>{w.label}</div>
               ))}
               {markers.map((m) => (
                 <button key={m.key} type="button" disabled={m.kind === 'as-of'} onClick={() => m.kind === 'deadline' && onSelect(m.code)}
@@ -290,8 +290,8 @@ function WorkstreamRow({ ws, scale, open, selected, onSelect, onToggle }: {
           className="flex h-full min-w-0 flex-1 cursor-pointer items-center gap-2 pr-3 pl-3 text-left transition-colors hover:bg-[oklch(0.93_0.01_250)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand">
           {open ? <ChevronDown className="size-4 shrink-0 text-muted-foreground" /> : <ChevronRight className="size-4 shrink-0 text-muted-foreground" />}
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[13.5px] font-semibold text-ink" title={ws.name ?? undefined}>{ws.name}</span>
-            <span className="block truncate text-[11.5px] text-muted-foreground">
+            <span className="block truncate text-[14px] font-semibold text-ink" title={ws.name ?? undefined}>{ws.name}</span>
+            <span className="block truncate text-[12px] text-muted-foreground">
               <span className="font-medium text-ink-soft">{ws.progress ?? 0}% activity progress</span> · {ws.milestones_achieved}/{ws.milestones_total} milestones achieved
             </span>
           </span>
@@ -331,8 +331,8 @@ function ItemRow({ item, scale, asOf, selected, onSelect, onPath, dim }: {
       <Label depth={1} className={cn('relative pr-2 transition-colors', LABEL_FOCUS, selected ? 'bg-brand-soft' : 'group-hover:bg-muted')}>
         {selected && <span className="absolute inset-y-0 left-0 w-[3px] bg-brand" aria-hidden />}
         <ShapeIcon item={item} />
-        <span className={cn('ml-2 min-w-0 flex-1 truncate text-[12.5px]', selected || onPath ? 'font-semibold text-ink' : 'text-ink-soft group-hover:text-ink')} title={item.name ?? undefined}>{item.name}</span>
-        {onPath && <span className="mr-1 shrink-0 rounded bg-risk-soft px-1.5 text-[10.5px] font-semibold text-risk" title="On the deadline-critical chain: least float before the chosen contractual deadline breaks">Deadline-critical</span>}
+        <span className={cn('ml-2 min-w-0 flex-1 truncate text-[13px]', selected || onPath ? 'font-semibold text-ink' : 'text-ink-soft group-hover:text-ink')} title={item.name ?? undefined}>{item.name}</span>
+        {onPath && <span className="mr-1 shrink-0 rounded bg-risk-soft px-1.5 text-[11px] font-semibold text-risk" title="On the deadline-critical chain: least float before the chosen contractual deadline breaks">Deadline-critical</span>}
         <ChevronRight aria-hidden className={cn('size-4 shrink-0 transition-opacity',
           selected ? 'text-brand opacity-100' : 'text-muted-foreground opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100')} />
       </Label>
@@ -461,7 +461,7 @@ function CriticalNote({ data, deadline, filtered }: { data: Schedule; deadline: 
   const names = new Map(data.workstreams.flatMap((w) => w.items.map((i) => [i.code, i.name])))
   const shown = cp.items.filter((c) => names.has(c))
   return (
-    <div className="mx-6 mb-3 grid gap-3 rounded-lg border border-risk/25 bg-risk-soft/40 px-4 py-3 text-[12.5px] leading-relaxed text-ink-soft md:grid-cols-2">
+    <div className="mx-6 mb-3 grid gap-3 rounded-lg border border-risk/25 bg-risk-soft/40 px-4 py-3 text-[13px] leading-relaxed text-ink-soft md:grid-cols-2">
       <div>
         <div className="font-semibold text-ink">Deadline exposure: {deadline.name}</div>
         It can absorb <span className="font-semibold text-risk">{cp.float} days</span> of delay before it breaks ({formatDate(deadline.due)}). That is the

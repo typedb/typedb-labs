@@ -47,7 +47,7 @@ export function ItemPanel({ data, code, onSelect, onClose }: { data: Impact; cod
       </div>
 
       {dl ? (
-        <div className={cn('rounded-lg px-3 py-2.5 text-[12.5px]', dl.breached ? 'bg-risk-soft text-risk' : 'bg-ok-soft text-ok')}>
+        <div className={cn('rounded-lg px-3 py-2.5 text-[13px]', dl.breached ? 'bg-risk-soft text-risk' : 'bg-ok-soft text-ok')}>
           <div className="font-semibold">{dl.breached ? `Breached by ${plural(dl.days_over, 'day')}` : `${dl.headroom_days} days of headroom`}</div>
           <div className="text-foreground/70">Due {formatDate(dl.due)} · {dl.breach_from_days != null ? `breached from ${dl.breach_from_days} days of delay` : 'not reached'}</div>
         </div>
@@ -68,7 +68,7 @@ export function ItemPanel({ data, code, onSelect, onClose }: { data: Impact; cod
               const step = byCode.get(c)
               const cause = step?.caused_by.find((x) => x.code === chain[i - 1])
               return (
-                <li key={c} className="flex items-start gap-2 text-[12.5px]">
+                <li key={c} className="flex items-start gap-2 text-[13px]">
                   <span className={cn('mt-1.5 size-2 shrink-0 rounded-full', i === 0 ? 'bg-ink' : 'bg-warn')} />
                   <span className="min-w-0">
                     <button type="button" onClick={() => onSelect(c)} className="font-medium text-ink hover:underline">{name(c)}</button>
@@ -78,7 +78,7 @@ export function ItemPanel({ data, code, onSelect, onClose }: { data: Impact; cod
                 </li>
               )
             })}
-            {dl && <li className="flex items-start gap-2 text-[12.5px]"><Flag className="mt-0.5 size-3 shrink-0 text-risk" /><span className="font-medium text-ink">{dl.name}</span></li>}
+            {dl && <li className="flex items-start gap-2 text-[13px]"><Flag className="mt-0.5 size-3 shrink-0 text-risk" /><span className="font-medium text-ink">{dl.name}</span></li>}
           </ol>
         </div>
       )}
@@ -114,7 +114,7 @@ export function ItemPanel({ data, code, onSelect, onClose }: { data: Impact; cod
         </ul>
         {others.length > 0 && (
           <>
-            <button type="button" onClick={() => setMore(!more)} className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-medium text-ink hover:underline">
+            <button type="button" onClick={() => setMore(!more)} className="mt-2 inline-flex items-center gap-1 text-[12px] font-medium text-ink hover:underline">
               <ChevronDown className={cn('size-3.5 transition-transform', more && 'rotate-180')} />{more ? 'Hide' : 'Show'} {plural(others.length, 'person', 'people')} to consult or inform
             </button>
             {more && <ul className="mt-2 space-y-2">{others.map((r) => <Holder key={r.letter + r.code} r={r} />)}</ul>}
@@ -125,8 +125,8 @@ export function ItemPanel({ data, code, onSelect, onClose }: { data: Impact; cod
       {dl && (
         <div className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5">
           <H>{dl.breached ? 'Potential exposure · needs legal judgement' : 'If missed'}</H>
-          <p className="text-[12.5px] leading-relaxed text-foreground/80">{dl.consequence}</p>
-          <div className="mt-2 space-y-0.5 text-[11.5px] text-muted-foreground">
+          <p className="text-[13px] leading-relaxed text-foreground/80">{dl.consequence}</p>
+          <div className="mt-2 space-y-0.5 text-[12px] text-muted-foreground">
             {dl.bound.length > 0 && <div>Legally bound: <span className="text-foreground/80">{dl.bound.map((b) => b.name).join(', ')}</span></div>}
             {dl.consent_from.length > 0 && <div>Consent right held by: <span className="text-foreground/80">{dl.consent_from.map((b) => b.name).join(', ')}</span></div>}
             {dl.legal_basis && <div>Source: {dl.legal_basis}</div>}
@@ -141,9 +141,9 @@ function Holder({ r }: { r: Schemas['ImpactHolder'] }) {
   return (
     <li className="flex items-start gap-2.5">
       <Letter l={r.letter} />
-      <div className="min-w-0 text-[12.5px]">
+      <div className="min-w-0 text-[13px]">
         <div><span className="font-medium text-ink">{r.name}</span> <span className="text-muted-foreground">· {WORD[r.letter]}</span></div>
-        <div className="text-[11.5px] text-muted-foreground">
+        <div className="text-[12px] text-muted-foreground">
           {r.type === 'person' ? [r.title, r.employer?.name].filter(Boolean).join(', ') : humanise(r.type)}
           {r.via?.type ? ` · under the ${r.via.type.toLowerCase()} mandate` : ''}
         </div>
@@ -185,7 +185,7 @@ export function PeopleSummary({ data, onSelect }: { data: Impact; onSelect: (c: 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-2">
                     <span className="text-[13px] font-medium text-ink">{p.name}</span>
-                    <span className="text-[11.5px] text-muted-foreground">{p.type === 'person' ? [p.title, p.employer?.name].filter(Boolean).join(', ') : humanise(p.type)}</span>
+                    <span className="text-[12px] text-muted-foreground">{p.type === 'person' ? [p.title, p.employer?.name].filter(Boolean).join(', ') : humanise(p.type)}</span>
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {(owns.length ? owns : p.items).slice(0, 6).map((i) => (
@@ -205,7 +205,7 @@ export function PeopleSummary({ data, onSelect }: { data: Impact; onSelect: (c: 
         })}
       </ul>
       {rest.length > 0 && (
-        <button type="button" onClick={() => setAll(!all)} className="-mt-2 inline-flex items-center gap-1 text-[11.5px] font-medium text-ink hover:underline">
+        <button type="button" onClick={() => setAll(!all)} className="-mt-2 inline-flex items-center gap-1 text-[12px] font-medium text-ink hover:underline">
           <ChevronDown className={cn('size-3.5 transition-transform', all && 'rotate-180')} />{all ? 'Show only people who act' : `Also show ${plural(rest.length, 'person', 'people')} to consult or inform`}
         </button>
       )}
@@ -213,7 +213,7 @@ export function PeopleSummary({ data, onSelect }: { data: Impact; onSelect: (c: 
         <H>Organisations involved</H>
         <ul className="space-y-1.5">
           {[...orgs.entries()].sort((a, b) => b[1].reasons.size - a[1].reasons.size || b[1].people - a[1].people).map(([code, o]) => (
-            <li key={code} className="flex items-start gap-2 text-[12.5px]">
+            <li key={code} className="flex items-start gap-2 text-[13px]">
               <Building2 className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
               <span><span className="font-medium text-ink">{o.name}</span>
                 <span className="text-muted-foreground">{o.people ? ` · ${plural(o.people, 'person', 'people')}` : ''}{o.reasons.size ? ` · ${[...o.reasons].join('; ')}` : ''}</span></span>

@@ -42,7 +42,7 @@ export function BeforeAfter({ data, onSelect, selected }: { data: Impact; onSele
       <div className="grid grid-cols-[minmax(0,1fr)] gap-y-0 md:grid-cols-[260px_minmax(0,1fr)_92px]">
         <div className="hidden md:block" />
         <div className="relative hidden h-6 md:block">
-          {uniqMonths.map((m) => <span key={m.iso} className="absolute top-1 -translate-x-1/2 text-[10.5px] text-muted-foreground" style={{ left: pos(m.iso) }}>{m.label}</span>)}
+          {uniqMonths.map((m) => <span key={m.iso} className="absolute top-1 -translate-x-1/2 text-[11px] text-muted-foreground" style={{ left: pos(m.iso) }}>{m.label}</span>)}
         </div>
         <div className="hidden md:block" />
         {shown.map((it) => {
@@ -52,7 +52,7 @@ export function BeforeAfter({ data, onSelect, selected }: { data: Impact; onSele
               className={rowClass(selected === it.code, 'relative col-span-full grid grid-cols-subgrid items-center py-1.5')}>
               <RowChevron selected={selected === it.code} className="absolute top-1/2 right-1 -translate-y-1/2" />
               <div className="min-w-0 px-2">
-                <div className="truncate text-[12.5px] font-medium text-ink" title={it.name ?? undefined}>{it.name}</div>
+                <div className="truncate text-[13px] font-medium text-ink" title={it.name ?? undefined}>{it.name}</div>
                 <div className="truncate text-[11px] text-muted-foreground">
                   {it.role === 'start' ? 'Delayed approval' : it.workstream?.name}{limited.has(it.code) ? ' · limited by a deadline' : ''}
                 </div>
@@ -70,7 +70,7 @@ export function BeforeAfter({ data, onSelect, selected }: { data: Impact; onSele
                 <span className={cn('absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white transition-all',
                   it.role === 'start' ? 'bg-ink' : moved ? 'bg-warn' : 'bg-ok')} style={{ left: pos(it.projected!) }} title={`Projected ${formatDate(it.projected)}`} />
               </div>
-              <div className="px-2 text-right text-[11.5px] tabular">
+              <div className="px-2 text-right text-[12px] tabular">
                 <div className={cn('font-semibold', moved ? 'text-warn' : 'text-muted-foreground')}>{moved ? `+${it.shift_days} days` : 'no change'}</div>
                 <div className="text-muted-foreground">{formatDate(it.projected, { year: false })}</div>
               </div>

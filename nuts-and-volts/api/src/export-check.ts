@@ -151,7 +151,7 @@ export interface Check {
 export async function check(connection: Connection, source: string, files?: Files, loaded?: string): Promise<Check> {
   if (!files) {
     const built = (await exportModel.build(connection, source)).files;
-    files = await unzip(await zip(Object.entries(built).map(([n, t]) => [`noodlelab-vehicle-typedb-model/${n}`, t])));
+    files = await unzip(await zip(Object.entries(built).map(([n, t]) => [`nuts-and-volts-vehicle-typedb-model/${n}`, t])));
   }
   const problems = syntaxProblems(files);
   const report = [`syntax: ${problems.length ? problems.join("; ") : "clean"}`];

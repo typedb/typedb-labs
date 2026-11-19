@@ -50,7 +50,7 @@ function TypePath({ path }: { path: string[] }) {
 function PlayerChip({ p, onSelect }: { p: { role: string; code?: string | null; name?: string | null; type: string; kind: string }; onSelect?: (code: string) => void }) {
   const clickable = onSelect && p.code && p.kind === 'entity' && /^(ORG|PER)-/.test(p.code)
   return (
-    <div className="flex items-baseline gap-2 text-[12.5px]">
+    <div className="flex items-baseline gap-2 text-[13px]">
       <span className="w-24 shrink-0 text-right text-[11px] font-medium text-muted-foreground">{humanise(p.role)}</span>
       {clickable
         ? <button type="button" onClick={() => onSelect!(p.code!)} className="text-left font-medium text-ink hover:underline">{p.name}</button>
@@ -64,7 +64,7 @@ function PlayerChip({ p, onSelect }: { p: { role: string; code?: string | null; 
 function Relations({ relations, onSelect }: { relations: Schemas['Membership'][]; onSelect: (code: string) => void }) {
   const shown = relations.filter((r) => r.type !== 'employment')
   const types = [...new Set(shown.map((r) => r.type))]
-  if (!shown.length) return <p className="text-[12.5px] text-muted-foreground">No other relationships recorded.</p>
+  if (!shown.length) return <p className="text-[13px] text-muted-foreground">No other relationships recorded.</p>
   return (
     <div className="space-y-3">
       {types.map((t) => {
@@ -77,7 +77,7 @@ function Relations({ relations, onSelect }: { relations: Schemas['Membership'][]
             <ul className="space-y-1.5">
               {shown.filter((r) => r.type === t).map((r) => (
                 <li key={r.key} className="rounded-lg border bg-white px-3 py-2">
-                  <div className="mb-1 text-[11.5px] text-muted-foreground">
+                  <div className="mb-1 text-[12px] text-muted-foreground">
                     As <span className="font-semibold text-foreground">{humanise(r.role)}</span>
                     {summaryText(r) && <> · {summaryText(r)}</>}
                   </div>
@@ -116,24 +116,24 @@ export function PartyPanel({ code, onSelect, onClose, peopleShown, onTogglePeopl
         <div className="min-w-0 flex-1">
           <h2 className="text-[16px] leading-snug font-semibold text-ink">{d.name}</h2>
           {isPerson && employer
-            ? <p className="text-[12.5px] text-muted-foreground">{String(employer.attributes['job-title'] ?? '')} ·{' '}
+            ? <p className="text-[13px] text-muted-foreground">{String(employer.attributes['job-title'] ?? '')} ·{' '}
                 <button type="button" className="font-medium text-ink hover:underline" onClick={() => onSelect(employer.others[0].code!)}>{employer.others[0].name}</button></p>
-            : <p className="text-[12.5px] text-muted-foreground">{[d.sector, d.jurisdiction].filter(Boolean).join(' · ')}</p>}
+            : <p className="text-[13px] text-muted-foreground">{[d.sector, d.jurisdiction].filter(Boolean).join(' · ')}</p>}
         </div>
         <button type="button" onClick={onClose} aria-label="Close details" className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-ink"><X className="size-4" /></button>
       </div>
       <div className="px-5 pb-4">
         <TypePath path={TYPE_PATHS[d.type] ?? [d.type]} />
-        {d.description && <p className="mt-2.5 text-[12.5px] leading-relaxed text-foreground/80">{d.description}</p>}
+        {d.description && <p className="mt-2.5 text-[13px] leading-relaxed text-foreground/80">{d.description}</p>}
       </div>
       <div className="flex-1 overflow-y-auto">
         {!isPerson && (
           <Section title="People on the deal" count={d.people.length}>
-            {d.people.length === 0 ? <p className="text-[12.5px] text-muted-foreground">No people recorded for this organisation.</p> : (
+            {d.people.length === 0 ? <p className="text-[13px] text-muted-foreground">No people recorded for this organisation.</p> : (
               <>
                 {onTogglePeople && (
                   <button type="button" onClick={onTogglePeople}
-                    className="mb-2.5 inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11.5px] font-medium text-ink hover:bg-muted">
+                    className="mb-2.5 inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[12px] font-medium text-ink hover:bg-muted">
                     {peopleShown ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}{peopleShown ? 'Hide people on the graph' : 'Show people on the graph'}
                   </button>
                 )}
@@ -143,12 +143,12 @@ export function PartyPanel({ code, onSelect, onClose, peopleShown, onTogglePeopl
                       <button type="button" onClick={() => onSelect(p.code)} className={rowClass(false, 'flex w-full items-start gap-2.5 px-1 py-1')}>
                         <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold text-foreground/70">{initials(p.name)}</span>
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[12.5px] font-medium text-ink">{p.name}</span>
-                          <span className="block text-[11.5px] text-muted-foreground">{p.title}</span>
+                          <span className="block text-[13px] font-medium text-ink">{p.name}</span>
+                          <span className="block text-[12px] text-muted-foreground">{p.title}</span>
                           <span className="mt-1 flex flex-wrap gap-1">
                             {(['A', 'R', 'C', 'I'] as const).map((l) => {
                               const n = p.raci.filter((r) => r.letter === l).length
-                              return n ? <span key={l} className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground"><Letter letter={l} />{n}</span> : null
+                              return n ? <span key={l} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground"><Letter letter={l} />{n}</span> : null
                             })}
                           </span>
                         </span>
@@ -168,7 +168,7 @@ export function PartyPanel({ code, onSelect, onClose, peopleShown, onTogglePeopl
           <Section title={isPerson ? 'Responsibilities' : 'Responsibilities held by the organisation'} count={d.raci.length}>
             <ul className="space-y-1.5">
               {d.raci.map((r) => (
-                <li key={`${r.letter}-${r.item.code}`} className="flex items-start gap-2 text-[12.5px]">
+                <li key={`${r.letter}-${r.item.code}`} className="flex items-start gap-2 text-[13px]">
                   <Letter letter={r.letter} />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center gap-1.5 font-medium text-ink"><StatusDot status={r.item.status} />{r.item.name}</span>
@@ -182,8 +182,8 @@ export function PartyPanel({ code, onSelect, onClose, peopleShown, onTogglePeopl
           </Section>
         )}
         <div className="flex flex-wrap gap-2 pt-1">
-          <Link to={`/parties/${d.code}`} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-ink-soft hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand">Open profile</Link>
-          <Link to={`/explorer?view=paths&from=${encodeURIComponent(d.code)}`} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-ink-soft hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand"><Route className="size-3.5" />Find connections</Link>
+          <Link to={`/parties/${d.code}`} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-ink-soft hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand">Open profile</Link>
+          <Link to={`/explorer?view=paths&from=${encodeURIComponent(d.code)}`} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-ink-soft hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand"><Route className="size-3.5" />Find connections</Link>
         </div>
       </div>
       <TypeQLDrawer envelope={q.data} note="One party: its exact type, every relation it plays a role in (with that role and the other players), its people and its RACI letters." />
@@ -222,11 +222,11 @@ export function RelationPanel({ relation, roles, onSelect, onClose }: {
       </div>
       <Section title="Players and their roles" count={relation.players.length}>
         <div className="space-y-1">{relation.players.map((p) => <PlayerChip key={`${p.role}-${p.code}`} p={p} onSelect={onSelect} />)}</div>
-        {roles && <p className="mt-3 text-[11.5px] text-muted-foreground">The schema defines this relation with the roles {roles.map(humanise).join(', ')}.</p>}
+        {roles && <p className="mt-3 text-[12px] text-muted-foreground">The schema defines this relation with the roles {roles.map(humanise).join(', ')}.</p>}
       </Section>
       {attrs.length > 0 && (
         <Section title="Attributes">
-          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[12.5px]">
+          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]">
             {attrs.map(([k, v]) => <Fragment key={k}><dt className="text-muted-foreground">{humanise(k)}</dt><dd className="font-medium text-ink">{String(v)}</dd></Fragment>)}
           </dl>
         </Section>

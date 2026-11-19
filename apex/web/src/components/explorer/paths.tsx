@@ -50,7 +50,7 @@ export function PathsView() {
           <div className="flex items-start gap-3">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand"><Route className="size-4" /></div>
             <div className="min-w-0">
-              <h2 className="text-[15px] font-semibold tracking-tight text-ink">How are these two connected?</h2>
+              <h2 className="text-[15px] font-semibold text-ink">How are these two connected?</h2>
               <p className="text-[13px] text-muted-foreground">
                 Every route of recorded relationships between two people, organisations, work items or risks, best first. Each step is a single
                 record, stated in words. The transaction itself is never a step, so “both are on the deal” is never offered as a connection.
@@ -61,14 +61,14 @@ export function PathsView() {
             <div className="grid items-end gap-3 lg:grid-cols-[1fr_auto_1fr]">
               <Picker label="From" value={from} things={things.data?.data} onChange={(c) => set({ from: c })} />
               <button type="button" onClick={() => set({ from: to ?? null, to: from ?? null })} disabled={!from && !to}
-                className="mb-0.5 inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md border bg-white px-3 text-[12.5px] font-medium text-ink-soft shadow-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
+                className="mb-0.5 inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md border bg-white px-3 text-[13px] font-medium text-ink-soft shadow-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
                 aria-label="Swap the two">
                 <ArrowLeftRight className="size-4" aria-hidden />Swap
               </button>
               <Picker label="To" value={to} things={things.data?.data} onChange={(c) => set({ to: c })} />
             </div>
           )}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12.5px] text-ink-soft">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-soft">
             <span className="inline-flex items-center gap-2">At most
               <Segmented label="Maximum steps" value={String(hops)} onChange={(k) => set({ hops: k === '3' ? null : k })}
                 options={[{ key: '1', label: '1 step' }, { key: '2', label: '2 steps' }, { key: '3', label: '3 steps' }]} /></span>
@@ -144,14 +144,14 @@ function Results({ data, stale, onItem, onMore, byCode }: {
   return (
     <div className={cn('space-y-4 transition-opacity', stale && 'opacity-60')}>
       <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-        <p className="text-[13.5px] text-ink">
+        <p className="text-[14px] text-ink">
           <span className="font-semibold">{plural(data.total, 'path')}</span> from <NodeLink n={data.from} onItem={onItem} /> to <NodeLink n={data.to} onItem={onItem} />
           {data.total > 0 && <span className="text-muted-foreground"> · {steps}{direct ? ` · ${direct} direct` : ''}</span>}
         </p>
         <p className="text-[12px] text-muted-foreground tabular">{data.elapsed_ms} ms</p>
       </div>
       {data.depths.filter((d) => d.capped || d.skipped).map((d) => (
-        <p key={d.hops} className="flex items-center gap-1.5 text-[12.5px] text-warn"><CircleAlert className="size-4" aria-hidden />
+        <p key={d.hops} className="flex items-center gap-1.5 text-[13px] text-warn"><CircleAlert className="size-4" aria-hidden />
           {d.skipped ? d.note : `Paths of ${d.hops} steps hit the row cap: the list may be incomplete.`}</p>
       ))}
       <p className="rounded-lg bg-muted/60 px-3 py-2 text-[12px] text-muted-foreground">{data.disclaimer}</p>
@@ -164,7 +164,7 @@ function Results({ data, stale, onItem, onMore, byCode }: {
         <ol className="space-y-3">{data.paths.map((p) => <PathCard key={p.rank} p={p} onItem={onItem} byCode={byCode} />)}</ol>
       )}
       {data.more.length > 0 && (
-        <div className="rounded-xl border bg-white px-5 py-4 text-[12.5px]">
+        <div className="rounded-xl border bg-white px-5 py-4 text-[13px]">
           <div className="mb-1.5 font-medium text-ink">{plural(data.more.reduce((n, g) => n + g.count, 0), 'more path')}, by what they go through</div>
           <ul className="flex flex-wrap gap-x-4 gap-y-1 text-ink-soft">
             {data.more.map((g) => <li key={g.through?.code ?? 'direct'}>{g.count} {g.through ? <>through {g.through.name}</> : 'direct'}</li>)}
@@ -181,11 +181,11 @@ function PathCard({ p, onItem, byCode }: { p: Path; onItem: (code: string) => vo
     <li className="rounded-xl border bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <span className="text-[12px] font-semibold text-muted-foreground tabular">#{p.rank}</span>
-        <span className={cn('rounded-full px-2 py-0.5 text-[11.5px] font-medium ring-1 ring-inset',
+        <span className={cn('rounded-full px-2 py-0.5 text-[12px] font-medium ring-1 ring-inset',
           p.direct ? 'bg-ok-soft text-ok ring-ok/20' : 'bg-info-soft text-info ring-info/20')}>
           {p.direct ? 'Direct relationship' : `Indirect · ${p.hops} steps`}
         </span>
-        <span className="text-[11.5px] text-muted-foreground" title="Ranking cost (config/connection-policy.yaml): lower is more specific">cost {p.cost}</span>
+        <span className="text-[12px] text-muted-foreground" title="Ranking cost (config/connection-policy.yaml): lower is more specific">cost {p.cost}</span>
       </div>
       {/* The route as a chain: thing — relation — thing. */}
       <div className="flex flex-wrap items-center gap-1.5">
@@ -193,7 +193,7 @@ function PathCard({ p, onItem, byCode }: { p: Path; onItem: (code: string) => vo
           <span key={`${n.code}-${i}`} className="contents">
             <NodeChip n={n} onItem={onItem} />
             {i < p.steps.length && (
-              <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
+              <span className="inline-flex items-center gap-1 text-[12px] text-muted-foreground">
                 <span aria-hidden>—</span>
                 <span className="rounded bg-muted px-1.5 py-0.5 font-medium text-ink-soft" title={`${p.steps[i].from_role} → ${p.steps[i].to_role}`}>{humanise(p.steps[i].type)}</span>
                 <span aria-hidden>—</span>
@@ -208,7 +208,7 @@ function PathCard({ p, onItem, byCode }: { p: Path; onItem: (code: string) => vo
             <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-ink-soft">{i + 1}</span>
             <span className="min-w-0">
               <span className="text-ink">{capitalise(s.sentence)}.</span>
-              <span className="block text-[11.5px] text-muted-foreground">
+              <span className="block text-[12px] text-muted-foreground">
                 {humanise(s.type)} record{s.code ? ` ${s.code}` : ''}: {byCode.get(s.from)?.name ?? s.from} as {humanise(s.from_role)}, {byCode.get(s.to)?.name ?? s.to} as {humanise(s.to_role)}
                 {s.others.length > 0 && <> · also in this record: {s.others.map((o) => `${o.name} (${humanise(o.role)})`).join(', ')}</>}
               </span>
@@ -217,7 +217,7 @@ function PathCard({ p, onItem, byCode }: { p: Path; onItem: (code: string) => vo
         ))}
       </ol>
       {p.notes.length > 0 && (
-        <ul className="mt-2 space-y-0.5 text-[11.5px] text-muted-foreground">
+        <ul className="mt-2 space-y-0.5 text-[12px] text-muted-foreground">
           {p.notes.map((n) => <li key={n} className="flex gap-1.5"><CircleAlert className="mt-px size-3.5 shrink-0" aria-hidden />{n}</li>)}
         </ul>
       )}
@@ -227,7 +227,7 @@ function PathCard({ p, onItem, byCode }: { p: Path; onItem: (code: string) => vo
 
 function NodeChip({ n, onItem }: { n: Node; onItem: (code: string) => void }) {
   const { icon: Icon, label } = KIND[n.kind] ?? KIND.organisation
-  const cls = 'inline-flex max-w-72 items-center gap-1.5 rounded-md border bg-white px-2 py-1 text-[12.5px] font-medium text-ink shadow-sm hover:border-brand/40 hover:bg-brand-soft/50 focus-visible:outline-2 focus-visible:outline-brand'
+  const cls = 'inline-flex max-w-72 items-center gap-1.5 rounded-md border bg-white px-2 py-1 text-[13px] font-medium text-ink shadow-sm hover:border-brand/40 hover:bg-brand-soft/50 focus-visible:outline-2 focus-visible:outline-brand'
   const body = <><Icon className="size-3.5 shrink-0 text-muted-foreground" aria-label={label} /><span className="truncate" title={`${n.name} (${label})`}>{n.name}</span></>
   if (n.kind === 'person' || n.kind === 'organisation') return <Link to={`/parties/${n.code}`} className={cls}>{body}</Link>
   if (n.kind === 'workstream') return <Link to={`/workstreams/${n.code}`} className={cls}>{body}</Link>

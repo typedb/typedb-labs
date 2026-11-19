@@ -1,0 +1,104 @@
+// Loaded by every labs page: the main site's fonts, variables and top bar (from typedb-web/common).
+// Lab apps bring their own page styles, so everything here is scoped to the top bar, and the element
+// rules use :where() so they never outweigh the top bar's own class rules.
+@use "fonts";
+@use "vars";
+@use "mixins";
+@use "topbar";
+
+@include topbar.styles("../icons");
+
+@property --gradient-button-bg-angle {
+  inherits: false;
+  initial-value: 120deg;
+  syntax: "<angle>";
+}
+
+@keyframes gradient-button-bg-rotate {
+  to { --gradient-button-bg-angle: 480deg; }
+}
+
+.td-topbar {
+  z-index: 1000;
+  color-scheme: dark;
+  background: var(--body-background);
+  border-bottom: 1px solid var(--content-border-color);
+  color: var(--color-white);
+  font-family: var(--font-family-default);
+  font-weight: var(--font-weight-base);
+  line-height: var(--line-height-base);
+  letter-spacing: var(--body-letter-spacing);
+
+  .text-p2 { font-size: var(--font-size-p2); line-height: var(--line-height-p2); }
+  .text-aside { font-size: var(--font-size-aside); line-height: var(--line-height-aside); }
+
+  .button-greenHollow { @include mixins.button; @include mixins.button-greenHollow; }
+  .button-water { @include mixins.button; @include mixins.button-water; }
+  .button-fire { @include mixins.button; @include mixins.button-fire; }
+  .button-frameless { @include mixins.button; @include mixins.button-frameless; }
+}
+
+:where(.td-topbar) {
+  &, *, *::before, *::after { box-sizing: border-box; }
+  h5, p, ul, dl, dt, dd { margin: 0; padding: 0; }
+  a { color: var(--color-white); text-decoration: none; }
+  h5 { color: var(--color-white); font-weight: var(--font-weight-regular); }
+  p { color: var(--body-font-color); }
+  dd { font-weight: var(--font-weight-light); }
+}
+
+// Lab apps take the site's font and letter spacing for their text; their monospace text keeps its own font.
+:root, body, .font-sans { font-family: var(--font-family-default); }
+:root, body { letter-spacing: var(--body-letter-spacing); }
+// Form controls don't inherit letter spacing by default.
+button, input, select, textarea { letter-spacing: inherit; }
+
+// The site's font runs lighter than the Inter that Apex was designed in, so each of its weights goes up a step.
+body.lab-apex {
+  --font-weight-normal: 500;
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+  font-weight: 500;
+}
+
+// The way back from a lab to the index page, under the top bar.
+.labs-breadcrumb {
+  position: relative;
+  z-index: 999;
+  color-scheme: dark;
+  background: var(--color-black-purple);
+  border-bottom: 1px solid var(--content-border-color);
+  color: var(--color-secondary-light-grey);
+  font-family: var(--font-family-default);
+  font-size: 13px;
+  font-weight: var(--font-weight-regular);
+  line-height: 36px;
+  letter-spacing: var(--body-letter-spacing);
+
+  div {
+    display: flex;
+    gap: 10px;
+    max-width: 1536px;
+    margin: 0 auto;
+    padding: 0 28px;
+    white-space: nowrap;
+
+    @media (max-width: 999px) { padding: 0 20px; }
+  }
+
+  a {
+    color: var(--color-white);
+    text-decoration: none;
+
+    &:hover, &:focus-visible { color: var(--color-green); }
+  }
+}
+
+body.labs-fill {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  > #root { flex: 1; min-height: 0; height: auto; }
+}

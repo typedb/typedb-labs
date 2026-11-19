@@ -14,7 +14,7 @@ describe("the downloadable model", () => {
     const response = await client(database()).raw("/api/export/model.zip");
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe("application/zip");
-    expect(response.headers.get("content-disposition")).toContain("noodlelab-vehicle-typedb-model.zip");
+    expect(response.headers.get("content-disposition")).toContain("nuts-and-volts-vehicle-typedb-model.zip");
     const files = await unzip(new Uint8Array(await response.arrayBuffer()));
     expect(Object.keys(files).sort()).toEqual(["README.md", "data.tql", "schema.tql"]);
     const { problems, report, totals } = await check(connection, database(), files);
@@ -31,8 +31,8 @@ describe("the downloadable model", () => {
   it("the files hold the schema with functions and the data", async () => {
     const response = await client(database()).raw("/api/export/model.zip");
     const members = await unzipMembers(new Uint8Array(await response.arrayBuffer()));
-    const schema = members["noodlelab-vehicle-typedb-model/schema.tql"];
-    const data = members["noodlelab-vehicle-typedb-model/data.tql"];
+    const schema = members["nuts-and-volts-vehicle-typedb-model/schema.tql"];
+    const data = members["nuts-and-volts-vehicle-typedb-model/data.tql"];
     expect(schema.startsWith("define")).toBe(true);
     expect(schema).toContain("fun system_components(");
     expect(schema).toContain("fun lost_steps(");

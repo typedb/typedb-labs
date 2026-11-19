@@ -1,6 +1,6 @@
 # Project notes for AI coding agents
 
-Project: **TypeDB Noodlelab Visual Explorer** (`typedb-noodlelab-visual-explorer`). Noodlelab is the owner's
+Project: **Nuts & Volts** (formerly the TypeDB Noodlelab Visual Explorer) (`typedb-noodlelab-visual-explorer`). Noodlelab is the owner's
 umbrella name for experimental software projects.
 
 ## Who this is for
@@ -26,7 +26,7 @@ the provisional dimensions in docs/design-targets.md. No commissioning or vendor
 - Everything the app displays about a component comes from a named TypeQL query through the API; never
   fake query results or add domain data in the frontend.
 - Without Node.js on the host, run npm, tsc and vitest inside the containers (`docker exec
-  noodlelab-web-dev ...` for the web app, `docker exec noodlelab-api ...` for the API).
+  nuts-and-volts-web-dev ...` for the web app, `docker exec nuts-and-volts-api ...` for the API).
 - Ports: 5180 (web dev), 1733 (TypeDB driver, for Studio), 8004 (TypeDB HTTP: the API and Studio use it).
   Reserved: 8092 (web). The API has no published port: the web dev server forwards /api to it.
   Other projects on this machine use 1729-1732, 8002-8003, 8090-8091. Bind everything to 127.0.0.1.
@@ -34,8 +34,8 @@ the provisional dimensions in docs/design-targets.md. No commissioning or vendor
   friction in ../typedb-cyber-intel/notes/typedb-feedback.md.
 
 ## TypeDB and the semantic API
-- Services (compose.yaml): `typedb` (noodlelab-typedb, data in the noodlelab-typedb-data volume), `seed`
-  (one-off, creates the `vehicle` database if missing), `api` (noodlelab-api, TypeScript on Node.js, restarts on
+- Services (compose.yaml): `typedb` (nuts-and-volts-typedb, data in the nuts-and-volts-typedb-data volume), `seed`
+  (one-off, creates the `vehicle` database if missing), `api` (nuts-and-volts-api, TypeScript on Node.js, restarts on
   code change). The API talks to TypeDB over its HTTP API (`@typedb/driver-http`), so the same code also runs
   as a Netlify Edge Function (`netlify/edge-functions/api.ts`, Deno) against TypeDB Cloud.
 - Recreate the database after changing schema/ or data/seed/: first `docker compose run --rm --no-deps api npm run gen`
@@ -62,9 +62,9 @@ the provisional dimensions in docs/design-targets.md. No commissioning or vendor
 Every piece of work follows this loop:
 1. Complete one meaningful, clearly scoped step.
 2. Run the checks (needs `docker compose up -d`):
-   - web: `docker exec noodlelab-web-dev sh -c "npx tsc -p . && npx vitest run && npx vite build"`
-   - API and TypeDB: `docker exec noodlelab-api sh -c "npx tsc --noEmit && npx vitest run"` (uses disposable `vehicle-test-*` databases)
-   - web against the live API: `docker exec -e TYPEDB_INTEGRATION=1 noodlelab-web-dev npx vitest run src/semantic`
+   - web: `docker exec nuts-and-volts-web-dev sh -c "npx tsc -p . && npx vitest run && npx vite build"`
+   - API and TypeDB: `docker exec nuts-and-volts-api sh -c "npx tsc --noEmit && npx vitest run"` (uses disposable `vehicle-test-*` databases)
+   - web against the live API: `docker exec -e TYPEDB_INTEGRATION=1 nuts-and-volts-web-dev npx vitest run src/semantic`
 3. Commit with a conventional commit message: `type(scope): imperative summary`, where type is one of
    feat, fix, docs, test, refactor, perf, build, chore (e.g. `feat(typedb): add component schema`).
    Then a body saying what changed and why, ending with the co-author line.

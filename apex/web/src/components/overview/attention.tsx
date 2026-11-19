@@ -34,7 +34,7 @@ export function AttentionNeeded({ className }: { className?: string }) {
                       <div className="text-[12px] text-muted-foreground">{c.description}</div>
                       {c.items.length > 0 && (
                         <ul className="mt-2 space-y-1">
-                          {c.items.map((i) => <li key={i.code} className="text-[12.5px] text-foreground/85">• {i.name ?? i.code}</li>)}
+                          {c.items.map((i) => <li key={i.code} className="text-[13px] text-foreground/85">• {i.name ?? i.code}</li>)}
                         </ul>
                       )}
                     </div>

@@ -30,7 +30,7 @@ export function Panel<T extends Envelope>({ title, subtitle, icon, action, query
       <div className="flex items-start gap-3 px-6 pt-5 pb-4">
         {icon && <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand [&>svg]:size-4">{icon}</div>}
         <div className="min-w-0 flex-1">
-          <h2 className="text-[15px] font-semibold tracking-tight text-ink">{title}</h2>
+          <h2 className="text-[15px] font-semibold text-ink">{title}</h2>
           {subtitle && <p className="mt-0.5 text-[13px] text-muted-foreground">{subtitle}</p>}
         </div>
         {query.data && action && <div className="shrink-0">{typeof action === 'function' ? action(query.data) : action}</div>}

@@ -38,7 +38,7 @@ export function Party() {
 
   return (
     <div className="space-y-5">
-      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted-foreground">
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
         <Link to="/" className="hover:text-ink hover:underline">Deal Overview</Link><span aria-hidden>/</span>
         <Link to={`/parties${p.kind === 'organisation' ? '?tab=organisations' : ''}`} className="hover:text-ink hover:underline">Parties</Link><span aria-hidden>/</span>
         <span className="font-medium text-ink" aria-current="page">{p.name}</span>
@@ -49,7 +49,7 @@ export function Party() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-2xl font-semibold tracking-tight text-ink">{p.name}</h1>
+                <h1 className="text-2xl font-semibold text-ink">{p.name}</h1>
                 <EngagementBadge level={p.engagement.level} category={p.engagement.category} />
               </div>
               <div className="mt-1.5 text-[14px] text-ink-soft">
@@ -58,14 +58,14 @@ export function Party() {
                   : <>{humanise(p.type)}{p.jurisdiction ? ` · ${p.jurisdiction}` : ''}{p.authority ? ' · public authority' : ''}</>}
               </div>
               {p.contact && (
-                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12.5px]">
+                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
                   <span className="font-mono text-muted-foreground" title="Masked on the server">{p.contact.email}</span>
                   <span className="font-mono text-muted-foreground" title="Masked on the server">{p.contact.phone}</span>
                   <AccessRequestDemo />
                 </div>
               )}
               {p.authority && (
-                <p className="mt-2 max-w-2xl text-[12.5px] text-muted-foreground">
+                <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">
                   A real public body in an invented scenario: no individuals are recorded and no contact details exist. It is assessed against its
                   statutory timetable and the requests sent to it, never against silence.
                 </p>
@@ -83,13 +83,13 @@ export function Party() {
           </div>
           <div className="grid gap-4 border-t pt-4 md:grid-cols-[1fr_auto]">
             <div>
-              <div className="text-[11.5px] font-medium text-muted-foreground">{p.engagement.profile} assessment</div>
-              <p className="mt-0.5 max-w-4xl text-[13.5px] leading-relaxed text-ink">{p.engagement.headline}</p>
+              <div className="text-[12px] font-medium text-muted-foreground">{p.engagement.profile} assessment</div>
+              <p className="mt-0.5 max-w-4xl text-[14px] leading-relaxed text-ink">{p.engagement.headline}</p>
               {p.engagement.no_engagement_recorded && p.engagement.level !== 'unknown' && (
                 <p className="mt-1 text-[12px] text-muted-foreground">No engagement by {p.name} is recorded anywhere on the deal yet.</p>
               )}
             </div>
-            <div className="text-[12.5px] text-ink-soft md:text-right">
+            <div className="text-[13px] text-ink-soft md:text-right">
               <div><span className="font-semibold text-ink tabular">{p.outstanding}</span> open Accountable / Responsible</div>
               <div>{p.delivery_risk.length ? <span className="text-warn">{plural(p.delivery_risk.length, 'item')} at risk or late (delivery risk)</span> : 'No delivery risk on their items'}</div>
               <div className="text-muted-foreground">Last activity {p.last_activity ? formatDate(p.last_activity.slice(0, 10)) : 'none recorded'}</div>
@@ -97,7 +97,7 @@ export function Party() {
           </div>
           <Flags flags={p.engagement.flags} />
           {p.workstreams.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 text-[12.5px]">
+            <div className="flex flex-wrap items-center gap-1.5 text-[13px]">
               <span className="text-muted-foreground">Works on:</span>
               {p.workstreams.map((w) => (
                 <Link key={w} to={`/workstreams/${w}`} className="inline-flex items-center gap-1 rounded-md border bg-white px-2 py-0.5 font-medium text-ink-soft hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
@@ -138,7 +138,7 @@ export function Party() {
             {() => p.relations.length ? (
               <ul className="space-y-2">
                 {p.relations.map((r) => (
-                  <li key={r.key} className="rounded-lg border px-3 py-2 text-[12.5px]">
+                  <li key={r.key} className="rounded-lg border px-3 py-2 text-[13px]">
                     <div className="font-medium text-ink">{humanise(r.type)} <span className="font-normal text-muted-foreground">· as {humanise(r.role)}</span></div>
                     <div className="mt-0.5 text-ink-soft">
                       {r.others.map((o, n) => (
@@ -182,7 +182,7 @@ function Responsibilities({ p, ar, ci, onSelect, q }: { p: Profile; ar: Assignme
           ) : <p className="text-[13px] text-muted-foreground">No open items as Accountable or Responsible.</p>}
           {ci.length > 0 && (
             <details>
-              <summary className="cursor-pointer text-[12.5px] font-medium text-brand">{plural(ci.length, 'open item')} as Consulted or Informed</summary>
+              <summary className="cursor-pointer text-[13px] font-medium text-brand">{plural(ci.length, 'open item')} as Consulted or Informed</summary>
               <ul className="mt-2 divide-y rounded-lg border">
                 {ci.map((a) => <AssignmentRow key={a.item + a.letter} a={a} asOf={p.as_of} onSelect={onSelect} />)}
               </ul>
@@ -204,10 +204,10 @@ function AssignmentRow({ a, asOf, onSelect }: { a: Assignment; asOf: string; onS
           a.letter === 'A' ? 'bg-ink text-white' : a.letter === 'R' ? 'bg-brand text-white' : 'bg-muted text-ink-soft')}>{a.letter}</span>
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-center gap-2"><span className="text-[13px] font-medium text-ink">{a.name}</span><StatusBadge status={a.status} /></span>
-          <span className="mt-0.5 block text-[11.5px] text-muted-foreground">
+          <span className="mt-0.5 block text-[12px] text-muted-foreground">
             {a.workstream.name} · {humanise(a.type)} · due {formatDate(a.due)}{days != null ? ` (${inDays(days)})` : ''}{a.via ? ' · under their firm’s mandate' : ''}
           </span>
-          <span className="block text-[11.5px] text-muted-foreground">
+          <span className="block text-[12px] text-muted-foreground">
             {a.float != null ? <>Schedule float <span className={cn('font-medium', a.float <= 30 ? 'text-risk' : a.float <= 60 ? 'text-warn' : 'text-ink-soft')}>{plural(a.float, 'day')}</span> before a contractual deadline breaks</>
               : a.type === 'deadline' ? 'A contractual deadline' : 'No contractual deadline within reach of a delay'}
             {a.criticality ? ` · assessed criticality ${a.criticality}` : ''}
@@ -228,12 +228,12 @@ function Requests({ p, q, onSelect }: { p: Profile; q: ReturnType<typeof usePart
         <button type="button" onClick={() => onSelect(e.item.code)} className={rowClass(false, 'flex w-full items-start gap-2 px-2 py-1.5')}>
           {incoming ? <Inbox className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden /> : <Send className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />}
           <span className="min-w-0 flex-1">
-            <span className="block text-[12.5px] leading-snug text-ink">{e.summary}</span>
-            <span className="block text-[11.5px] text-muted-foreground">
+            <span className="block text-[13px] leading-snug text-ink">{e.summary}</span>
+            <span className="block text-[12px] text-muted-foreground">
               {incoming ? `From ${e.actor.name}` : `To ${e.recipients.map((r) => r.name).join(', ')}`} · {formatDate(e.when.slice(0, 10))} · on {e.item.name}
             </span>
             {e.response_due && (
-              <span className={cn('block text-[11.5px]', overdue ? 'font-medium text-risk' : answered ? 'text-ok' : 'text-ink-soft')}>
+              <span className={cn('block text-[12px]', overdue ? 'font-medium text-risk' : answered ? 'text-ok' : 'text-ink-soft')}>
                 Reply by {formatDate(e.response_due)} · {answered ? `answered ${e.answered_by.map((a) => formatDate(a.when.slice(0, 10))).join(', ')}` : overdue ? 'no response recorded, and the date has passed' : 'awaiting a response'}
               </span>
             )}
@@ -273,8 +273,8 @@ function OrgPeople({ p }: { p: Profile }) {
               <li key={x.code}>
                 <Link to={`/parties/${x.code}`} className={rowClass(false, 'flex items-center gap-3 px-2 py-1.5')}>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12.5px] font-medium text-ink">{x.name}</span>
-                    <span className="block truncate text-[11.5px] text-muted-foreground">{x.title}</span>
+                    <span className="block truncate text-[13px] font-medium text-ink">{x.name}</span>
+                    <span className="block truncate text-[12px] text-muted-foreground">{x.title}</span>
                   </span>
                   {e && <EngagementBadge level={e.level} category={e.category} />}
                   <RowChevron />
@@ -290,7 +290,7 @@ function OrgPeople({ p }: { p: Profile }) {
 
 function NavButton({ to, icon: Icon, children }: { to: string; icon: typeof Network; children: React.ReactNode }) {
   return (
-    <Link to={to} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-ink-soft shadow-sm hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
+    <Link to={to} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-ink-soft shadow-sm hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
       <Icon className="size-3.5 shrink-0" aria-hidden /><span className="truncate">{children}</span>
     </Link>
   )

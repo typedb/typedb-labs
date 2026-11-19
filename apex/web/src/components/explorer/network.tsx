@@ -48,7 +48,7 @@ function Legend({ data, hiddenTypes, toggle, hiddenFamilies, toggleFamily }: {
           const off = hiddenTypes.has(t)
           return (
             <button key={t} type="button" onClick={() => toggle(t)} title={`${humanise(t)}: roles ${info.roles.map(humanise).join(', ')}`}
-              className={cn('inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-medium transition-all', off ? 'bg-white text-muted-foreground opacity-60' : 'bg-white shadow-sm')}
+              className={cn('inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-medium transition-all', off ? 'bg-white text-muted-foreground opacity-60' : 'bg-white shadow-sm')}
               style={off ? undefined : { borderColor: tone.stroke + '55', color: tone.text }}>
               <svg width="18" height="6" aria-hidden><line x1="1" y1="3" x2="17" y2="3" stroke={off ? '#cbd5e1' : tone.stroke} strokeWidth="2.5" strokeDasharray={tone.dash} /></svg>
               {tone.label}<span className="text-muted-foreground tabular">{counts.get(t)}</span>
@@ -65,7 +65,7 @@ function Legend({ data, hiddenTypes, toggle, hiddenFamilies, toggleFamily }: {
           const kinds = Object.entries(data.types.parties).filter(([, p]) => p === f).map(([t]) => humanise(t))
           return (
             <button key={f} type="button" onClick={() => toggleFamily(f)} title={kinds.length ? `Includes: ${kinds.join(', ')}` : humanise(f)}
-              className={cn('inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11.5px] transition-all hover:bg-muted', off ? 'text-muted-foreground line-through opacity-60' : 'text-foreground/80')}>
+              className={cn('inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[12px] transition-all hover:bg-muted', off ? 'text-muted-foreground line-through opacity-60' : 'text-foreground/80')}>
               <span className="size-2.5 rounded-full" style={{ background: off ? '#cbd5e1' : s.dot }} />{humanise(f)}<span className="text-muted-foreground tabular">{n}</span>
             </button>
           )
@@ -238,7 +238,7 @@ export function NetworkView() {
           <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand"><Network className="size-4" /></div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-[15px] font-semibold tracking-tight text-ink">Transaction network</h2>
+            <h2 className="text-[15px] font-semibold text-ink">Transaction network</h2>
             <p className="text-[13px] text-muted-foreground">{data.nodes.length} organisations and the {data.relations.length} typed relations between them. Select one to inspect it.</p>
           </div>
           </div>
@@ -294,7 +294,7 @@ function Guide({ data }: { data: Schemas['Graph'] }) {
     <div className="space-y-5 p-5">
       <div>
         <h3 className="text-[14px] font-semibold text-ink">How to read this</h3>
-        <ul className="mt-2 space-y-1.5 text-[12.5px] leading-relaxed text-foreground/80">
+        <ul className="mt-2 space-y-1.5 text-[13px] leading-relaxed text-foreground/80">
           <li>• Every box is an organisation and every line a relation stored in TypeDB, with its type and roles.</li>
           <li>• Select an organisation to see its roles, its people and their responsibilities.</li>
           <li>• Select a line to see the whole relation: a mandate links adviser, client <em>and</em> the deal; a review links authority, clearance and applicant.</li>
@@ -308,10 +308,10 @@ function Guide({ data }: { data: Schemas['Graph'] }) {
             const tone = relationStyle(t)
             return (
               <li key={t} className="rounded-lg border px-3 py-2">
-                <div className="flex items-center justify-between text-[12.5px] font-semibold" style={{ color: tone.text }}>
+                <div className="flex items-center justify-between text-[13px] font-semibold" style={{ color: tone.text }}>
                   <span>{humanise(t)}</span><span className="text-muted-foreground tabular">{counts.get(t)}</span>
                 </div>
-                <div className="text-[11.5px] text-muted-foreground">Roles: {info.roles.map(humanise).join(' · ')}{info.parent ? ` · a kind of ${info.parent}` : ''}</div>
+                <div className="text-[12px] text-muted-foreground">Roles: {info.roles.map(humanise).join(' · ')}{info.parent ? ` · a kind of ${info.parent}` : ''}</div>
               </li>
             )
           })}

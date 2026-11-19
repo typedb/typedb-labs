@@ -90,8 +90,8 @@ function CompanyPanel({ data, code, onHover }: { data: Own; code: string; onHove
         <div className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">{data.parent_name}'s effective economic interest in</div>
         <h3 className="mt-1 text-[16px] font-semibold text-ink">{c.name}</h3>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-4xl font-semibold tracking-tight text-ink tabular">{formatPercent(c.stake)}</span>
-          <span className="text-[12.5px] text-muted-foreground">over {c.routes} {c.routes === 1 ? 'route' : 'routes'}</span>
+          <span className="text-4xl font-semibold text-ink tabular">{formatPercent(c.stake)}</span>
+          <span className="text-[13px] text-muted-foreground">over {c.routes} {c.routes === 1 ? 'route' : 'routes'}</span>
         </div>
       </div>
       <div>
@@ -109,12 +109,12 @@ function CompanyPanel({ data, code, onHover }: { data: Own; code: string; onHove
           ))}
         </ol>
         {c.paths.length > 1 && (
-          <div className="mt-2 flex items-center justify-between rounded-lg bg-ink px-3 py-2 text-[12.5px] font-semibold text-white">
+          <div className="mt-2 flex items-center justify-between rounded-lg bg-ink px-3 py-2 text-[13px] font-semibold text-white">
             <span>Effective economic interest</span>
             <span className="tabular">{c.paths.map((r) => formatPercent(r.stake)).join(' + ')} = {formatPercent(c.stake)}</span>
           </div>
         )}
-        <p className="mt-2 text-[11.5px] leading-relaxed text-muted-foreground">
+        <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">
           The total and the number of routes come from TypeDB's recursive <code className="rounded bg-muted px-1">group_members</code> function.
           The routes are listed from the direct holdings, and the API refuses to answer unless they add up to TypeDB's figure exactly.
         </p>
@@ -123,12 +123,12 @@ function CompanyPanel({ data, code, onHover }: { data: Own; code: string; onHove
         <h4 className="mb-2 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">Direct shareholdings (legal)</h4>
         <ul className="space-y-2">
           {holders.map((h) => (
-            <li key={h.owner} className="text-[12.5px]">
+            <li key={h.owner} className="text-[13px]">
               <div className="flex items-center justify-between">
                 <span className={cn('font-medium text-ink', !h.inside_group && 'text-foreground/70')}>{data.names[h.owner]}{!h.inside_group && <span className="ml-1.5 rounded bg-muted px-1 text-[10px] font-medium text-muted-foreground">outside</span>}</span>
                 <span className="font-semibold text-ink tabular">{formatPercent(h.stake)}</span>
               </div>
-              {h.description && <p className="mt-0.5 text-[11.5px] leading-relaxed text-muted-foreground">{h.description}</p>}
+              {h.description && <p className="mt-0.5 text-[12px] leading-relaxed text-muted-foreground">{h.description}</p>}
             </li>
           ))}
         </ul>
@@ -136,7 +136,7 @@ function CompanyPanel({ data, code, onHover }: { data: Own; code: string; onHove
       {consents.length > 0 && (
         <div>
           <h4 className="mb-2 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">Change-of-control consents it owes</h4>
-          <ul className="space-y-1.5">{consents.map((x) => <li key={x.obligation} className="text-[12.5px]"><span className="font-medium text-ink">{x.obligation_name}</span><span className="text-muted-foreground"> · consent from {data.names[x.consent_from] ?? x.consent_from}</span></li>)}</ul>
+          <ul className="space-y-1.5">{consents.map((x) => <li key={x.obligation} className="text-[13px]"><span className="font-medium text-ink">{x.obligation_name}</span><span className="text-muted-foreground"> · consent from {data.names[x.consent_from] ?? x.consent_from}</span></li>)}</ul>
         </div>
       )}
     </div>
@@ -160,17 +160,17 @@ export function OwnershipView() {
           <div className="flex items-center gap-3">
             <div className="flex size-8 items-center justify-center rounded-lg bg-brand-soft text-brand"><GitFork className="size-4" /></div>
             <div>
-              <h2 className="text-[15px] font-semibold tracking-tight text-ink">{data.parent_name} group structure</h2>
+              <h2 className="text-[15px] font-semibold text-ink">{data.parent_name} group structure</h2>
               <p className="text-[13px] text-muted-foreground">What the acquirer is buying: {data.companies.length} companies below the target, and who else owns part of them.</p>
             </div>
           </div>
           <div className="grid gap-2 text-[12px] sm:grid-cols-2 lg:ml-auto lg:max-w-xl">
             <div className="flex items-start gap-2 rounded-lg bg-[#e3f5f2]/60 px-3 py-2">
-              <span className="mt-0.5 inline-flex shrink-0 items-center rounded border border-[#138a7e]/30 bg-white px-1 text-[10.5px] font-semibold text-[#0d6e64]">70%</span>
+              <span className="mt-0.5 inline-flex shrink-0 items-center rounded border border-[#138a7e]/30 bg-white px-1 text-[11px] font-semibold text-[#0d6e64]">70%</span>
               <span><span className="font-semibold text-ink">Direct shareholding (legal)</span>: recorded on each ownership relation (the line labels).</span>
             </div>
             <div className="flex items-start gap-2 rounded-lg bg-brand-soft/70 px-3 py-2">
-              <span className="mt-0.5 inline-flex shrink-0 items-center rounded bg-white px-1 text-[10.5px] font-semibold text-brand">90%</span>
+              <span className="mt-0.5 inline-flex shrink-0 items-center rounded bg-white px-1 text-[11px] font-semibold text-brand">90%</span>
               <span><span className="font-semibold text-ink">Effective economic interest</span>: calculated by multiplying along every route from the parent and adding the routes up.</span>
             </div>
           </div>
@@ -196,7 +196,7 @@ export function OwnershipView() {
             <div className="flex size-8 items-center justify-center rounded-lg bg-ok-soft text-ok"><ShieldCheck className="size-4" /></div>
             <div>
               <h3 className="text-[14px] font-semibold text-ink">Ownership checks passed</h3>
-              <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+              <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
                 Before any percentage is calculated, TypeDB checks, in the same read transaction, that there are no ownership cycles
                 and that no company is more than 100% owned. If either finds anything, no figures are shown at all.
                 (Effective ownership assumes no cross-shareholdings: a deliberate simplification, not a claim about real groups.)
@@ -211,7 +211,7 @@ export function OwnershipView() {
               <h3 className="text-[14px] font-semibold text-ink">Change-of-control consents inside the group</h3>
               <ul className="mt-2 space-y-2">
                 {data.consents.map((x) => (
-                  <li key={x.obligation} className="flex items-start gap-2 text-[12.5px]">
+                  <li key={x.obligation} className="flex items-start gap-2 text-[13px]">
                     <Building2 className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
                     <span><span className="font-medium text-ink">{x.obligation_name}</span>
                       <span className="block text-muted-foreground">Owed by {data.names[x.owed_by]} ({formatPercent(x.stake)} effective) · consent from {data.names[x.consent_from] ?? x.consent_from}</span></span>

@@ -27,7 +27,7 @@ export function WorkstreamProgress({ className, selected, onSelect }: { classNam
     <Panel title="Workstream progress" icon={<ListChecks />} className={className} query={q} skeletonRows={7}
       note="Counts each workstream's items by status inside TypeDB and reads every item's dates and progress; activity progress is then weighted by planned duration in Python."
       subtitle="Activity progress is weighted by planned duration; milestones are counted separately. Select a workstream for its responsibility matrix below, or open it."
-      action={<Link to="/workstreams" className="inline-flex items-center gap-1 text-[12.5px] font-medium text-brand hover:underline">All workstreams<ArrowUpRight className="size-3.5" aria-hidden /></Link>}>
+      action={<Link to="/workstreams" className="inline-flex items-center gap-1 text-[13px] font-medium text-brand hover:underline">All workstreams<ArrowUpRight className="size-3.5" aria-hidden /></Link>}>
       {({ data }) => (
         <ul className="-mx-2 space-y-0.5">
           {data.map((w) => {
@@ -40,10 +40,10 @@ export function WorkstreamProgress({ className, selected, onSelect }: { classNam
                   <div className="flex items-center gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="truncate text-[13.5px] font-medium text-ink" title={w.name ?? undefined}>{w.name}</span>
+                        <span className="truncate text-[14px] font-medium text-ink" title={w.name ?? undefined}>{w.name}</span>
                         <StatusBadge status={w.status} className="hidden sm:inline-flex" />
                       </div>
-                      <div className="mt-0.5 truncate text-[11.5px] text-muted-foreground">{w.accountable?.name} · due {formatDate(w.due)} · {items} items · {w.milestones_achieved} of {w.milestones_total} milestones achieved</div>
+                      <div className="mt-0.5 truncate text-[12px] text-muted-foreground">{w.accountable?.name} · due {formatDate(w.due)} · {items} items · {w.milestones_achieved} of {w.milestones_total} milestones achieved</div>
                     </div>
                     <div className="w-10 text-right text-[13px] font-semibold text-ink tabular" title={w.progress_basis}>{w.progress ?? 0}%</div>
                     <RowChevron selected={selected === w.code} />
@@ -121,13 +121,13 @@ export function RaciMatrix({ className, workstream, onSelect }: { className?: st
                           <button type="button" onClick={() => onSelect(i.code)} className={rowClass(false, 'flex w-full items-start gap-2 px-1 py-0.5')}
                             aria-label={`${i.name}: open details`}>
                             <span className="min-w-0 flex-1">
-                              <span className="flex items-center gap-2"><StatusDot status={i.status} /><span className="text-[12.5px] font-medium text-ink">{i.name}</span></span>
+                              <span className="flex items-center gap-2"><StatusDot status={i.status} /><span className="text-[13px] font-medium text-ink">{i.name}</span></span>
                               <span className="block pl-4 text-[11px] text-muted-foreground">{humanise(i.type)} · {formatDate(i.due)}</span>
                             </span>
                             <RowChevron className="mt-0.5" />
                           </button>
                         ) : <>
-                          <div className="flex items-center gap-2"><StatusDot status={i.status} /><span className="text-[12.5px] font-medium text-ink">{i.name}</span></div>
+                          <div className="flex items-center gap-2"><StatusDot status={i.status} /><span className="text-[13px] font-medium text-ink">{i.name}</span></div>
                           <div className="pl-4 text-[11px] text-muted-foreground">{humanise(i.type)} · {formatDate(i.due)}</div>
                         </>}
                       </td>
@@ -140,7 +140,7 @@ export function RaciMatrix({ className, workstream, onSelect }: { className?: st
                 </tbody>
               </table>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11.5px] text-muted-foreground">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] text-muted-foreground">
               {Object.entries(LETTER).map(([k, v]) => (
                 <span key={k} className="inline-flex items-center gap-1.5"><span className={cn('inline-flex size-4 items-center justify-center rounded text-[9px] font-semibold', v.cls)}>{k}</span>{v.word}</span>
               ))}

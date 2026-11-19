@@ -32,7 +32,7 @@ function Section({ icon: Icon, title, subtitle, children, className, action }: {
         <div className="flex min-w-0 flex-1 items-start gap-3">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand"><Icon className="size-4" /></div>
           <div className="min-w-0">
-            <h2 className="text-[15px] font-semibold tracking-tight text-ink">{title}</h2>
+            <h2 className="text-[15px] font-semibold text-ink">{title}</h2>
             {subtitle && <p className="text-[13px] text-muted-foreground">{subtitle}</p>}
           </div>
         </div>
@@ -74,7 +74,7 @@ export function Impact() {
     <div className={cn('space-y-5 transition-opacity', q.isPlaceholderData && 'opacity-90')}>
       <PageHeader title="Impact Explorer"
         description="Delay one approval and follow the consequences through the deal's dependencies, deadlines and people."
-        note={<span className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-2.5 py-1 text-[11.5px] font-medium text-violet-700 ring-1 ring-violet-200">
+        note={<span className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-2.5 py-1 text-[12px] font-medium text-violet-700 ring-1 ring-violet-200">
           <FlaskConical className="size-3.5" />Projection only: nothing is written to TypeDB</span>}
         actions={data.subjects.length > 1 && (
           <Segmented label="Approval to delay" value={data.start.code}
@@ -86,7 +86,7 @@ export function Impact() {
       <EscalationBanner data={data} />
 
       <div>
-        <h2 className="mb-3 text-[13px] font-semibold tracking-tight text-ink">Contractual deadlines in reach of this delay</h2>
+        <h2 className="mb-3 text-[13px] font-semibold text-ink">Contractual deadlines in reach of this delay</h2>
         <DeadlineCards data={data} />
       </div>
 

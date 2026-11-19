@@ -22,13 +22,13 @@ export function Approvals({ className }: { className?: string }) {
             return (
               <div key={a.code} className={cn('grid gap-3 px-4 py-3.5 *:min-w-0 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto]', open && 'bg-warn-soft/40 shadow-[inset_3px_0_0_var(--warn)]')}>
                 <div className="min-w-0">
-                  <div className="text-[13.5px] font-medium text-ink">{a.name}</div>
+                  <div className="text-[14px] font-medium text-ink">{a.name}</div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     {a.reviews.length ? a.reviews.map((r) => (
-                      <span key={r.code} className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-[11.5px] text-foreground/80">
+                      <span key={r.code} className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-0.5 text-[12px] text-foreground/80">
                         <span className="rounded bg-white px-1 text-[10px] font-semibold text-muted-foreground ring-1 ring-border">{r.jurisdiction}</span>{r.name}
                       </span>
-                    )) : <span className="rounded-md bg-risk-soft px-2 py-0.5 text-[11.5px] font-medium text-risk">No reviewing authority recorded</span>}
+                    )) : <span className="rounded-md bg-risk-soft px-2 py-0.5 text-[12px] font-medium text-risk">No reviewing authority recorded</span>}
                   </div>
                   {a.latest && <div className="mt-1.5 text-[12px] text-muted-foreground"><span className="text-foreground/70">{formatDateTime(a.latest.when)}:</span> {a.latest.summary}</div>}
                 </div>

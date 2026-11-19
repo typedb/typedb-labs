@@ -29,12 +29,12 @@ export const OrgNode = memo(function OrgNode({ data }: NodeProps & { data: OrgNo
       <Handle type="target" position={inPos} className={hidden} isConnectable={false} />
       <div className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg', fam.chip)}><Icon className="size-4" /></div>
       <div className="min-w-0 flex-1">
-        <div className="line-clamp-2 text-[12.5px] leading-tight font-semibold text-ink">{data.name}</div>
-        <div className="mt-0.5 truncate text-[10.5px] text-muted-foreground">{data.subtitle}</div>
+        <div className="line-clamp-2 text-[13px] leading-tight font-semibold text-ink">{data.name}</div>
+        <div className="mt-0.5 truncate text-[11px] text-muted-foreground">{data.subtitle}</div>
       </div>
       {data.badge && <div className="shrink-0 rounded-md bg-brand-soft px-1.5 py-0.5 text-[11px] font-semibold text-brand tabular">{data.badge}</div>}
       {!data.badge && data.people ? (
-        <div className={cn('flex shrink-0 items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10.5px] font-medium', data.peopleShown ? 'bg-ink text-white' : 'bg-muted text-muted-foreground')}>
+        <div className={cn('flex shrink-0 items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-medium', data.peopleShown ? 'bg-ink text-white' : 'bg-muted text-muted-foreground')}>
           <Users className="size-3" />{data.people}
         </div>
       ) : null}
@@ -54,7 +54,7 @@ export const PersonNode = memo(function PersonNode({ data }: NodeProps & { data:
         {data.name.split(' ').filter((w) => !/^(Dr|Mr|Ms)$/.test(w)).map((w) => w[0]).slice(0, 2).join('')}
       </div>
       <div className="min-w-0">
-        <div className="truncate text-[11.5px] leading-tight font-semibold text-ink">{data.name}</div>
+        <div className="truncate text-[12px] leading-tight font-semibold text-ink">{data.name}</div>
         <div className="truncate text-[10px] text-muted-foreground">{data.title}</div>
       </div>
       <Handle type="source" position={Position.Right} className={hidden} isConnectable={false} />
@@ -71,8 +71,8 @@ export const SummaryNode = memo(function SummaryNode({ data }: NodeProps & { dat
       <Handle type="target" position={Position.Left} className={hidden} isConnectable={false} />
       <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-[12px] font-semibold text-ink tabular">{data.count}</div>
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[12.5px] font-semibold text-ink">{data.label}</div>
-        <div className="flex items-center gap-1 text-[10.5px] text-muted-foreground"><ChevronRight className="size-3" />Collapsed · click to expand</div>
+        <div className="truncate text-[13px] font-semibold text-ink">{data.label}</div>
+        <div className="flex items-center gap-1 text-[11px] text-muted-foreground"><ChevronRight className="size-3" />Collapsed · click to expand</div>
       </div>
       <Handle type="source" position={Position.Right} className={hidden} isConnectable={false} />
     </div>
@@ -85,7 +85,7 @@ export const ClusterNode = memo(function ClusterNode({ data }: NodeProps & { dat
   return (
     <div className="pointer-events-none h-full w-full rounded-2xl border border-slate-200/90 bg-slate-50/70">
       <div className="pointer-events-auto flex items-center gap-1 pt-2 pr-2 pl-4">
-        <span className="min-w-0 flex-1 truncate text-[10.5px] font-semibold tracking-[0.06em] text-slate-500 uppercase" title={data.label}>{data.label}</span>
+        <span className="min-w-0 flex-1 truncate text-[11px] font-semibold tracking-[0.06em] text-slate-500 uppercase" title={data.label}>{data.label}</span>
         {data.onCollapse && data.count > 1 && (
           <button type="button" onClick={(e) => { e.stopPropagation(); data.onCollapse!() }} title={`Collapse ${data.label}`} aria-label={`Collapse ${data.label}`}
             className="nodrag inline-flex shrink-0 items-center rounded p-0.5 text-slate-400 hover:bg-white hover:text-ink">
@@ -153,7 +153,7 @@ export function RelationEdge({ id, sourceX, sourceY, targetX, targetY, sourcePos
         style={{ stroke: tone.stroke, strokeWidth: width, strokeDasharray: data.outside ? '5 4' : tone.dash, opacity: data.state === 'dim' ? 0.12 : 0.9 }} />
       {data.showLabel && data.state !== 'dim' && (
         <EdgeLabelRenderer>
-          <div className="nodrag nopan pointer-events-auto absolute cursor-pointer rounded-md border bg-white px-1.5 py-0.5 text-[10.5px] font-semibold whitespace-nowrap shadow-sm"
+          <div className="nodrag nopan pointer-events-auto absolute cursor-pointer rounded-md border bg-white px-1.5 py-0.5 text-[11px] font-semibold whitespace-nowrap shadow-sm"
             style={{ transform: `translate(-50%, -50%) translate(${lx}px, ${ly}px)`, color: tone.text, borderColor: tone.soft }}>
             {label}
           </div>

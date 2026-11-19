@@ -10,8 +10,8 @@ function Team({ people }: { people: Schemas['Person'][] }) {
     <ul className="mt-3 space-y-1.5 border-t pt-3">
       {people.map((p) => (
         <li key={p.code} className="flex items-center gap-2">
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[9.5px] font-semibold text-foreground/70">{initials(p.name)}</span>
-          <span className="min-w-0 truncate text-[12.5px]"><span className="font-medium text-ink">{p.name}</span> <span className="text-muted-foreground">· {p.title}</span></span>
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold text-foreground/70">{initials(p.name)}</span>
+          <span className="min-w-0 truncate text-[13px]"><span className="font-medium text-ink">{p.name}</span> <span className="text-muted-foreground">· {p.title}</span></span>
         </li>
       ))}
     </ul>
@@ -21,7 +21,7 @@ function Team({ people }: { people: Schemas['Person'][] }) {
 function OrgCard({ org, eyebrow, meta, children }: { org: Schemas['Organisation']; eyebrow: string; meta?: React.ReactNode; children?: React.ReactNode }) {
   return (
     <div className="flex min-w-0 flex-col rounded-xl border bg-card p-4">
-      <div className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-brand">{eyebrow}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-brand">{eyebrow}</div>
       <div className="mt-1 text-[14px] font-semibold text-ink">{org.name}</div>
       {meta && <div className="mt-0.5 text-[12px] text-muted-foreground">{meta}</div>}
       {children}
@@ -99,7 +99,7 @@ export function Participants() {
                       <span className="mt-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">{a.organisation.jurisdiction}</span>
                       <div className="min-w-0 flex-1">
                         <div className="text-[13px] font-medium text-ink">{a.organisation.name}</div>
-                        <div className="text-[11.5px] text-muted-foreground">
+                        <div className="text-[12px] text-muted-foreground">
                           {a.reviews.length > 0
                             ? a.reviews.map((r) => <span key={r.code} className="mr-3 inline-flex items-center gap-1.5"><StatusDot status={r.status} />Reviews: {r.name}</span>)
                             : a.raci.length > 0 ? `Informed of: ${a.raci.map((r) => r.name).join(', ')}` : humanise(a.type)}

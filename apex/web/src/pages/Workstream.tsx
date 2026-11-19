@@ -36,7 +36,7 @@ export function Workstream() {
 
   return (
     <div className="space-y-5">
-      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted-foreground">
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
         <Link to="/" className="hover:text-ink hover:underline">Deal Overview</Link><span aria-hidden>/</span>
         <Link to="/workstreams" className="hover:text-ink hover:underline">Workstreams</Link><span aria-hidden>/</span>
         <span className="font-medium text-ink" aria-current="page">{w.name}</span>
@@ -47,7 +47,7 @@ export function Workstream() {
           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-2xl font-semibold tracking-tight text-ink">{w.name}</h1>
+                <h1 className="text-2xl font-semibold text-ink">{w.name}</h1>
                 <StatusBadge status={w.status} />
               </div>
               <p className="mt-1.5 max-w-3xl text-[14px] leading-relaxed text-muted-foreground">{w.description}</p>
@@ -70,7 +70,7 @@ export function Workstream() {
             Activity progress and milestones describe this workstream's work; neither is readiness to close. Readiness to close is the
             conditions satisfied, shown here for this workstream and on the <Link to="/" className="font-medium text-brand hover:underline">Deal Overview</Link> for the whole deal.
           </p>
-          <div className="grid gap-4 border-t pt-4 text-[12.5px] md:grid-cols-3">
+          <div className="grid gap-4 border-t pt-4 text-[13px] md:grid-cols-3">
             <Fact label="Next milestone">
               {w.next_milestone
                 ? <ItemLink code={w.next_milestone.code} onSelect={select}>{w.next_milestone.name}</ItemLink>
@@ -146,7 +146,7 @@ function DepList({ title, icon: Icon, empty, children }: { title: string; icon: 
   return (
     <div className="min-w-0">
       <div className="mb-1.5 flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground"><Icon className="size-3.5" aria-hidden />{title}</div>
-      {children.length ? <ul className="space-y-1">{children}</ul> : <p className="text-[12.5px] text-muted-foreground">{empty}</p>}
+      {children.length ? <ul className="space-y-1">{children}</ul> : <p className="text-[13px] text-muted-foreground">{empty}</p>}
     </div>
   )
 }
@@ -160,12 +160,12 @@ function DepRow({ d, other, otherItem, otherName, ownName, onSelect, arrow }: {
       <button type="button" onClick={() => onSelect(otherItem)} className={rowClass(false, 'flex w-full items-start gap-2 px-2 py-1.5')}
         aria-label={`${otherName} (${other}) ${arrow === 'from' ? 'before' : 'after'} ${ownName}: ${humanise(d.kind)}. Open details`}>
         <span className="min-w-0 flex-1">
-          <span className="block text-[12.5px] leading-snug text-ink">
+          <span className="block text-[13px] leading-snug text-ink">
             {arrow === 'from'
               ? <><span className="font-medium">{otherName}</span> <span className="text-muted-foreground">→</span> {ownName}</>
               : <>{ownName} <span className="text-muted-foreground">→</span> <span className="font-medium">{otherName}</span></>}
           </span>
-          <span className="block truncate text-[11.5px] text-muted-foreground">
+          <span className="block truncate text-[12px] text-muted-foreground">
             {other} · {humanise(d.kind)}{d.lag ? ` · ${plural(d.lag, 'day')} lag` : ''}
           </span>
         </span>
@@ -192,7 +192,7 @@ function Waiting({ d, onSelect, q }: SectionProps) {
                   <StatusDot status={i.status} className="mt-1.5" />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[13px] font-medium text-ink" title={i.name ?? undefined}>{i.name}</span>
-                    <span className="block text-[11.5px] text-muted-foreground">
+                    <span className="block text-[12px] text-muted-foreground">
                       Waits on {plural(i.open_prerequisites.length, 'open item')}{elsewhere.length ? `, ${elsewhere.length} in other workstreams` : ''}:{' '}
                       {i.open_prerequisites.map((u) => u.name).join(', ')}
                     </span>
@@ -224,17 +224,17 @@ function Obligations({ d, onSelect, q }: SectionProps) {
                     <span className="text-[13px] font-medium text-ink">{o.name}</span>
                     <StatusBadge status={o.status} />
                   </span>
-                  <span className="mt-0.5 block text-[11.5px] text-muted-foreground">
+                  <span className="mt-0.5 block text-[12px] text-muted-foreground">
                     {humanise(o.type)} · {o.type === 'deadline' ? 'by' : 'due'} {formatDate(o.due)}{o.legal_basis ? ` · ${o.legal_basis}` : ''}
                   </span>
                   {(o.bound.length > 0 || o.consent_from.length > 0 || o.limits.length > 0) && (
-                    <span className="mt-0.5 block text-[11.5px] text-ink-soft">
+                    <span className="mt-0.5 block text-[12px] text-ink-soft">
                       {o.bound.length > 0 && <>Binds {o.bound.map((b) => b.name).join(', ')}. </>}
                       {o.consent_from.length > 0 && <>Consent from {o.consent_from.map((b) => b.name).join(', ')}. </>}
                       {o.limits.length > 0 && <>Limits {o.limits.map((b) => b.name).join(', ')}.</>}
                     </span>
                   )}
-                  {o.consequence && <span className="mt-1 block text-[11.5px] leading-snug text-ink-soft"><span className="font-semibold text-risk">If missed: </span>{o.consequence}</span>}
+                  {o.consequence && <span className="mt-1 block text-[12px] leading-snug text-ink-soft"><span className="font-semibold text-risk">If missed: </span>{o.consequence}</span>}
                 </span>
                 <RowChevron className="mt-0.5" />
               </button>
@@ -257,9 +257,9 @@ function Risks({ d, onSelect, q }: SectionProps) {
           {risks.map((r) => (
             <li key={r.code} className="rounded-lg border p-3">
               <RiskBadge risk={r} />
-              {r.description && <p className="mt-2 text-[12.5px] leading-relaxed text-ink-soft">{r.description}</p>}
+              {r.description && <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">{r.description}</p>}
               {r.mitigation && <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground"><span className="font-medium text-ink-soft">Mitigation: </span>{r.mitigation}</p>}
-              <div className="mt-1.5 text-[11.5px] text-muted-foreground">
+              <div className="mt-1.5 text-[12px] text-muted-foreground">
                 Owner: <span className="font-medium text-ink-soft">{r.owner?.name}</span> · {humanise(r.likelihood)} likelihood · threatens{' '}
                 {r.items.map((c, n) => {
                   const it = d.items.find((i) => i.code === c)
@@ -277,7 +277,7 @@ function Risks({ d, onSelect, q }: SectionProps) {
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <div className="mb-0.5 flex items-center gap-1.5 text-[11.5px] font-medium text-muted-foreground"><CalendarClock className="size-3.5" aria-hidden />{label}</div>
+      <div className="mb-0.5 flex items-center gap-1.5 text-[12px] font-medium text-muted-foreground"><CalendarClock className="size-3.5" aria-hidden />{label}</div>
       <div>{children}</div>
     </div>
   )
@@ -289,7 +289,7 @@ function ItemLink({ code, onSelect, children }: { code: string; onSelect: (code:
 
 function NavButton({ to, icon: Icon, children }: { to: string; icon: typeof Network; children: React.ReactNode }) {
   return (
-    <Link to={to} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[12.5px] font-medium text-ink-soft shadow-sm hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
+    <Link to={to} className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2.5 py-1.5 text-[13px] font-medium text-ink-soft shadow-sm hover:bg-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-brand">
       <Icon className="size-3.5" aria-hidden />{children}
     </Link>
   )

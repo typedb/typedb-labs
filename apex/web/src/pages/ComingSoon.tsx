@@ -7,7 +7,7 @@ export function ComingSoon({ title, phase, icon: Icon, points }: { title: string
     <div className="mx-auto max-w-2xl py-16 text-center">
       <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-brand-soft text-brand"><Icon className="size-7" /></div>
       <div className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-brand">{phase}</div>
-      <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink">{title}</h1>
+      <h1 className="mt-2 text-2xl font-semibold text-ink">{title}</h1>
       <p className="mt-3 text-muted-foreground">This screen is part of the next phase of the demonstration.</p>
       <ul className="mx-auto mt-8 max-w-md space-y-2.5 text-left text-sm text-foreground/80">
         {points.map((p) => (

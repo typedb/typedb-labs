@@ -1,6 +1,6 @@
 // Integration tests against the running semantic API and TypeDB (decision 0001, tests 1, 2 and 4 from the
 // web app's side). They need the whole stack, so they only run when asked:
-//   docker exec -e TYPEDB_INTEGRATION=1 noodlelab-web-dev npx vitest run src/semantic
+//   docker exec -e TYPEDB_INTEGRATION=1 nuts-and-volts-web-dev npx vitest run src/semantic
 // When asked, an unreachable API is a failure, not a skip.
 
 import { readFileSync } from "node:fs";

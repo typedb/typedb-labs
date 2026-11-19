@@ -27,7 +27,7 @@ function saveShots(): Plugin {
 }
 
 export default defineConfig({
-  // Served from the site root locally and in Docker; labs.typedb.com builds with VITE_BASE=/noodlelab/.
+  // Served from the site root locally and in Docker; labs.typedb.com builds with VITE_BASE=/nuts-and-volts/.
   base: process.env.VITE_BASE ?? "/",
   plugins: [react(), saveShots()],
   server: {

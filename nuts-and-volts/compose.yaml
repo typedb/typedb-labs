@@ -1,4 +1,4 @@
-# Docker Compose file for the TypeDB Noodlelab Visual Explorer.
+# Docker Compose file for Nuts & Volts.
 # Start everything:   docker compose up -d --build        then open http://127.0.0.1:5180
 # Stop everything:    docker compose down                 (TypeDB's data is kept in its volume)
 #
@@ -25,13 +25,13 @@ x-api: &api
 services:
   typedb:
     image: typedb/typedb:3.14.1        # pinned exact version; change deliberately
-    container_name: noodlelab-typedb
+    container_name: nuts-and-volts-typedb
     restart: unless-stopped
     ports:
       - "127.0.0.1:1733:1729"          # driver port (TypeDB Studio and scripts on this computer)
       - "127.0.0.1:8004:8000"          # HTTP port (the API when run outside Docker, TypeDB Studio)
     volumes:
-      - noodlelab-typedb-data:/var/lib/typedb/data
+      - nuts-and-volts-typedb-data:/var/lib/typedb/data
     healthcheck:
       # The image has no curl or wget; bash's /dev/tcp checks the HTTP port is accepting.
       test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000"]
@@ -42,7 +42,7 @@ services:
 
   seed:
     <<: *api
-    container_name: noodlelab-seed
+    container_name: nuts-and-volts-seed
     command: ["node", "scripts/create-database.ts", "--if-missing"]
     restart: "no"
     depends_on:
@@ -51,7 +51,7 @@ services:
 
   api:
     <<: *api
-    container_name: noodlelab-api
+    container_name: nuts-and-volts-api
     restart: unless-stopped
     # --watch: restarts when the code changes (development only)
     command: ["node", "--watch", "server.ts"]
@@ -61,7 +61,7 @@ services:
 
   web-dev:
     image: node:24.22.1-alpine
-    container_name: noodlelab-web-dev
+    container_name: nuts-and-volts-web-dev
     working_dir: /web
     command: ["sh", "-c", "npm install --no-audit --no-fund && npm run dev -- --host 0.0.0.0 --port 5180"]
     ports:
@@ -71,9 +71,9 @@ services:
       API_URL: http://api:8000             # where the dev server forwards /api requests
     volumes:
       - ./web:/web
-      - noodlelab-node-modules:/web/node_modules   # dependencies live in the container, not in the project folder
+      - nuts-and-volts-node-modules:/web/node_modules   # dependencies live in the container, not in the project folder
       - .:/project:ro                       # read-only view of the whole project, for the architecture tests
 
 volumes:
-  noodlelab-node-modules:
-  noodlelab-typedb-data:
+  nuts-and-volts-node-modules:
+  nuts-and-volts-typedb-data:

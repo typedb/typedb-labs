@@ -295,9 +295,9 @@ export function counts(instances: Instances): Counts {
   };
 }
 
-const README = (f: Record<string, string | number>) => `# Noodlelab Visual Explorer: the vehicle model in TypeDB
+const README = (f: Record<string, string | number>) => `# Nuts & Volts: the vehicle model in TypeDB
 
-The complete TypeDB model behind the Noodlelab Visual Explorer, exported from its live database on ${f.day}.
+The complete TypeDB model behind Nuts & Volts, exported from its live database on ${f.day}.
 The vehicle is an original concept vehicle for demonstration, not a production model. Its specifications are design
 targets, not measured data.
 

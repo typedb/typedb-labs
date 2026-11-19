@@ -64,11 +64,11 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
     <div className={cn('space-y-5 p-5 transition-opacity', stale && 'opacity-60')}>
       <div>
         <div className="text-[12px] font-medium text-muted-foreground">{humanise(d.type)}{d.criticality && <> · {humanise(d.criticality)} criticality</>}</div>
-        <h2 className="mt-1 text-[18px] leading-snug font-semibold tracking-tight text-ink">{d.name}</h2>
+        <h2 className="mt-1 text-[18px] leading-snug font-semibold text-ink">{d.name}</h2>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <StatusBadge status={d.status} />
           {d.workstream && (
-            <button type="button" onClick={() => onShowWorkstream(d.workstream!.code)} className="text-[12.5px] font-medium text-brand hover:underline">
+            <button type="button" onClick={() => onShowWorkstream(d.workstream!.code)} className="text-[13px] font-medium text-brand hover:underline">
               {d.workstream.name} workstream
             </button>
           )}
@@ -117,7 +117,7 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
         <Section title="Dependencies">
           <Links title="Waits for" icon={<ArrowLeft className="size-3.5" />} links={d.depends_on} onSelect={onSelect} />
           <Links title="Holds up" icon={<ArrowRight className="size-3.5" />} links={d.needed_by} onSelect={onSelect} />
-          <p className="mt-2 text-[11.5px] text-muted-foreground">Sequencing and gating move dates; informing passes information only.</p>
+          <p className="mt-2 text-[12px] text-muted-foreground">Sequencing and gating move dates; informing passes information only.</p>
         </Section>
       )}
 
@@ -129,7 +129,7 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
             {d.limits.length > 0 && <Fact label="Limits">{d.limits.map((l, i) => <span key={l.code}>{i > 0 && ', '}<ItemButton code={l.code} onSelect={onSelect}>{l.name}</ItemButton></span>)}</Fact>}
             {d.bound.length > 0 && <Fact label="Binds">{d.bound.map((b) => b.name).join(', ')}</Fact>}
             {d.consent_from.length > 0 && <Fact label="Consent from">{d.consent_from.map((b) => b.name).join(', ')}</Fact>}
-            {d.consequence && <div className="rounded-lg bg-risk-soft/70 px-3 py-2 text-[12.5px] leading-relaxed text-ink-soft"><span className="font-semibold text-risk">If missed: </span>{d.consequence}</div>}
+            {d.consequence && <div className="rounded-lg bg-risk-soft/70 px-3 py-2 text-[13px] leading-relaxed text-ink-soft"><span className="font-semibold text-risk">If missed: </span>{d.consequence}</div>}
           </div>
         </Section>
       )}
@@ -155,7 +155,7 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
             <div className="mt-0.5 text-[12px] text-muted-foreground">{humanise(latest.type)} · {latest.actor.name} · {formatDateTime(latest.when)}</div>
             {earlier.length > 0 && (
               <details className="mt-2">
-                <summary className="cursor-pointer text-[12.5px] font-medium text-brand">{plural(earlier.length, 'earlier event')}</summary>
+                <summary className="cursor-pointer text-[13px] font-medium text-brand">{plural(earlier.length, 'earlier event')}</summary>
                 <ul className="mt-2 space-y-2 border-l pl-3">
                   {earlier.map((e) => (
                     <li key={e.code}><div className="text-ink-soft">{e.summary}</div>
@@ -178,7 +178,7 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
               </li>
             ))}
           </ul>
-          <p className="mt-1 text-[11.5px] text-muted-foreground">Attending one of these counts as engagement on this item; a meeting that did not discuss it does not.</p>
+          <p className="mt-1 text-[12px] text-muted-foreground">Attending one of these counts as engagement on this item; a meeting that did not discuss it does not.</p>
         </Section>
       )}
 
@@ -200,7 +200,7 @@ function Body({ d, asOf, onSelect, onShowWorkstream, stale }: {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
-      <h3 className="mb-2 text-[11.5px] font-semibold tracking-wide text-muted-foreground uppercase">{title}</h3>
+      <h3 className="mb-2 text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">{title}</h3>
       {children}
     </section>
   )
@@ -223,7 +223,7 @@ function Links({ title, icon, links, onSelect }: { title: string; icon: ReactNod
         {links.map((l) => (
           <li key={l.code} className="flex items-baseline justify-between gap-3 text-[13px]">
             <ItemButton code={l.code} onSelect={onSelect}>{l.name}</ItemButton>
-            <span className="shrink-0 text-[11.5px] text-muted-foreground">{humanise(l.kind)}{l.lag ? ` · ${plural(l.lag, 'day')} lag` : ''}</span>
+            <span className="shrink-0 text-[12px] text-muted-foreground">{humanise(l.kind)}{l.lag ? ` · ${plural(l.lag, 'day')} lag` : ''}</span>
           </li>
         ))}
       </ul>

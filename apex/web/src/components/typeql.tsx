@@ -75,7 +75,7 @@ export function TypeQLDrawer({ envelope, className, functions, label, note, sele
               <span key={c}><span className="text-muted-foreground/50"> · </span><span className="font-medium whitespace-nowrap text-typedb" title={CAPABILITY_HINT[c]}>{c}</span></span>
             ))}
           </span>
-          {note && <span className="mt-0.5 block text-[11.5px] leading-snug font-normal text-ink-soft">{note}</span>}
+          {note && <span className="mt-0.5 block text-[12px] leading-snug font-normal text-ink-soft">{note}</span>}
         </span>
         <ChevronDown className="mt-px size-3.5 shrink-0 text-typedb transition-transform group-data-[state=open]:rotate-180" aria-hidden />
       </CollapsibleTrigger>
@@ -96,7 +96,7 @@ export function TypeQLDrawer({ envelope, className, functions, label, note, sele
                 Recursive functions used (saved in the schema, schema/functions.tql)
               </div>
               {functions.map((f) => (
-                <pre key={f.name} className="px-4 py-2.5 font-mono text-[11.5px] leading-relaxed whitespace-pre"><Highlighted text={f.definition} /></pre>
+                <pre key={f.name} className="px-4 py-2.5 font-mono text-[12px] leading-relaxed whitespace-pre"><Highlighted text={f.definition} /></pre>
               ))}
             </div>
           )}
@@ -106,7 +106,7 @@ export function TypeQLDrawer({ envelope, className, functions, label, note, sele
                 {envelope.typeql.length > 1 && (
                   <div className="px-4 pt-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Query {n + 1}</div>
                 )}
-                <pre className="px-4 py-2.5 font-mono text-[11.5px] leading-relaxed whitespace-pre"><Highlighted text={q} /></pre>
+                <pre className="px-4 py-2.5 font-mono text-[12px] leading-relaxed whitespace-pre"><Highlighted text={q} /></pre>
               </div>
             ))}
           </ScrollArea>

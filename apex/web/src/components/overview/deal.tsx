@@ -47,7 +47,7 @@ export function DealHeader() {
                 {d.status.headline}
               </span>
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-[34px]">{d.name}</h2>
+            <h2 className="mt-3 text-3xl font-semibold sm:text-[34px]">{d.name}</h2>
             <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-white/70">{d.description}</p>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-stretch">
               <Party role="Acquirer" org={d.acquirer} />
@@ -57,7 +57,7 @@ export function DealHeader() {
           </div>
           <div className="shrink-0 lg:text-right">
             <div className="text-[11px] font-medium uppercase tracking-[0.12em] text-white/50">Transaction value</div>
-            <div className="mt-1 text-5xl font-semibold tracking-tight tabular">{formatMoney(d.value, d.currency)}</div>
+            <div className="mt-1 text-5xl font-semibold tabular">{formatMoney(d.value, d.currency)}</div>
             <div className="mt-2 text-[13px] text-white/65">{d.structure} · {d.currency}</div>
             <div className="mt-1 text-[12px] text-white/45">Data as of {formatDate(d.as_of)}</div>
           </div>
@@ -76,9 +76,9 @@ function Tile({ icon: Icon, label, value, detail, children, tone }: {
       <div className="flex items-center gap-2 text-[12px] font-medium text-muted-foreground">
         <Icon className={cn('size-4', tone === 'warn' ? 'text-warn' : 'text-brand')} />{label}
       </div>
-      <div className="mt-2.5 text-[28px] leading-none font-semibold tracking-tight text-ink tabular">{value}</div>
+      <div className="mt-2.5 text-[28px] leading-none font-semibold text-ink tabular">{value}</div>
       {children}
-      {detail && <div className="mt-2 text-[12.5px] leading-snug text-muted-foreground">{detail}</div>}
+      {detail && <div className="mt-2 text-[13px] leading-snug text-muted-foreground">{detail}</div>}
     </div>
   )
 }
@@ -108,7 +108,7 @@ export function KeyMetrics() {
         value={<>{metrics.progress_percent}%<span className="ml-1.5 text-[13px] font-medium text-muted-foreground">activity progress</span></>}
         detail={<>{metrics.progress_basis}. Neither figure is readiness to close: that is <span className="font-medium text-foreground">Conditions satisfied</span>.</>}>
         <ProgressBar value={metrics.progress_percent} status="in-progress" className="mt-3" />
-        <div className="mt-3 flex items-baseline justify-between text-[12.5px]">
+        <div className="mt-3 flex items-baseline justify-between text-[13px]">
           <span className="text-muted-foreground">Milestones achieved</span>
           <span className="font-semibold text-ink tabular">{metrics.milestones_achieved} of {metrics.milestones_total}</span>
         </div>

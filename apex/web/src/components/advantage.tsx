@@ -80,14 +80,14 @@ function Panel({ section, onClose }: { section: string; onClose: () => void }) {
             <p className="mt-0.5 text-[12px] text-ink-soft">Six points, each with its evidence from Apex: the schema, live figures and a working example.</p>
           </div>
           <button type="button" onClick={onClose} aria-label="Close the TypeDB advantage panel (Escape)"
-            className="flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-typedb-line bg-white px-2 py-1 text-[12.5px] font-medium text-typedb hover:bg-[#ede6f8] focus-visible:outline-2 focus-visible:outline-typedb">
+            className="flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-typedb-line bg-white px-2 py-1 text-[13px] font-medium text-typedb hover:bg-[#ede6f8] focus-visible:outline-2 focus-visible:outline-typedb">
             <X className="size-4" aria-hidden />Close
           </button>
         </div>
         <nav aria-label="Sections" className="mt-2.5 flex flex-wrap gap-1">
           {sections.map((s) => (
             <a key={s.key} href={`#advantage-${s.key}`} onClick={(e) => { e.preventDefault(); document.getElementById(`advantage-${s.key}`)?.scrollIntoView({ block: 'start' }) }}
-              className={cn('rounded-full border px-2 py-0.5 text-[11.5px] font-medium focus-visible:outline-2 focus-visible:outline-typedb',
+              className={cn('rounded-full border px-2 py-0.5 text-[12px] font-medium focus-visible:outline-2 focus-visible:outline-typedb',
                 s.key === section ? 'border-typedb bg-typedb text-white' : 'border-typedb-line bg-white text-typedb hover:bg-[#ede6f8]')}>{s.title}</a>
           ))}
         </nav>
@@ -112,18 +112,18 @@ function SectionView({ s, current, onNavigate }: { s: Section; current: boolean;
     <section id={`advantage-${s.key}`} aria-labelledby={`advantage-${s.key}-title`} className={cn('scroll-mt-2 rounded-xl border p-4', current ? 'border-typedb/40 bg-typedb-tint/60' : 'border-border')}>
       <div className="flex flex-wrap items-center gap-2">
         <h3 id={`advantage-${s.key}-title`} className="text-[14px] font-semibold text-ink">{s.title}</h3>
-        {current && <span className="rounded-full bg-typedb px-2 py-0.5 text-[10.5px] font-semibold text-white">Relevant to this page</span>}
+        {current && <span className="rounded-full bg-typedb px-2 py-0.5 text-[11px] font-semibold text-white">Relevant to this page</span>}
       </div>
       <p className="mt-1 text-[13px] leading-relaxed text-ink-soft">{s.statement}</p>
       <div className="mt-3 space-y-2">
         {s.schema.map((x) => (
           <figure key={`${x.file}:${x.line}`}>
-            <pre className="overflow-x-auto rounded-md border bg-muted/40 px-3 py-2 font-mono text-[11.5px] leading-relaxed whitespace-pre text-ink">{x.text}</pre>
-            <figcaption className="mt-0.5 font-mono text-[10.5px] text-muted-foreground">{x.file}:{x.line}</figcaption>
+            <pre className="overflow-x-auto rounded-md border bg-muted/40 px-3 py-2 font-mono text-[12px] leading-relaxed whitespace-pre text-ink">{x.text}</pre>
+            <figcaption className="mt-0.5 font-mono text-[11px] text-muted-foreground">{x.file}:{x.line}</figcaption>
           </figure>
         ))}
       </div>
-      <dl className="mt-3 space-y-1.5 text-[12.5px]">
+      <dl className="mt-3 space-y-1.5 text-[13px]">
         {s.live.map((f) => (
           <div key={f.label}><dt className="text-muted-foreground">{f.label}</dt><dd className="font-medium text-ink">{f.value}</dd></div>
         ))}
@@ -132,7 +132,7 @@ function SectionView({ s, current, onNavigate }: { s: Section; current: boolean;
       <div className="mt-3 flex flex-wrap gap-2">
         {s.links.map((l) => (
           <Link key={l.to} to={l.to} onClick={onNavigate}
-            className="inline-flex items-center gap-1 rounded-md border border-typedb-line bg-white px-2.5 py-1 text-[12.5px] font-medium text-typedb hover:bg-[#ede6f8] focus-visible:outline-2 focus-visible:outline-typedb">
+            className="inline-flex items-center gap-1 rounded-md border border-typedb-line bg-white px-2.5 py-1 text-[13px] font-medium text-typedb hover:bg-[#ede6f8] focus-visible:outline-2 focus-visible:outline-typedb">
             {l.label}<ArrowUpRight className="size-3.5" aria-hidden />
           </Link>
         ))}

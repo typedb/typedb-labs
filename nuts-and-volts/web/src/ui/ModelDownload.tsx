@@ -14,7 +14,7 @@ export function ModelDownload() {
       const url = URL.createObjectURL(await response.blob());
       const a = document.createElement("a");
       a.href = url;
-      a.download = "noodlelab-vehicle-typedb-model.zip";
+      a.download = "nuts-and-volts-vehicle-typedb-model.zip";
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       setState("idle");

@@ -1,0 +1,96 @@
+// The index page: the main site's base styles and footer, plus the page's own layout.
+@use "reset";
+@use "base";
+@use "colors";
+@use "footer";
+
+@include footer.styles("../icons");
+
+main {
+  max-width: var(--section-narrow-max-width);
+  margin: 0 auto;
+  padding: var(--first-section-margin) var(--section-padding) var(--section-margin);
+}
+
+.lead {
+  margin-top: var(--subtitle-margin);
+  max-width: 760px;
+}
+
+.labs {
+  margin-top: var(--subsection-margin);
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    // Matches the hoverable bento boxes on Cloud's "Get started" page (.tp-bento-box.hoverable.tp-icon-card).
+    @include colors.light-source-gradient(colors.$purple, colors.$deep-purple);
+    transition: background 0.1s linear;
+
+    &:hover, &:has(h2 a:focus-visible) {
+      @include colors.light-source-gradient(rgba(colors.$light-purple, 0.6), colors.$purple);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin-bottom: 8px;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--content-border-color);
+  }
+
+  h2 {
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+  }
+
+  // The title's link covers the whole card; the links in .meta sit above it.
+  h2 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .open {
+    margin-top: auto;
+    padding-top: 12px;
+    color: var(--color-secondary-blue);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--content-border-color);
+    list-style: none;
+    color: var(--color-secondary-light-grey);
+    font-size: var(--font-size-aside);
+    line-height: var(--line-height-aside);
+
+    a {
+      position: relative;
+      z-index: 1;
+      color: var(--color-secondary-blue);
+
+      &:hover, &:focus-visible { text-decoration: underline; }
+    }
+  }
+}
+
+.note {
+  margin-top: var(--subsection-margin);
+  color: var(--color-secondary-light-grey);
+
+  & + & { margin-top: 12px; }
+}

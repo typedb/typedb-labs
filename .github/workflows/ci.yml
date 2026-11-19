@@ -21,7 +21,7 @@ jobs:
           - lab: apex
             health: http://127.0.0.1:8091/api/health
             typedb: 127.0.0.1:8003
-          - lab: noodlelab
+          - lab: nuts-and-volts
             health: http://127.0.0.1:5180/api/health
             typedb: 127.0.0.1:8004
     defaults:
@@ -60,8 +60,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+          submodules: true
       - uses: actions/setup-node@v6
         with:
           node-version: 24
       - name: Build the site as Netlify does
-        run: npm run build
+        run: npm ci --no-audit --no-fund && npm run build

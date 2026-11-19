@@ -93,7 +93,7 @@ export function Parties() {
         subtitle={data ? `${shown.length} of ${plural(rows.length, tab === 'people' ? 'person' : 'organisation', tab === 'people' ? 'people' : 'organisations')} · engagement is measured against each person's own responsibilities and requests, from the scenario date ${formatDate(data.as_of)}` : undefined}
         note="People and their employers, RACI assignments with the letter from the relation's type, every event (engagement subtypes and outreach read from the schema), authority reviews and the dependency data for schedule float. Contacts are read separately and masked before leaving the server."
         action={() => (
-          <div className="flex flex-wrap items-center justify-end gap-2 text-[12.5px]">
+          <div className="flex flex-wrap items-center justify-end gap-2 text-[13px]">
             <label className="inline-flex items-center gap-1.5 rounded-md border bg-white px-2 py-1 shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-brand">
               <Search className="size-3.5 text-muted-foreground" aria-hidden />
               <input value={text} onChange={(e) => set('q', e.target.value)} placeholder="Search names, titles, organisations" aria-label="Search"
@@ -139,19 +139,19 @@ function RowView({ r }: { r: Row }) {
           aria-label={`${r.name}: ${LEVEL[r.engagement.level]?.label}, ${CATEGORY[r.engagement.category] ?? ''}. Open profile`}>
           <span className="min-w-0 px-6">
             <span className="block truncate text-[13px] font-medium text-ink" title={r.name ?? undefined}>{r.name}</span>
-            <span className="block truncate text-[11.5px] text-muted-foreground">
+            <span className="block truncate text-[12px] text-muted-foreground">
               {person ? [r.title, r.employer?.name].filter(Boolean).join(', ') : humanise(r.type)}{r.authority ? ' · authority' : ''}
             </span>
           </span>
           <span className="min-w-0 px-3">
             <EngagementBadge level={r.engagement.level} category={r.engagement.category} />
-            <span className="mt-0.5 block truncate text-[11.5px] text-muted-foreground" title={r.engagement.headline}>{r.engagement.headline}</span>
+            <span className="mt-0.5 block truncate text-[12px] text-muted-foreground" title={r.engagement.headline}>{r.engagement.headline}</span>
           </span>
           <span className="px-3 text-[13px] font-semibold text-ink tabular">{r.outstanding}</span>
           <span className="flex gap-1 px-3">
             {(['A', 'R', 'C', 'I'] as const).map((l) => (
               <span key={l} title={`${r.letters[l] ?? 0} open as ${l}`}
-                className={cn('inline-flex h-5 min-w-5 items-center justify-center rounded px-1 text-[10.5px] font-semibold tabular',
+                className={cn('inline-flex h-5 min-w-5 items-center justify-center rounded px-1 text-[11px] font-semibold tabular',
                   (r.letters[l] ?? 0) ? 'bg-muted text-ink' : 'text-border')}>{l}{r.letters[l] ? r.letters[l] : ''}</span>
             ))}
           </span>
@@ -161,7 +161,7 @@ function RowView({ r }: { r: Row }) {
               : <span className="text-muted-foreground">None</span>}
           </span>
           <span className="px-3 text-[12px] text-muted-foreground">{r.last_activity ? formatDate(r.last_activity.slice(0, 10)) : 'None recorded'}</span>
-          <span className="min-w-0 px-3 font-mono text-[11.5px] text-muted-foreground">
+          <span className="min-w-0 px-3 font-mono text-[12px] text-muted-foreground">
             {person ? <span className="block truncate" title="Masked on the server">{r.contact.email}</span>
               : <span className="font-sans">{r.people ? plural(r.people, 'person', 'people') : r.authority ? 'None recorded (authority)' : 'None'}</span>}
           </span>
@@ -184,7 +184,7 @@ function Select({ label, value, onChange, options }: { label: string; value: str
 
 function PolicyNote({ policy, source }: { policy: Schemas['EngagementPolicy']; source: string }) {
   return (
-    <details className="rounded-xl border bg-white px-5 py-3 text-[12.5px] text-ink-soft shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+    <details className="rounded-xl border bg-white px-5 py-3 text-[13px] text-ink-soft shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
       <summary className="flex cursor-pointer items-center gap-2 font-medium text-ink"><SlidersHorizontal className="size-4 text-brand" aria-hidden />How engagement is assessed (the policy in force)</summary>
       <div className="mt-3 grid gap-4 md:grid-cols-2">
         <ul className="list-disc space-y-1 pl-5">
@@ -200,7 +200,7 @@ function PolicyNote({ policy, source }: { policy: Schemas['EngagementPolicy']; s
           <li>Engagement is what the schema calls <code>engagement</code> (responses, meetings, deliveries, decisions), plus requests and notices for their sender only. Point milestones become active {plural(policy.milestone_active_window_days, 'day')} before they are due.</li>
         </ul>
       </div>
-      <p className="mt-3 text-[11.5px] text-muted-foreground">Source: {source} (configuration, not business data). All days are counted from the scenario date stored in TypeDB.</p>
+      <p className="mt-3 text-[12px] text-muted-foreground">Source: {source} (configuration, not business data). All days are counted from the scenario date stored in TypeDB.</p>
     </details>
   )
 }

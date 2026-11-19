@@ -1,4 +1,4 @@
-# TypeDB Noodlelab Visual Explorer
+# Nuts & Volts
 
 A Noodlelab project (Noodlelab is an umbrella name for experimental software projects).
 
@@ -35,11 +35,11 @@ and installs the web dependencies; it takes a few minutes. TypeDB Studio can con
 Tests and type checks (with everything running):
 
 ```bash
-docker exec noodlelab-web-dev sh -c "npx tsc -p . && npx vitest run"
+docker exec nuts-and-volts-web-dev sh -c "npx tsc -p . && npx vitest run"
 ```
 
 ```bash
-docker exec noodlelab-api sh -c "npx tsc --noEmit && npx vitest run"
+docker exec nuts-and-volts-api sh -c "npx tsc --noEmit && npx vitest run"
 ```
 
 Without Docker (Node.js 22.6 or newer, a TypeDB server on 127.0.0.1:8004): `cd api && npm ci && npm run create-database`

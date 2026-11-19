@@ -39,7 +39,7 @@ export function Measures({ w, compact }: { w: Summary; compact?: boolean }) {
 function Measure({ label, value, hint, children, muted }: { label: string; value: string; hint: string; children?: ReactNode; muted?: boolean }) {
   return (
     <div className="min-w-0" title={hint}>
-      <div className="text-[11.5px] font-medium text-muted-foreground">{label}</div>
+      <div className="text-[12px] font-medium text-muted-foreground">{label}</div>
       <div className={cn('mt-0.5 text-[17px] leading-tight font-semibold tabular', muted ? 'text-muted-foreground' : 'text-ink')}>{value}</div>
       {children && <div className="mt-1.5">{children}</div>}
     </div>
@@ -56,7 +56,7 @@ export function RiskBadge({ risk, className }: { risk: Risk; className?: string 
   const closed = risk.status === 'closed'
   const Icon = closed ? ShieldCheck : ShieldAlert
   return (
-    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-md px-1.5 py-0.5 text-[11.5px] font-medium ring-1 ring-inset',
+    <span className={cn('inline-flex max-w-full items-center gap-1.5 rounded-md px-1.5 py-0.5 text-[12px] font-medium ring-1 ring-inset',
       closed ? 'bg-muted text-muted-foreground ring-border' : SEVERITY[risk.severity ?? 'low'], className)} title={risk.description ?? undefined}>
       <Icon className="size-3.5 shrink-0" aria-hidden />
       <span className="truncate">{risk.name}</span>

@@ -44,7 +44,7 @@ function useTypeDBStatus() {
 /** Where the side panels end (CSS pixels): the explorer's right edge and the part panel's distance from the window's
  * right edge, measured from the panels themselves, so the camera always frames the space actually free. */
 function usePanelEdges() {
-  const [edges, setEdges] = useState({ left: 354, right: 384 });
+  const [edges, setEdges] = useState({ left: 374, right: 384 });
   useEffect(() => {
     const measure = () => {
       const explore = document.querySelector(".explore")?.getBoundingClientRect();
@@ -133,14 +133,9 @@ export function App() {
           insets={insets} />
       </div>
 
-      <header className="brand">
-        <span className="brand-mark" aria-hidden />
-        <span>Noodlelab Visual Explorer</span>
-        <span className="brand-sep">·</span>
-        <span className={`typedb-status ${typedb}`} role="status">
-          TypeDB {typedb === "available" ? "connected" : typedb === "unavailable" ? "unavailable" : "…"}
-        </span>
-      </header>
+      <span className={`typedb-status ${typedb}`} role="status">
+        TypeDB {typedb === "available" ? "connected" : typedb === "unavailable" ? "unavailable" : "…"}
+      </span>
 
       <section className="intro" aria-hidden={exploring}>
         <h1>A vehicle is more than the sum of its parts.</h1>

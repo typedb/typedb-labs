@@ -29,12 +29,12 @@ function Turntable({ spinning, children }: { spinning: boolean; children: React.
  * null when closed), so the vehicle can be framed in what is left. */
 export interface Insets { left: number; right: number; overlay: { right: number; bottom: number } | null }
 
-/** Kept clear at the bottom for the explode controls and focus bar, and at the top for the brand line (CSS pixels). */
+/** Kept clear at the bottom for the explode controls and focus bar, and at the top for the TypeDB status (CSS pixels). */
 const CONTROLS = 165;
 const BRAND = 64;
 
 /** While the intro text is showing, shift the picture so the vehicle sits right of the headline. While exploring,
- * frame it in the free space: between the side panels and between the brand line and the controls, and beside or
+ * frame it in the free space: between the side panels and between the TypeDB status and the controls, and beside or
  * below the TypeQL overlay (whichever leaves it larger). A lens "film offset" sideways, a view offset up or down
  * and a wider lens when the space is small, so the camera itself doesn't move. */
 /** A framing target: how far to move the picture (CSS pixels) and how much to widen the lens. */
@@ -89,7 +89,7 @@ function Framing({ exploring, insets }: { exploring: boolean; insets: Insets }) 
         down = (y0 + y1) / 2 - H / 2;
       } else {
         // Desktop: the scene is a full-width background behind the panels. The vehicle is centred in the band between
-        // the brand line and the controls, and may reach behind the panels and the TypeQL overlay: it is sized to be
+        // the TypeDB status and the controls, and may reach behind the panels and the TypeQL overlay: it is sized to be
         // up to OVERHANG times the free width, so it stays large. While the overlay is open, the vehicle moves right
         // (OVERLAY_SHIFT), behind the part panel rather than the TypeQL. The overlay's slot is fixed by its styles,
         // never its content, so switching selections never moves the camera.

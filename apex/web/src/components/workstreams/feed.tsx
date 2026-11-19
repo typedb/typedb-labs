@@ -48,12 +48,12 @@ export function ActivityFeed({ events, onSelect, asOf }: { events: Event[]; onSe
               <li key={e.code} className="relative flex gap-3">
                 <div className="z-10 flex size-[31px] shrink-0 items-center justify-center rounded-full border bg-card text-brand"><Icon className="size-3.5" aria-hidden /></div>
                 <div className="min-w-0 flex-1 pt-0.5">
-                  {showDay && <div className="mb-0.5 text-[10.5px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">{formatDate(day)}</div>}
+                  {showDay && <div className="mb-0.5 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">{formatDate(day)}</div>}
                   <div className="flex flex-wrap items-baseline gap-x-2">
                     <span className="text-[13px] leading-snug text-ink">{e.summary}</span>
-                    <span className="rounded bg-muted px-1.5 text-[10.5px] font-medium text-muted-foreground">{humanise(e.type)}</span>
+                    <span className="rounded bg-muted px-1.5 text-[11px] font-medium text-muted-foreground">{humanise(e.type)}</span>
                   </div>
-                  <div className="mt-0.5 text-[11.5px] text-muted-foreground">
+                  <div className="mt-0.5 text-[12px] text-muted-foreground">
                     {e.actor.name}{e.actor.employer ? `, ${e.actor.employer}` : ''} · {formatDateTime(e.when).split(', ')[1]} · on{' '}
                     <button type="button" onClick={() => onSelect(e.item.code)} className="cursor-pointer font-medium text-brand hover:underline focus-visible:outline-2 focus-visible:outline-brand">{e.item.name}</button>
                   </div>
@@ -93,7 +93,7 @@ function Details({ e, byCode, asOf, onSelect }: { e: Event; byCode: Map<string, 
   }
   if (e.automated) lines.push(<>Sent automatically</>)
   if (!lines.length) return null
-  return <div className="mt-1 space-y-0.5 text-[11.5px] text-ink-soft">{lines.map((l, i) => <div key={i}>{l}</div>)}</div>
+  return <div className="mt-1 space-y-0.5 text-[12px] text-ink-soft">{lines.map((l, i) => <div key={i}>{l}</div>)}</div>
 }
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {

@@ -57,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3">
             <Logo />
             <div className="leading-tight whitespace-nowrap">
-              <div className="text-[15px] font-semibold tracking-tight">{deal.data?.data.name ?? 'Deal workspace'}</div>
+              <div className="text-[15px] font-semibold">{deal.data?.data.name ?? 'Deal workspace'}</div>
               <div className="flex items-center gap-1 text-[11px] text-amber-200/75" title="All companies, people and events are fictional">
                 <FlaskConical className="size-3" aria-hidden />Fictional demonstration data
               </div>

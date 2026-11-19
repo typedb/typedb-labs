@@ -15,7 +15,7 @@ export function ScenarioControl({ data, delay, setDelay, max }: { data: Impact; 
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0">
           <div className="text-[11px] font-semibold tracking-[0.12em] text-white/50 uppercase">Scenario: delay to</div>
-          <div className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">{s.name}</div>
+          <div className="mt-1 text-xl font-semibold sm:text-2xl">{s.name}</div>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-[13px] text-white/70">
             <span>Planned {formatDate(s.planned)}</span>
             <ArrowRight className="size-3.5 text-white/40" />
@@ -27,7 +27,7 @@ export function ScenarioControl({ data, delay, setDelay, max }: { data: Impact; 
         </div>
         <div className="shrink-0 text-left lg:text-right">
           <div className="text-[11px] font-semibold tracking-[0.12em] text-white/50 uppercase">Delay</div>
-          <div className="text-5xl leading-none font-semibold tracking-tight tabular">{delay}<span className="ml-1 text-xl text-white/60">days</span></div>
+          <div className="text-5xl leading-none font-semibold tabular">{delay}<span className="ml-1 text-xl text-white/60">days</span></div>
         </div>
       </div>
 
@@ -42,7 +42,7 @@ export function ScenarioControl({ data, delay, setDelay, max }: { data: Impact; 
             ))}
           </div>
         </div>
-        <div className="relative mt-1 h-4 px-1 text-[10.5px] text-white/45">
+        <div className="relative mt-1 h-4 px-1 text-[11px] text-white/45">
           <span className="absolute left-1">0</span>
           <span className="absolute right-1">{max} days</span>
         </div>
@@ -86,7 +86,7 @@ export function EscalationBanner({ data }: { data: Impact }) {
           {data.level === 'delayed' && `${plural(moved, 'item')} delayed downstream; no contractual deadline breached`}
           {data.level === 'breach' && `${plural(breached.length, 'contractual deadline')} breached`}
         </div>
-        <div className="text-[12.5px] text-foreground/70">
+        <div className="text-[13px] text-foreground/70">
           {data.level === 'breach' && breached.map((d) => d.name).join(' · ')}
           {data.level !== 'breach' && nearest && <>Tightest remaining headroom: <span className="font-medium text-foreground">{nearest.headroom_days} days</span> on {nearest.name}</>}
           {data.level === 'delayed' && data.summary.workstreams.length > 0 && <> · across {data.summary.workstreams.join(', ')}</>}
@@ -105,7 +105,7 @@ function Stat({ n, label, alert }: { n: number; label: string; alert?: boolean }
   return (
     <div className="min-w-16">
       <div className={cn('text-2xl leading-none font-semibold tabular', alert ? 'text-risk' : 'text-ink')}>{n}</div>
-      <div className="mt-1 text-[10.5px] text-foreground/60">{label}</div>
+      <div className="mt-1 text-[11px] text-foreground/60">{label}</div>
     </div>
   )
 }
@@ -128,10 +128,10 @@ export function DeadlineCards({ data }: { data: Impact }) {
                   <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                     <Flag className={cn('size-3.5', d.breached ? 'text-risk' : 'text-muted-foreground')} />Contractual deadline
                   </div>
-                  <div className="mt-1 text-[14.5px] leading-snug font-semibold text-ink">{d.name}</div>
+                  <div className="mt-1 text-[15px] leading-snug font-semibold text-ink">{d.name}</div>
                   <div className="text-[12px] text-muted-foreground">{formatDate(d.due)} · {d.legal_basis}</div>
                 </div>
-                <span className={cn('shrink-0 rounded-full px-2.5 py-1 text-[11.5px] font-semibold',
+                <span className={cn('shrink-0 rounded-full px-2.5 py-1 text-[12px] font-semibold',
                   d.breached ? 'bg-risk text-white' : 'bg-ok-soft text-ok')}>
                   {d.breached ? `Breached by ${plural(d.days_over, 'day')}` : `${d.headroom_days} days headroom`}
                 </span>
@@ -143,7 +143,7 @@ export function DeadlineCards({ data }: { data: Impact }) {
                 {d.breach_from_days != null ? <>Breached from <span className="font-semibold text-foreground">{d.breach_from_days} days</span> of delay</> : 'Not reached within the simulated range'}
               </div>
             </div>
-            <ul className="space-y-1.5 border-t px-4 py-3 text-[12.5px]">
+            <ul className="space-y-1.5 border-t px-4 py-3 text-[13px]">
               {d.limits.map((x) => (
                 <li key={x.code} className="flex items-center justify-between gap-2">
                   <span className="min-w-0 truncate text-foreground/80">{x.name}</span>
@@ -152,14 +152,14 @@ export function DeadlineCards({ data }: { data: Impact }) {
                   </span>
                 </li>
               ))}
-              {worst && !d.breached && data.delay_days > 0 && <li className="text-[11.5px] text-muted-foreground">Projected {plural(worst.headroom_days, 'day')} inside the deadline</li>}
+              {worst && !d.breached && data.delay_days > 0 && <li className="text-[12px] text-muted-foreground">Projected {plural(worst.headroom_days, 'day')} inside the deadline</li>}
             </ul>
             <div className={cn('mt-auto border-t px-4 py-3', d.breached ? 'bg-violet-50' : 'bg-muted/40')}>
               <div className={cn('flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.06em] uppercase', d.breached ? 'text-violet-700' : 'text-muted-foreground')}>
                 <Scale className="size-3.5" />{d.breached ? 'Potential exposure · needs legal judgement' : 'If this deadline were missed'}
               </div>
-              <p className="mt-1 text-[12.5px] leading-relaxed text-foreground/80">{d.consequence}</p>
-              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11.5px] text-muted-foreground">
+              <p className="mt-1 text-[13px] leading-relaxed text-foreground/80">{d.consequence}</p>
+              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted-foreground">
                 {d.bound.length > 0 && <span className="inline-flex items-center gap-1"><Gavel className="size-3" />Bound: <span className="text-foreground/80">{d.bound.map((b) => b.name).join(', ')}</span></span>}
                 {d.consent_from.length > 0 && <span className="inline-flex items-center gap-1"><CalendarClock className="size-3" />Consent from: <span className="text-foreground/80">{d.consent_from.map((b) => b.name).join(', ')}</span></span>}
                 {d.group_obligation && <span className="inline-flex items-center gap-1"><TriangleAlert className="size-3" />Owed inside the target group ({formatPercent(d.group_obligation.effective_stake)} owned)</span>}

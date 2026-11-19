@@ -2,7 +2,7 @@
   "name": "typedb-noodlelab-visual-explorer-api",
   "private": true,
   "version": "0.1.0",
-  "description": "Read-only semantic API for the TypeDB Noodlelab Visual Explorer: named TypeQL queries over TypeDB 3",
+  "description": "Read-only semantic API for the Nuts & Volts lab: named TypeQL queries over TypeDB 3",
   "license": "Apache-2.0",
   "type": "module",
   "engines": {
