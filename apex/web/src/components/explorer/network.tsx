@@ -8,7 +8,7 @@ import '@xyflow/react/dist/style.css'
 import { Maximize2, Network, RotateCcw, Users } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useGraph, type Schemas } from '@/api/client'
+import { API, useGraph, type Schemas } from '@/api/client'
 import { PanelError } from '@/components/panel'
 import { TypeQLDrawer } from '@/components/typeql'
 import { UNDIRECTED, graphEdges, layoutDagre, layoutElk, type GraphData, type Layout, type LayoutEdge, type LayoutNode, type Relation } from '@/lib/graph-layout'
@@ -27,7 +27,7 @@ function useExpandedPeople(codes: string[]) {
   return useQueries({
     queries: codes.map((code) => ({
       queryKey: ['party', code],
-      queryFn: async () => (await fetch(`/api/graph/node/${encodeURIComponent(code)}`)).json() as Promise<Schemas['PartyResponse']>,
+      queryFn: async () => (await fetch(`${API}/graph/node/${encodeURIComponent(code)}`)).json() as Promise<Schemas['PartyResponse']>,
     })),
     combine: (results) => results.map((r) => r.data?.data).filter((d): d is Schemas['PartyDetail'] => Boolean(d)),
   })

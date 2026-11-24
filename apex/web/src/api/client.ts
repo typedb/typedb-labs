@@ -17,7 +17,7 @@ export class ApiError extends Error {
 }
 
 /** Where the API lives: /api next to the app, whatever path the app itself is served from. */
-const API = import.meta.env.BASE_URL.replace(/\/$/, '') + '/api'
+export const API = import.meta.env.BASE_URL.replace(/\/$/, '') + '/api'
 
 async function getJson<T>(path: string): Promise<T> {
   let response: Response
@@ -47,25 +47,25 @@ const query = <T,>(key: unknown[], path: string) => ({
 export const useDeal = () => useQuery(query<Schemas['DealResponse']>(['deal'], `${API}/deal`))
 export const useApprovals = () => useQuery(query<Schemas['ApprovalsResponse']>(['approvals'], `${API}/approvals`))
 export const useActivity = (limit: number) =>
-  useQuery(query<Schemas['ActivityResponse']>(['activity', limit], `/api/activity?limit=${limit}`))
+  useQuery(query<Schemas['ActivityResponse']>(['activity', limit], `${API}/activity?limit=${limit}`))
 export const useParties = () => useQuery(query<Schemas['PartiesResponse']>(['parties'], `${API}/parties`))
 export const useProgress = () => useQuery(query<Schemas['ProgressResponse']>(['progress'], `${API}/progress`))
 export const useRaci = (workstream: string | undefined) =>
   useQuery({
-    ...query<Schemas['RaciResponse']>(['raci', workstream], `/api/raci?workstream=${encodeURIComponent(workstream ?? '')}`),
+    ...query<Schemas['RaciResponse']>(['raci', workstream], `${API}/raci?workstream=${encodeURIComponent(workstream ?? '')}`),
     enabled: Boolean(workstream),
   })
 export const useChecks = () => useQuery(query<Schemas['ChecksResponse']>(['checks'], `${API}/checks`))
 export const useGraph = () => useQuery(query<Schemas['GraphResponse']>(['graph'], `${API}/graph`))
 export const useParty = (code: string | undefined) =>
-  useQuery({ ...query<Schemas['PartyResponse']>(['party', code], `/api/graph/node/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
+  useQuery({ ...query<Schemas['PartyResponse']>(['party', code], `${API}/graph/node/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
 /** The group structure below the deal's target (the API chooses it from TypeDB; no code here). */
 export const useOwnership = () => useQuery({ ...query<Schemas['OwnershipResponse']>(['ownership'], `${API}/ownership`), retry: false })
 /** One impact scenario. The previous answer stays on screen while the next one loads (smooth slider). */
 export const useImpact = (item: string | undefined, delayDays: number) =>
   useQuery({
     ...query<Schemas['ImpactResponse']>(['impact', item ?? 'default', delayDays],
-      `/api/impact?delay_days=${delayDays}${item ? `&item=${encodeURIComponent(item)}` : ''}`),
+      `${API}/impact?delay_days=${delayDays}${item ? `&item=${encodeURIComponent(item)}` : ''}`),
     placeholderData: keepPreviousData, staleTime: 5 * 60_000,
   })
 /** The Gantt chart: every workstream, item, dependency and deadline, with the scenario date. */
@@ -73,19 +73,19 @@ export const useSchedule = () => useQuery(query<Schemas['ScheduleResponse']>(['s
 /** One item's detail (shared panel). The previous item stays on screen while the next one loads. */
 export const useItem = (code: string | undefined) =>
   useQuery({
-    ...query<Schemas['ItemResponse']>(['item', code], `/api/items/${encodeURIComponent(code ?? '')}`),
+    ...query<Schemas['ItemResponse']>(['item', code], `${API}/items/${encodeURIComponent(code ?? '')}`),
     enabled: Boolean(code), placeholderData: keepPreviousData,
   })
 /** Every workstream's operational summary (one answer; the page filters and sorts it in the browser). */
 export const useWorkstreams = () => useQuery(query<Schemas['WorkstreamsResponse']>(['workstreams'], `${API}/workstreams`))
 /** One workstream in detail: items, dependencies, obligations and its event history. */
 export const useWorkstream = (code: string | undefined) =>
-  useQuery({ ...query<Schemas['WorkstreamResponse']>(['workstream', code], `/api/workstreams/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
+  useQuery({ ...query<Schemas['WorkstreamResponse']>(['workstream', code], `${API}/workstreams/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
 /** Everyone on the deal with masked contacts and an explainable engagement assessment (one answer). */
 export const useRegister = () => useQuery(query<Schemas['RegisterResponse']>(['register'], `${API}/register`))
 /** One person's or organisation's profile. */
 export const usePartyProfile = (code: string | undefined) =>
-  useQuery({ ...query<Schemas['PartyProfileResponse']>(['party-profile', code], `/api/parties/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
+  useQuery({ ...query<Schemas['PartyProfileResponse']>(['party-profile', code], `${API}/parties/${encodeURIComponent(code ?? '')}`), enabled: Boolean(code) })
 /** The engagement thresholds in force (configuration). */
 export const useEngagementPolicy = () => useQuery(query<Schemas['EngagementPolicyResponse']>(['engagement-policy'], `${API}/engagement-policy`))
 /** Everything a connection path can join (for the pickers). */
@@ -94,13 +94,13 @@ export const useConnectables = () => useQuery(query<Schemas['ConnectablesRespons
 export const useConnections = (from: string | undefined, to: string | undefined, opts: { hops: number; results: number; activity: boolean; workstreams: boolean }) =>
   useQuery({
     ...query<Schemas['ConnectionsResponse']>(['connections', from, to, opts],
-      `/api/connections?from=${encodeURIComponent(from ?? '')}&to=${encodeURIComponent(to ?? '')}&max_hops=${opts.hops}&results=${opts.results}&activity=${opts.activity}&workstreams=${opts.workstreams}`),
+      `${API}/connections?from=${encodeURIComponent(from ?? '')}&to=${encodeURIComponent(to ?? '')}&max_hops=${opts.hops}&results=${opts.results}&activity=${opts.activity}&workstreams=${opts.workstreams}`),
     enabled: Boolean(from && to && from !== to), placeholderData: keepPreviousData, retry: false,
   })
 /** The TypeDB Advantage panel: evidence from the schema files and live TypeDB figures. */
 export const useAdvantage = (enabled: boolean) => useQuery({ ...query<Schemas['AdvantageResponse']>(['advantage'], `${API}/advantage`), enabled })
 /** AI Analyst concept preview: one predefined investigation (no AI model). */
-export const useInvestigation = (key: string) => useQuery({ ...query<Schemas['InvestigationResponse']>(['analyst', key], `/api/analyst/${encodeURIComponent(key)}`), placeholderData: keepPreviousData })
+export const useInvestigation = (key: string) => useQuery({ ...query<Schemas['InvestigationResponse']>(['analyst', key], `${API}/analyst/${encodeURIComponent(key)}`), placeholderData: keepPreviousData })
 /** The guided demonstration's steps. */
 export const useGuide = () => useQuery(query<Schemas['GuideResponse']>(['guide'], `${API}/guide`))
 /** Is TypeDB answering? Checked every 15 s, or every 4 s while it isn't. */
