@@ -88,6 +88,9 @@ body.lab-apex {
   }
 
   a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: var(--color-white);
     text-decoration: none;
 

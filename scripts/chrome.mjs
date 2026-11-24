@@ -63,7 +63,7 @@ export async function buildChrome(dist) {
 }
 
 const breadcrumb = (title) =>
-  `<nav class="labs-breadcrumb" aria-label="Breadcrumb"><div><a href="/">TypeDB Labs</a><span aria-hidden="true">/</span><span>${title}</span></div></nav>`;
+  `<nav class="labs-breadcrumb" aria-label="Breadcrumb"><div><a href="/"><img src="/favicon.svg" alt="" width="20" height="20" />TypeDB Labs</a><span aria-hidden="true">/</span><span>${title}</span></div></nav>`;
 
 /**
  * Adds the top bar (and optionally the footer) to a built page. A lab's page passes its `name` and `title`:

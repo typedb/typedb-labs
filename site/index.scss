@@ -12,6 +12,20 @@ main {
   padding: var(--first-section-margin) var(--section-padding) var(--section-margin);
 }
 
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  img {
+    width: 1.3em;
+    height: 1.3em;
+    // The beaker's fumes make it top-heavy: this sits its body level with the text.
+    margin-top: -0.2em;
+    filter: drop-shadow(0 0 12px rgba(51, 230, 18, 0.35));
+  }
+}
+
 .lead {
   margin-top: var(--subtitle-margin);
   max-width: 760px;
